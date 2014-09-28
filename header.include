@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang=en><head>
-  <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-  <title>The WTF-8 encoding</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>[TITLE]</title>
   <style>
 @media print {
   html { margin: 0 !important; }
@@ -548,69 +550,19 @@ span.issue, span.note {
 }
   </style>
 </head>
-<body class=h-entry>
-<div class=head>
-  <p data-fill-with=logo></p>
-  <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://simonsapin.github.io/wtf8/>http://simonsapin.github.io/wtf8/</a><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>28 September 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
-  <div data-fill-with=warning></div>
-  <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license>
-  <img alt=CC0 src=zero.png>
-</a>
-To the extent possible under law, the editors have waived all copyright
-and related or neighboring rights to this work.
-</p>
+<body class="h-entry">
+<div class="head">
+  <p data-fill-with="logo"></p>
+  <h1 id="title" class="p-name no-ref">[TITLE]</h1>
+  <div data-fill-with="spec-metadata"></div>
+  <div data-fill-with="warning"></div>
+  <p class='copyright' data-fill-with='copyright'></p>
   <hr title="Separator for header">
 </div>
 
-<h2 class="no-num no-toc no-ref heading settled" id=abstract><span class=content>Abstract</span></h2>
-<div class=p-summary data-fill-with=abstract><p>WTF-8 is a super-set of UTF-8 that allows unpaired surrogate code points.</p>
+<h2 class='no-num no-toc no-ref' id='abstract'>Abstract</h2>
+<div class="p-summary" data-fill-with="abstract"></div>
+<div data-fill-with="at-risk"></div>
 
-</div>
-<div data-fill-with=at-risk></div>
-
-<h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#conformance><span class=secno></span> <span class=content>
-Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
-
-
-
-<p class=logo><img height=100 src=logo-wtf8.svg width=100>
-
-<p class=issue id=issue-654f3630><a class=self-link href=#issue-654f3630></a>Write the spec
-
-<h2 class="no-ref no-num heading settled" id=conformance><span class=content>
-Conformance</span></h2>
-
-    <p>
-        Conformance requirements are expressed with a combination of descriptive assertions and RFC 2119 terminology.
-        The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
-        in the normative parts of this document
-        are to be interpreted as described in RFC 2119.
-        However, for readability,
-        these words do not appear in all uppercase letters in this specification.
-
-    <p>
-        All of the text of this specification is normative
-        except sections explicitly marked as non-normative, examples, and notes. <a data-biblio-type=normative data-link-type=biblio href=#biblio-rfc2119 title=RFC2119>[RFC2119]</a>
-
-    <p>
-        Examples in this specification are introduced with the words “for example”
-        or are set apart from the normative text with <code>class="example"</code>, like this:
-
-    <div class=example>
-        This is an example of an informative example.
-    </div>
-
-    <p>
-        Informative notes begin with the word “Note”
-        and are set apart from the normative text with <code>class="note"</code>, like this:
-
-    <p class=note>
-        Note, this is an informative note.
-
-
-
-<h2 class="no-num heading settled" id=references><span class=content>References</span></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span></h2><div style=counter-reset:issue><div class=issue>Write the spec
-
-<a href=#issue-654f3630> ↵ </a></div></div>
+<h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
+<div data-fill-with="table-of-contents"></div>
