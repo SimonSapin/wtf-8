@@ -552,7 +552,7 @@ span.issue, span.note {
 <div class=head>
   <p data-fill-with=logo></p>
   <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://simonsapin.github.io/wtf8/>http://simonsapin.github.io/wtf8/</a><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>28 September 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
+  <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://simonsapin.github.io/wtf8/>http://simonsapin.github.io/wtf8/</a><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>29 September 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license>
   <img alt=CC0 src=zero.png>
@@ -564,23 +564,94 @@ and related or neighboring rights to this work.
 </div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=abstract><span class=content>Abstract</span></h2>
-<div class=p-summary data-fill-with=abstract><p>WTF-8 is a super-set of UTF-8 that allows unpaired surrogate code points.</p>
+<div class=p-summary data-fill-with=abstract><p>WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that allows unpaired <a data-link-type=dfn href=#surrogate-code-point title="surrogate code points">surrogate code points</a>. It is meant to represent in a way compatible with UTF-8 data from legacy systems such as JavaScript and Windows APIs that use <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.</p>
 
 </div>
 <div data-fill-with=at-risk></div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#conformance><span class=secno></span> <span class=content>
-Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
+<div data-fill-with=table-of-contents><ul class=toc><li><a href=#motivation><span class=secno>1</span> <span class=content>Background and motivation</span></a><li><a href=#terminology><span class=secno>2</span> <span class=content>Terminology</span></a><li><a href=#wtf8><span class=secno>3</span> <span class=content>WTF-8</span></a><li><a href=#conformance><span class=secno></span> <span class=content>
+Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
 
+
+<p></p>
 
 <p class=logo><img height=100 src=logo-wtf8.svg width=100>
 
-<p class=issue id=issue-654f3630><a class=self-link href=#issue-654f3630></a>Write the spec
+<h2 class="heading settled" data-level=1 id=motivation><span class=secno>1 </span><span class=content>Background and motivation</span><a class=self-link href=#motivation></a></h2>
+
+<p><em>This section is non-normative.</em></p>
+
+<p class=issue id=issue-9acd40f1><a class=self-link href=#issue-9acd40f1></a>Write this</p>
+
+<p></p>
+
+<h2 class="heading settled" data-level=2 id=terminology><span class=secno>2 </span><span class=content>Terminology</span><a class=self-link href=#terminology></a></h2>
+
+<p>These definitions correspond to those of the
+  <a href=http://www.unicode.org/glossary/>Glossary of Unicode Terms</a> <a data-biblio-type=normative data-link-type=biblio href=#biblio-unicode title=UNICODE>[UNICODE]</a>,
+  except for <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> which is slightly different for the purpose of this specification.</p>
+
+<p>A Unicode <dfn data-dfn-type=dfn data-noexport="" id=code-point>code point<a class=self-link href=#code-point></a></dfn> is any value in the Unicode codespace;
+  that is, the range of integers from 0 to 1114111.
+  It is noted with a “U+” prefix and four to six hexadecimal digits:
+  the first and last code points are U+0000 and U+10FFFF.</p>
+
+<p>The <dfn data-dfn-type=dfn data-noexport="" id=basic-multilingual-plane>Basic Multilingual Plane<a class=self-link href=#basic-multilingual-plane></a></dfn> is
+  the range of <a data-link-type=dfn href=#code-point title="code points">code points</a> from U+0000 to U+FFFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=bmp-code-point>BMP code point<a class=self-link href=#bmp-code-point></a></dfn> is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the <a data-link-type=dfn href=#basic-multilingual-plane title="Basic Multilingual Plane">Basic Multilingual Plane</a>.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=supplementary-code-point>supplementary code point<a class=self-link href=#supplementary-code-point></a></dfn>
+  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+10000 to U+10FFFF.
+  That is, a code point not in the Basic Multilingual Plane.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-code-point>surrogate code point<a class=self-link href=#surrogate-code-point></a></dfn>
+  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+D800 to U+DFFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=unicode-scalar-value>Unicode scalar value<a class=self-link href=#unicode-scalar-value></a></dfn>
+  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> that is not a <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogate code point</a>.
+  That is, a code point in the range from U+0000 to U+D7FF, or U+E000 to U+10FFFF.</p>
+
+<p><dfn data-dfn-type=dfn data-noexport="" id=unicode-text>Unicode text<a class=self-link href=#unicode-text></a></dfn> is a sequence of <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar values">Unicode scalar values</a>.</p>
+
+<p><dfn data-dfn-type=dfn data-noexport="" id=utf-8>UTF-8<a class=self-link href=#utf-8></a></dfn> is an encoding of <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a> using 8-bit bytes.
+  Each <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar value">Unicode scalar value</a> is represented asq a sequence of one to four bytes.</p>
+
+<p><dfn data-dfn-type=dfn data-noexport="" id=utf-16>UTF-16<a class=self-link href=#utf-16></a></dfn> is an encoding of <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a> using 16-bit <a data-link-type=dfn href=#code-unit title="code units">code units</a>.
+  <a data-link-type=dfn href=#bmp-code-point title="BMP code points">BMP code points</a> (other than <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogates</a>)
+  are represented as a single <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> with the same value.
+  <a data-link-type=dfn href=#supplementary-code-point title="Supplementary code points">Supplementary code points</a>
+  are represented as a <a data-link-type=dfn href=#surrogate-pair title="surrogate pair">surrogate pair</a> of <a data-link-type=dfn href=#code-unit title="code units">code units</a>.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=code-unit>code unit<a class=self-link href=#code-unit></a></dfn>, for the purpose of this specification,
+  is a 16-bit integer used in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>.
+  It is noted with a “0x” prefix and four hexadecimal digits:
+  the first and last code units are 0x0000 and 0xFFFF.</p>
+
+<p class=note>Note: The byte serialization of a <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> (little-endian or big-endian)
+  is out of scope for this specification.</p>
+
+<p class=note>Note: Unicode also uses this term for 8-bit and 32-bit code units
+  in the UTF-8 and UTF-32 encodings.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=lead-surrogate>lead surrogate<a class=self-link href=#lead-surrogate></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=high-surrogate>high surrogate<a class=self-link href=#high-surrogate></a></dfn> code unit
+  is a <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> in the range from 0xD800 to 0xDBFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=trail-surrogate>trail surrogate<a class=self-link href=#trail-surrogate></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=low-surrogate>low surrogate<a class=self-link href=#low-surrogate></a></dfn> code unit
+  is a <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> in the range from 0xDC00 to 0xDFFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-pair>surrogate pair<a class=self-link href=#surrogate-pair></a></dfn> is a sequence of
+  a <a data-link-type=dfn href=#lead-surrogate title="lead surrogate">lead surrogate</a> followed by a <a data-link-type=dfn href=#trail-surrogate title="trail surrogate">trail surrogate</a>.
+  In <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>, it represents a <a data-link-type=dfn href=#supplementary-code-point title="supplementary code point">supplementary code point</a>.</p>
+
+<h2 class="heading settled" data-level=3 id=wtf8><span class=secno>3 </span><span class=content>WTF-8</span><a class=self-link href=#wtf8></a></h2>
+
+<p class=issue id=issue-9acd40f1><a class=self-link href=#issue-9acd40f1></a>Write this</p>
 
 <h2 class="no-ref no-num heading settled" id=conformance><span class=content>
-Conformance</span></h2>
+Conformance</span><a class=self-link href=#conformance></a></h2>
 
     <p>
         Conformance requirements are expressed with a combination of descriptive assertions and RFC 2119 terminology.
@@ -611,6 +682,4 @@ Conformance</span></h2>
 
 
 
-<h2 class="no-num heading settled" id=references><span class=content>References</span></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span></h2><div style=counter-reset:issue><div class=issue>Write the spec
-
-<a href=#issue-654f3630> ↵ </a></div></div>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>high surrogate, <a href=#high-surrogate title="section 2">2</a><li>lead surrogate, <a href=#lead-surrogate title="section 2">2</a><li>low surrogate, <a href=#low-surrogate title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2">2</a><li>surrogate pair, <a href=#surrogate-pair title="section 2">2</a><li>trail surrogate, <a href=#trail-surrogate title="section 2">2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>Write this<a href=#issue-9acd40f1> ↵ </a></div><div class=issue>Write this<a href=#issue-9acd40f1> ↵ </a></div></div>
