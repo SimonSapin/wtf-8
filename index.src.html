@@ -6,27 +6,14 @@ ED: http://simonsapin.github.io/wtf8/
 !Issue tracking: <a href="https://github.com/SimonSapin/wtf8/issues">On GitHub</a>
 !Last updated: [DATE]
 Editor: Simon Sapin, Mozilla https://www.mozilla.org/, https://exyr.org/
-Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a>UTF-8</a> that allows unpaired <a>surrogate code points</a>. It is meant to represent in a way compatible with UTF-8 data from legacy systems such as JavaScript and Windows APIs that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
+Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a>UTF-8</a> that allows unpaired <a>surrogate code points</a>. It represents in a way compatible with UTF-8 data from legacy systems such as JavaScript and Windows APIs that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
 </pre>
-
-<!--
-
-W___ Transformation Format − 8-bit
-Wat
-Web
-Whacked
-Whatever
-Whitespace
-Why
-Wobbly
-Woodlouse
-Worldly Transformation Format − 8-bit
-
--->
 
 <p class=logo><img src=logo-wtf8.svg width=100 height=100>
 
-<h2 id=motivation>Background and motivation</h2>
+
+<h2 id=motivation>
+Background and motivation</h2>
 
   <em>This section is non-normative.</em>
 
@@ -64,9 +51,6 @@ ECMAScript string type
   is a <a>code point</a> in the range from U+10000 to U+10FFFF.
   That is, a code point not in the Basic Multilingual Plane.
 
-  A <dfn>surrogate code point</dfn>
-  is a <a>code point</a> in the range from U+D800 to U+DFFF.
-
   A <dfn>Unicode scalar value</dfn>
   is a <a>code point</a> that is not a <a>surrogate code point</a>.
   That is, a code point in the range from U+0000 to U+D7FF, or U+E000 to U+10FFFF.
@@ -74,13 +58,13 @@ ECMAScript string type
   <dfn>Unicode text</dfn> is a sequence of <a>Unicode scalar values</a>.
 
   <dfn>UTF-8</dfn> is an encoding of <a>Unicode text</a> using 8-bit bytes.
-  Each <a>Unicode scalar value</a> is represented asq a sequence of one to four bytes.
+  Each <a>Unicode scalar value</a> is represented as a sequence of one to four bytes.
 
   <dfn>UTF-16</dfn> is an encoding of <a>Unicode text</a> using 16-bit <a>code units</a>.
   <a>BMP code points</a> (other than <a title="surrogate code point">surrogates</a>)
   are represented as a single <a>code unit</a> with the same value.
   <a>Supplementary code points</a>
-  are represented as a <a>surrogate pair</a> of <a>code units</a>.
+  are represented as a <a>surrogate code unit pair</a>.
 
   A <dfn>code unit</dfn>, for the purpose of this specification,
   is a 16-bit integer used in <a>UTF-16</a>.
@@ -93,16 +77,48 @@ ECMAScript string type
   Note: Unicode also uses this term for 8-bit and 32-bit code units
   in the UTF-8 and UTF-32 encodings.
 
-  A <dfn>lead surrogate</dfn> or <dfn>high surrogate</dfn> code unit
+
+<h3 id=surrogates-code-units>
+Surrogate code units</h3>
+
+  A <dfn>lead surrogate code unit</dfn> or <dfn>high surrogate code unit</dfn>
   is a <a>code unit</a> in the range from 0xD800 to 0xDBFF.
 
-  A <dfn>trail surrogate</dfn> or <dfn>low surrogate</dfn> code unit
+  A <dfn>trail surrogate code unit</dfn> or <dfn>low surrogate code unit</dfn>
   is a <a>code unit</a> in the range from 0xDC00 to 0xDFFF.
 
-  A <dfn>surrogate pair</dfn> is a sequence of
-  a <a>lead surrogate</a> followed by a <a>trail surrogate</a>.
-  In <a>UTF-16</a>, it represents a <a>supplementary code point</a>.
+  A <dfn>surrogate code unit</dfn> is
+  either a <a>lead surrogate code unit</a> or a <a>trail surrogate code unit</a>.
+  That is, a <a>code unit</a> in the range from 0xD800 to 0xDFFF.
 
-<h2 id=wtf8>WTF-8</h2>
+  A <dfn>surrogate code unit pair</dfn> is a sequence of
+  a <a>lead surrogate code unit</a> followed by a <a>trail surrogate code unit</a>.
+  If <a>UTF-16</a>, it represents a <a>supplementary code point</a>.
+
+  An <dfn>unpaired surrogate code unit</dfn> is a <a>surrogate code unit</a>
+  that is not part of a <a>surrogate code unit pair</a>.
+
+
+<h3 id=surrogates-code-points>
+Surrogate code points</h3>
+
+  A <dfn>lead surrogate code point</dfn> or <dfn>high surrogate code point</dfn>
+  is a <a>code point</a> in the range from U+D800 to U+DBFF.
+
+  A <dfn>trail surrogate code point</dfn> or <dfn>low surrogate code point</dfn>
+  is a <a>code point</a> in the range from U+DC00 to U+DFFF.
+
+  A <dfn>surrogate code point</dfn> is
+  either a <a>lead surrogate code point</a> or a <a>trail surrogate code point</a>.
+  That is, a <a>code point</a> in the range from U+D800 to U+DFFF.
+
+  A <dfn>surrogate code point pair</dfn> is a sequence of
+  a <a>lead surrogate code point</a> followed by a <a>trail surrogate code point</a>.
+
+  An <dfn>unpaired surrogate code point</dfn> is a <a>surrogate code point</a>
+  that is not part of a <a>surrogate code point pair</a>.
+
+<h2 id=wtf8>
+WTF-8</h2>
 
   Issue: Write this
