@@ -17,7 +17,23 @@ Background and motivation</h2>
 
   <em>This section is non-normative.</em>
 
-  Issue: Write this
+  <a href="http://www.unicode.org/versions/Unicode1.0.0/">Unicode 1.0</a> was published in 1991.
+  At the time, it defined a codespace of 65536 code points from U+0000 to U+FFFF
+  and assigned characters to around half of them.
+  Many software implementations chose the obvious memory reprentation
+  for Unicode text of 16 bits per code point / character.
+
+  As subsequent versions of Unicode assigned more characters,
+  it became apparent that 65536 code points would not be sufficient.
+  In 1996, <a href="http://www.unicode.org/versions/Unicode2.0.0/">Unicode 2.0</a>
+  extended the codespace to 1114111 code points from U+0000 to U+10FFFF.
+  It also introduced the <a>UTF-16</a> encoding
+  which preserves compatibility with existing 16-bit based systems
+  and represents new (<a title="supplementary code point">supplementary</a>) code points
+  as a <a title="surrogate code unit pair">pair</a> of “surrogates”.
+
+  Issue: Finish writing this
+
 
 <!--
 
