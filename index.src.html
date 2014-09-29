@@ -31,7 +31,9 @@ ECMAScript string type
 
 -->
 
-<h2 id=terminology>Terminology</h2>
+
+<h2 id=terminology>
+Terminology</h2>
 
   These definitions correspond to those of the
   <a href="http://www.unicode.org/glossary/">Glossary of Unicode Terms</a> [[!UNICODE]],
@@ -65,6 +67,9 @@ ECMAScript string type
   are represented as a single <a>code unit</a> with the same value.
   <a>Supplementary code points</a>
   are represented as a <a>surrogate code unit pair</a>.
+
+  A <a>UTF-16</a> string is <dfn>well-formed</dfn> if and only if
+  it does not contain any <a>unpaired surrogate code unit</a>.
 
   A <dfn>code unit</dfn>, for the purpose of this specification,
   is a 16-bit integer used in <a>UTF-16</a>.
@@ -117,6 +122,14 @@ Surrogate code points</h3>
 
   An <dfn>unpaired surrogate code point</dfn> is a <a>surrogate code point</a>
   that is not part of a <a>surrogate code point pair</a>.
+
+
+<h2 id=wtf16>
+WTF-16</h2>
+
+  A <dfn>WTF-16</dfn> string is an <a>UTF-16</a> string
+  that is not necessarily <a>well-formed</a>.
+
 
 <h2 id=wtf8>
 WTF-8</h2>
