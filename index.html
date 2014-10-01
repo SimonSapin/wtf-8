@@ -177,7 +177,6 @@ img, a.logo { border-style: none; }
 /* Self-links */
 a.self-link {
   position: absolute;
-  top: 0;
   left: -2.5em;
   width: 2em;
   height: 2em;
@@ -552,7 +551,7 @@ span.issue, span.note {
 <div class=head>
   <p data-fill-with=logo></p>
   <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://simonsapin.github.io/wtf8/>http://simonsapin.github.io/wtf8/</a><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>29 September 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
+  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>1 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=zero.png></a>
 To the extent possible under law, the editors have waived all copyright
@@ -562,7 +561,7 @@ and related or neighboring rights to this work.
 </div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=abstract><span class=content>Abstract</span></h2>
-<div class=p-summary data-fill-with=abstract><p>WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that allows unpaired <a data-link-type=dfn href=#surrogate-code-point title="surrogate code points">surrogate code points</a>. It represents in a way compatible with UTF-8 data from legacy systems such as JavaScript and Windows APIs that use <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.</p>
+<div class=p-summary data-fill-with=abstract><p>WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that encodes <a data-link-type=dfn href=#surrogate-code-point title="surrogate code points">surrogate code points</a> if they are not in a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.</p>
 
 </div>
 <div data-fill-with=at-risk></div>
@@ -570,11 +569,12 @@ and related or neighboring rights to this work.
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
 <div data-fill-with=table-of-contents><ul class=toc><li><a href=#motivation><span class=secno>1</span> <span class=content>
 Background and motivation</span></a><li><a href=#terminology><span class=secno>2</span> <span class=content>
-Terminology</span></a><ul class=toc><li><a href=#surrogates-code-units><span class=secno>2.1</span> <span class=content>
-Surrogate code units</span></a><li><a href=#surrogates-code-points><span class=secno>2.2</span> <span class=content>
-Surrogate code points</span></a></ul><li><a href=#wtf16><span class=secno>3</span> <span class=content>
-WTF-16</span></a><li><a href=#wtf8><span class=secno>4</span> <span class=content>
-WTF-8</span></a><li><a href=#conformance><span class=secno></span> <span class=content>
+Terminology</span></a><ul class=toc><li><a href=#surrogates-code-points><span class=secno>2.1</span> <span class=content>
+Surrogate code points</span></a><li><a href=#surrogates-code-units><span class=secno>2.2</span> <span class=content>
+Surrogate code units</span></a><li><a href=#surrogates-byte-sequences><span class=secno>2.3</span> <span class=content>
+Surrogate byte sequences</span></a></ul><li><a href=#wtf8><span class=secno>3</span> <span class=content>
+WTF-8</span></a><ul class=toc><li><a href=#concatenation><span class=secno>3.1</span> <span class=content>
+Concatenation of WTF-8 strings</span></a></ul><li><a href=#conformance><span class=secno></span> <span class=content>
 Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
 
@@ -587,23 +587,71 @@ Background and motivation</span><a class=self-link href=#motivation></a></h2>
 
 <p><em>This section is non-normative.</em></p>
 
-<p><a href=http://www.unicode.org/versions/Unicode1.0.0/>Unicode 1.0</a> was published in 1991.
-  At the time, it defined a codespace of 65536 code points from U+0000 to U+FFFF
+<p>When <a href=http://www.unicode.org/versions/Unicode1.0.0/>Unicode 1.0</a>
+  was published in 1991,
+  it defined 65536 <a data-link-type=dfn href=#code-point title="code points">code points</a> from U+0000 to U+FFFF
   and assigned characters to around half of them.
   Many software implementations chose the obvious memory reprentation
-  for Unicode text of 16 bits per code point / character.</p>
+  for Unicode text of 16 bits per <a data-link-type=dfn href=#code-point title="code point">code point</a> / character.</p>
 
 <p>As subsequent versions of Unicode assigned more characters,
-  it became apparent that 65536 code points would not be sufficient.
-  In 1996, <a href=http://www.unicode.org/versions/Unicode2.0.0/>Unicode 2.0</a>
-  extended the codespace to 1114111 code points from U+0000 to U+10FFFF.
-  It also introduced the <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> encoding
-  which preserves compatibility with existing 16-bit based systems
+  it became apparent that 65536 <a data-link-type=dfn href=#code-point title="code points">code points</a> would not be sufficient.
+  Unicode was extended to 1114111 <a data-link-type=dfn href=#code-point title="code points">code points</a> from U+0000 to U+10FFFF,
+  and the <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> encoding was introduced.
+  This encoding preserves compatibility with existing 16-bit based systems
   and represents new (<a data-link-type=dfn href=#supplementary-code-point title="supplementary code point">supplementary</a>) code points
   as a <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pair">pair</a> of “surrogates”.</p>
 
-<p class=issue id=issue-bba7b781><a class=self-link href=#issue-bba7b781></a>Finish writing this</p>
+<p><a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> is designed to represent any Unicode text,
+  but it can not represent a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
+  since the corresponding <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pairs">surrogate code unit pairs</a>
+  would instead represent a <a data-link-type=dfn href=#supplementary-code-point title="supplementary code point">supplementary code point</a>.
+  Therefore, the concept of <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar value">Unicode scalar value</a> was introduced
+  and <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a> was restricted to not contain any <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogate code point</a>.
+  (This was presumably deemed simpler that only restricting pairs.)</p>
 
+<p><a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> was redefined to be <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a>
+  if it contains <a data-link-type=dfn href=#unpaired-surrogate-code-unit title="unpaired surrogate code units">unpaired surrogate code units</a>.
+  <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> was similarly redefined to be <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a>
+  if it contains <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequences">surrogate byte sequences</a>.</p>
+
+<p>Meanwhile, 16-bit based systems had little to no incentive
+  to do anything about surrogates:
+  For several years,
+  Unicode did not assign any character to <a data-link-type=dfn href=#supplementary-code-point title="supplementary code points">supplementary code points</a>,
+  and then (until emoji) only comparatively rare characters.
+  Additionally, the Unicode Standard does not require conforming implementations
+  to maintain <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a> of <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> strings.</p>
+
+<p>As a result, surrogates do occur in practice and need to be preserved.
+  For example:</p>
+
+  <ul>
+    <li>
+      In ECMAScript (a.k.a. JavaScript),
+      <a href=http://www.ecma-international.org/ecma-262/5.1/#sec-4.3.16>
+      a <code>String</code> value</a>
+      is defined as a sequence of 16-bit integers
+      that <em>usually</em> represents <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> text
+      but may or may not be <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a>.
+    <li>
+      <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd374069%28v=vs.85%29.aspx">
+      Windows applications normally use UTF-16</a>, but
+      <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx#maxpath">
+      the file system treats path and file names as an opaque sequence of <code>WCHAR</code>s</a>
+      (<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa383751%28v=vs.85%29.aspx#WCHAR">16-bit
+      code units</a>).
+  </ul>
+
+<p><a data-link-type=dfn href=#unpaired-surrogate-code-unit title="Unpaired surrogate code units">Unpaired surrogate code units</a> are the only case
+  where an arbitrary sequence of <a data-link-type=dfn href=#code-unit title="code units">code units</a> is <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>.
+  <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>, however, is more complex
+  and maintaining its <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a> is arguably more valuable.</p>
+
+<p>This specification defines <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>,
+  a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that can losslessly represent
+  arbitrary <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> sequences (even if <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>)
+  but preserves the other <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a> constraints of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.</p>
 
 <p></p>
 
@@ -644,22 +692,62 @@ Terminology</span><a class=self-link href=#terminology></a></h2>
   <a data-link-type=dfn href=#supplementary-code-point title="Supplementary code points">Supplementary code points</a>
   are represented as a <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pair">surrogate code unit pair</a>.</p>
 
-<p>A <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> string is <dfn data-dfn-type=dfn data-noexport="" id=well-formed>well-formed<a class=self-link href=#well-formed></a></dfn> if and only if
-  it does not contain any <a data-link-type=dfn href=#unpaired-surrogate-code-unit title="unpaired surrogate code unit">unpaired surrogate code unit</a>.</p>
+<p>A string is <dfn data-dfn-type=dfn data-noexport="" id=well-formed title=well-formed|well-formedness>well-formed<a class=self-link href=#well-formed></a></dfn>
+  (not <dfn data-dfn-type=dfn data-noexport="" id=ill-formed title=ill-formed|ill-formedness>ill-formed<a class=self-link href=#ill-formed></a></dfn>)
+  in a given encoding if it follows the specification of that encoding.
+  <a data-biblio-type=normative data-link-type=biblio href=#biblio-unicode title=UNICODE>[UNICODE]</a> defines
+  <a href=http://www.unicode.org/glossary/#well_formed_code_unit_sequence>
+  Well-Formed Code Unit Sequence</a>
+  for <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> and <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>.</p>
+
+  <div class=note>
+    In particular:
+
+    <ul>
+      <li><a data-link-type=dfn href=#unpaired-surrogate-code-unit title="Unpaired surrogate code units">Unpaired surrogate code units</a> are <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>.
+      <li><a data-link-type=dfn href=#surrogate-byte-sequence title="Surrogate byte sequences">Surrogate byte sequences</a> are <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.
+    </ul>
+  </div>
+
+<p>The <dfn data-dfn-type=dfn data-noexport="" id=replacement-character>replacement character<a class=self-link href=#replacement-character></a></dfn> is the code point U+FFFD
+  <code>REPLACEMENT CHARACTER</code> (�).
+  It is used as a substitute to replace <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> sub-sequences
+  during a conversion.</p>
 
 <p>A <dfn data-dfn-type=dfn data-noexport="" id=code-unit>code unit<a class=self-link href=#code-unit></a></dfn>, for the purpose of this specification,
   is a 16-bit integer used in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>.
   It is noted with a “0x” prefix and four hexadecimal digits:
   the first and last code units are 0x0000 and 0xFFFF.</p>
 
-<p class=note>Note: The byte serialization of a <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> (little-endian or big-endian)
+<p class=note>Note: The byte serialization or memory representation of a <a data-link-type=dfn href=#code-unit title="code unit">code unit</a>
+  (little-endian or big-endian)
   is out of scope for this specification.</p>
 
 <p class=note>Note: Unicode also uses this term for 8-bit and 32-bit code units
   in the UTF-8 and UTF-32 encodings.</p>
 
 
-<h3 class="heading settled" data-level=2.1 id=surrogates-code-units><span class=secno>2.1. </span><span class=content>
+<h3 class="heading settled" data-level=2.1 id=surrogates-code-points><span class=secno>2.1. </span><span class=content>
+Surrogate code points</span><a class=self-link href=#surrogates-code-points></a></h3>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=lead-surrogate-code-point>lead surrogate code point<a class=self-link href=#lead-surrogate-code-point></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=high-surrogate-code-point>high surrogate code point<a class=self-link href=#high-surrogate-code-point></a></dfn>
+  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+D800 to U+DBFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=trail-surrogate-code-point>trail surrogate code point<a class=self-link href=#trail-surrogate-code-point></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=low-surrogate-code-point>low surrogate code point<a class=self-link href=#low-surrogate-code-point></a></dfn>
+  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+DC00 to U+DFFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-code-point>surrogate code point<a class=self-link href=#surrogate-code-point></a></dfn> is
+  either a <a data-link-type=dfn href=#lead-surrogate-code-point title="lead surrogate code point">lead surrogate code point</a> or a <a data-link-type=dfn href=#trail-surrogate-code-point title="trail surrogate code point">trail surrogate code point</a>.
+  That is, a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+D800 to U+DFFF.</p>
+
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-code-point-pair>surrogate code point pair<a class=self-link href=#surrogate-code-point-pair></a></dfn> is a sequence of
+  a <a data-link-type=dfn href=#lead-surrogate-code-point title="lead surrogate code point">lead surrogate code point</a> followed by a <a data-link-type=dfn href=#trail-surrogate-code-point title="trail surrogate code point">trail surrogate code point</a>.</p>
+
+<p>An <dfn data-dfn-type=dfn data-noexport="" id=unpaired-surrogate-code-point>unpaired surrogate code point<a class=self-link href=#unpaired-surrogate-code-point></a></dfn> is a <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogate code point</a>
+  that is not part of a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>.</p>
+
+
+<h3 class="heading settled" data-level=2.2 id=surrogates-code-units><span class=secno>2.2. </span><span class=content>
 Surrogate code units</span><a class=self-link href=#surrogates-code-units></a></h3>
 
 <p>A <dfn data-dfn-type=dfn data-noexport="" id=lead-surrogate-code-unit>lead surrogate code unit<a class=self-link href=#lead-surrogate-code-unit></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=high-surrogate-code-unit>high surrogate code unit<a class=self-link href=#high-surrogate-code-unit></a></dfn>
@@ -680,37 +768,33 @@ Surrogate code units</span><a class=self-link href=#surrogates-code-units></a></
   that is not part of a <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pair">surrogate code unit pair</a>.</p>
 
 
-<h3 class="heading settled" data-level=2.2 id=surrogates-code-points><span class=secno>2.2. </span><span class=content>
-Surrogate code points</span><a class=self-link href=#surrogates-code-points></a></h3>
+<h3 class="heading settled" data-level=2.3 id=surrogates-byte-sequences><span class=secno>2.3. </span><span class=content>
+Surrogate byte sequences</span><a class=self-link href=#surrogates-byte-sequences></a></h3>
 
-<p>A <dfn data-dfn-type=dfn data-noexport="" id=lead-surrogate-code-point>lead surrogate code point<a class=self-link href=#lead-surrogate-code-point></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=high-surrogate-code-point>high surrogate code point<a class=self-link href=#high-surrogate-code-point></a></dfn>
-  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+D800 to U+DBFF.</p>
+<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-byte-sequence>surrogate byte sequence<a class=self-link href=#surrogate-byte-sequence></a></dfn> is a byte sequence
+  that represents a <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogate code point</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>’s underlying algorithm.
+  That is, a sequence of three bytes that matches the following bit pattern
+  (where each <code>x</code> can be either <code>0</code> or <code>1</code>)</p>
 
-<p>A <dfn data-dfn-type=dfn data-noexport="" id=trail-surrogate-code-point>trail surrogate code point<a class=self-link href=#trail-surrogate-code-point></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=low-surrogate-code-point>low surrogate code point<a class=self-link href=#low-surrogate-code-point></a></dfn>
-  is a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+DC00 to U+DFFF.</p>
+<pre>11101101 101xxxxx 10xxxxxx</pre>
 
-<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-code-point>surrogate code point<a class=self-link href=#surrogate-code-point></a></dfn> is
-  either a <a data-link-type=dfn href=#lead-surrogate-code-point title="lead surrogate code point">lead surrogate code point</a> or a <a data-link-type=dfn href=#trail-surrogate-code-point title="trail surrogate code point">trail surrogate code point</a>.
-  That is, a <a data-link-type=dfn href=#code-point title="code point">code point</a> in the range from U+D800 to U+DFFF.</p>
-
-<p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-code-point-pair>surrogate code point pair<a class=self-link href=#surrogate-code-point-pair></a></dfn> is a sequence of
-  a <a data-link-type=dfn href=#lead-surrogate-code-point title="lead surrogate code point">lead surrogate code point</a> followed by a <a data-link-type=dfn href=#trail-surrogate-code-point title="trail surrogate code point">trail surrogate code point</a>.</p>
-
-<p>An <dfn data-dfn-type=dfn data-noexport="" id=unpaired-surrogate-code-point>unpaired surrogate code point<a class=self-link href=#unpaired-surrogate-code-point></a></dfn> is a <a data-link-type=dfn href=#surrogate-code-point title="surrogate code point">surrogate code point</a>
-  that is not part of a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>.</p>
+<p class=note>Note: A <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequence">surrogate byte sequence</a> is <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.
+  Decoders are required to treat is as an error.</p>
 
 
-<h2 class="heading settled" data-level=3 id=wtf16><span class=secno>3. </span><span class=content>
-WTF-16</span><a class=self-link href=#wtf16></a></h2>
-
-<p>A <dfn data-dfn-type=dfn data-noexport="" id=wtf-16>WTF-16<a class=self-link href=#wtf-16></a></dfn> string is an <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> string
-  that is not necessarily <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a>.</p>
-
-
-<h2 class="heading settled" data-level=4 id=wtf8><span class=secno>4. </span><span class=content>
+<h2 class="heading settled" data-level=3 id=wtf8><span class=secno>3. </span><span class=content>
 WTF-8</span><a class=self-link href=#wtf8></a></h2>
 
-<p class=issue id=issue-9acd40f1><a class=self-link href=#issue-9acd40f1></a>Write this</p>
+<p><dfn data-dfn-type=dfn data-noexport="" id=wtf-8>WTF-8<a class=self-link href=#wtf-8></a></dfn> is…</p>
+
+<p class=issue id=issue-9139216e><a class=self-link href=#issue-9139216e></a>Write this.</p>
+
+<h3 class="heading settled" data-level=3.1 id=concatenation><span class=secno>3.1. </span><span class=content>
+Concatenation of WTF-8 strings</span><a class=self-link href=#concatenation></a></h3>
+
+<p>Concatenating two <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> strings requires extra care to preserve <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a>.</p>
+
+<p class=issue id=issue-9139216e><a class=self-link href=#issue-9139216e></a>Write this.</p>
 
 <h2 class="no-ref no-num heading settled" id=conformance><span class=content>
 Conformance</span><a class=self-link href=#conformance></a></h2>
@@ -744,4 +828,4 @@ Conformance</span><a class=self-link href=#conformance></a></h2>
 
 
 
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.2">2.2</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.1">2.1</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.2">2.2</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.1">2.1</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.2">2.2</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.1">2.1</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.2">2.2</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.2">2.2</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.1">2.1</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.1">2.1</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.2">2.2</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.1">2.1</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.2">2.2</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.1">2.1</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>WTF-16, <a href=#wtf-16 title="section 3">3</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>Finish writing this<a href=#issue-bba7b781> ↵ </a></div><div class=issue>Write this<a href=#issue-9acd40f1> ↵ </a></div></div>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.1">2.1</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.2">2.2</a><li>ill-formed, <a href=#ill-formed title="section 2">2</a><li>ill-formedness, <a href=#ill-formed title="section 2">2</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.1">2.1</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.2">2.2</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.1">2.1</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.2">2.2</a><li>replacement character, <a href=#replacement-character title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate byte sequence, <a href=#surrogate-byte-sequence title="section 2.3">2.3</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.1">2.1</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.1">2.1</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.2">2.2</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.2">2.2</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.1">2.1</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.2">2.2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.1">2.1</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.2">2.2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>well-formedness, <a href=#well-formed title="section 2">2</a><li>WTF-8, <a href=#wtf-8 title="section 3">3</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div></div>

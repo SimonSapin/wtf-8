@@ -2,11 +2,10 @@
 <pre class='metadata'>
 Shortname: wtf8
 Status: LS
-ED: http://simonsapin.github.io/wtf8/
 !Issue tracking: <a href="https://github.com/SimonSapin/wtf8/issues">On GitHub</a>
 !Last updated: [DATE]
 Editor: Simon Sapin, Mozilla https://www.mozilla.org/, https://exyr.org/
-Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a>UTF-8</a> that allows unpaired <a>surrogate code points</a>. It represents in a way compatible with UTF-8 data from legacy systems such as JavaScript and Windows APIs that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
+Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
 </pre>
 
 <p class=logo><img src=logo-wtf8.svg width=100 height=100>
@@ -17,33 +16,77 @@ Background and motivation</h2>
 
   <em>This section is non-normative.</em>
 
-  <a href="http://www.unicode.org/versions/Unicode1.0.0/">Unicode 1.0</a> was published in 1991.
-  At the time, it defined a codespace of 65536 code points from U+0000 to U+FFFF
+  When <a href="http://www.unicode.org/versions/Unicode1.0.0/">Unicode 1.0</a>
+  was published in 1991,
+  it defined 65536 <a>code points</a> from U+0000 to U+FFFF
   and assigned characters to around half of them.
   Many software implementations chose the obvious memory reprentation
-  for Unicode text of 16 bits per code point / character.
+  for Unicode text of 16 bits per <a>code point</a> / character.
 
   As subsequent versions of Unicode assigned more characters,
-  it became apparent that 65536 code points would not be sufficient.
-  In 1996, <a href="http://www.unicode.org/versions/Unicode2.0.0/">Unicode 2.0</a>
-  extended the codespace to 1114111 code points from U+0000 to U+10FFFF.
-  It also introduced the <a>UTF-16</a> encoding
-  which preserves compatibility with existing 16-bit based systems
+  it became apparent that 65536 <a>code points</a> would not be sufficient.
+  Unicode was extended to 1114111 <a>code points</a> from U+0000 to U+10FFFF,
+  and the <a>UTF-16</a> encoding was introduced.
+  This encoding preserves compatibility with existing 16-bit based systems
   and represents new (<a title="supplementary code point">supplementary</a>) code points
   as a <a title="surrogate code unit pair">pair</a> of “surrogates”.
 
-  Issue: Finish writing this
+  <a>UTF-16</a> is designed to represent any Unicode text,
+  but it can not represent a <a>surrogate code point pair</a>
+  since the corresponding <a>surrogate code unit pairs</a>
+  would instead represent a <a>supplementary code point</a>.
+  Therefore, the concept of <a>Unicode scalar value</a> was introduced
+  and <a>Unicode text</a> was restricted to not contain any <a>surrogate code point</a>.
+  (This was presumably deemed simpler that only restricting pairs.)
 
+  <a>UTF-16</a> was redefined to be <a>ill-formed</a>
+  if it contains <a>unpaired surrogate code units</a>.
+  <a>UTF-8</a> was similarly redefined to be <a>ill-formed</a>
+  if it contains <a>surrogate byte sequences</a>.
+
+  Meanwhile, 16-bit based systems had little to no incentive
+  to do anything about surrogates:
+  For several years,
+  Unicode did not assign any character to <a>supplementary code points</a>,
+  and then (until emoji) only comparatively rare characters.
+  Additionally, the Unicode Standard does not require conforming implementations
+  to maintain <a>well-formedness</a> of <a>UTF-16</a> strings.
+
+  As a result, surrogates do occur in practice and need to be preserved.
+  For example:
+
+  <ul>
+    <li>
+      In ECMAScript (a.k.a. JavaScript),
+      <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-4.3.16">
+      a <code>String</code> value</a>
+      is defined as a sequence of 16-bit integers
+      that <em>usually</em> represents <a>UTF-16</a> text
+      but may or may not be <a>well-formed</a>.
+    <li>
+      <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd374069%28v=vs.85%29.aspx">
+      Windows applications normally use UTF-16</a>, but
+      <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx#maxpath">
+      the file system treats path and file names as an opaque sequence of <code>WCHAR</code>s</a>
+      (<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa383751%28v=vs.85%29.aspx#WCHAR">16-bit
+      code units</a>).
+  </ul>
+
+  <a>Unpaired surrogate code units</a> are the only case
+  where an arbitrary sequence of <a>code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
+  <a>UTF-8</a>, however, is more complex
+  and maintaining its <a>well-formedness</a> is arguably more valuable.
+
+  This specification defines <a>WTF-8</a>,
+  a superset of <a>UTF-8</a> that can losslessly represent
+  arbitrary <a>code unit</a> sequences (even if <a>ill-formed</a> in <a>UTF-16</a>)
+  but preserves the other <a>well-formedness</a> constraints of <a>UTF-8</a>.
 
 <!--
 
-Unicode 1.0 (1991): 16 bit fixed width encoding
-Unicode 2.0 (1996): UTF-16, surrogates, non-BMP planes not actually used
-Unicode 3.1 (2001): Starts using non-BMP planes
-
-ECMAScript string type
-    http://www.ecma-international.org/ecma-262/5.1/#sec-8.4
-    [u16]
+Scheme 48
+    UTF-8of16
+    http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15
 
 -->
 
@@ -84,19 +127,59 @@ Terminology</h2>
   <a>Supplementary code points</a>
   are represented as a <a>surrogate code unit pair</a>.
 
-  A <a>UTF-16</a> string is <dfn>well-formed</dfn> if and only if
-  it does not contain any <a>unpaired surrogate code unit</a>.
+  A string is <dfn title="well-formed|well-formedness">well-formed</dfn>
+  (not <dfn title="ill-formed|ill-formedness">ill-formed</dfn>)
+  in a given encoding if it follows the specification of that encoding.
+  [[!UNICODE]] defines
+  <a href="http://www.unicode.org/glossary/#well_formed_code_unit_sequence">
+  Well-Formed Code Unit Sequence</a>
+  for <a>UTF-8</a> and <a>UTF-16</a>.
+
+  <div class=note>
+    In particular:
+
+    <ul>
+      <li><a>Unpaired surrogate code units</a> are <a>ill-formed</a> in <a>UTF-16</a>.
+      <li><a>Surrogate byte sequences</a> are <a>ill-formed</a> in <a>UTF-8</a>.
+    </ul>
+  </div>
+
+  The <dfn>replacement character</dfn> is the code point U+FFFD
+  <code>REPLACEMENT CHARACTER</code> (&#xFFFD;).
+  It is used as a substitute to replace <a>ill-formed</a> sub-sequences
+  during a conversion.
 
   A <dfn>code unit</dfn>, for the purpose of this specification,
   is a 16-bit integer used in <a>UTF-16</a>.
   It is noted with a “0x” prefix and four hexadecimal digits:
   the first and last code units are 0x0000 and 0xFFFF.
 
-  Note: The byte serialization of a <a>code unit</a> (little-endian or big-endian)
+  Note: The byte serialization or memory representation of a <a>code unit</a>
+  (little-endian or big-endian)
   is out of scope for this specification.
 
   Note: Unicode also uses this term for 8-bit and 32-bit code units
   in the UTF-8 and UTF-32 encodings.
+
+
+<h3 id=surrogates-code-points>
+Surrogate code points</h3>
+
+  A <dfn>lead surrogate code point</dfn> or <dfn>high surrogate code point</dfn>
+  is a <a>code point</a> in the range from U+D800 to U+DBFF.
+
+  A <dfn>trail surrogate code point</dfn> or <dfn>low surrogate code point</dfn>
+  is a <a>code point</a> in the range from U+DC00 to U+DFFF.
+
+  A <dfn>surrogate code point</dfn> is
+  either a <a>lead surrogate code point</a> or a <a>trail surrogate code point</a>.
+  That is, a <a>code point</a> in the range from U+D800 to U+DFFF.
+
+  A <dfn>surrogate code point pair</dfn> is a sequence of
+  a <a>lead surrogate code point</a> followed by a <a>trail surrogate code point</a>.
+
+  An <dfn>unpaired surrogate code point</dfn> is a <a>surrogate code point</a>
+  that is not part of a <a>surrogate code point pair</a>.
 
 
 <h3 id=surrogates-code-units>
@@ -120,34 +203,30 @@ Surrogate code units</h3>
   that is not part of a <a>surrogate code unit pair</a>.
 
 
-<h3 id=surrogates-code-points>
-Surrogate code points</h3>
+<h3 id=surrogates-byte-sequences>
+Surrogate byte sequences</h3>
 
-  A <dfn>lead surrogate code point</dfn> or <dfn>high surrogate code point</dfn>
-  is a <a>code point</a> in the range from U+D800 to U+DBFF.
+  A <dfn>surrogate byte sequence</dfn> is a byte sequence
+  that represents a <a>surrogate code point</a> in <a>UTF-8</a>’s underlying algorithm.
+  That is, a sequence of three bytes that matches the following bit pattern
+  (where each <code>x</code> can be either <code>0</code> or <code>1</code>)
 
-  A <dfn>trail surrogate code point</dfn> or <dfn>low surrogate code point</dfn>
-  is a <a>code point</a> in the range from U+DC00 to U+DFFF.
+  <pre>11101101 101xxxxx 10xxxxxx</pre>
 
-  A <dfn>surrogate code point</dfn> is
-  either a <a>lead surrogate code point</a> or a <a>trail surrogate code point</a>.
-  That is, a <a>code point</a> in the range from U+D800 to U+DFFF.
-
-  A <dfn>surrogate code point pair</dfn> is a sequence of
-  a <a>lead surrogate code point</a> followed by a <a>trail surrogate code point</a>.
-
-  An <dfn>unpaired surrogate code point</dfn> is a <a>surrogate code point</a>
-  that is not part of a <a>surrogate code point pair</a>.
-
-
-<h2 id=wtf16>
-WTF-16</h2>
-
-  A <dfn>WTF-16</dfn> string is an <a>UTF-16</a> string
-  that is not necessarily <a>well-formed</a>.
+  Note: A <a>surrogate byte sequence</a> is <a>ill-formed</a> in <a>UTF-8</a>.
+  Decoders are required to treat is as an error.
 
 
 <h2 id=wtf8>
 WTF-8</h2>
 
-  Issue: Write this
+  <dfn>WTF-8</dfn> is…
+
+  Issue: Write this.
+
+<h3 id=concatenation>
+Concatenation of WTF-8 strings</h3>
+
+  Concatenating two <a>WTF-8</a> strings requires extra care to preserve <a>well-formedness</a>.
+
+  Issue: Write this.

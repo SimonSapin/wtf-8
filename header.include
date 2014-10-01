@@ -179,7 +179,6 @@ img, a.logo { border-style: none; }
 /* Self-links */
 a.self-link {
   position: absolute;
-  top: 0;
   left: -2.5em;
   width: 2em;
   height: 2em;
