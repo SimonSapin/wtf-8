@@ -722,6 +722,11 @@ Terminology</span><a class=self-link href=#terminology></a></h2>
 
 <p><dfn data-dfn-type=dfn data-noexport="" id=unicode-text>Unicode text<a class=self-link href=#unicode-text></a></dfn> is a sequence of <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar values">Unicode scalar values</a>.</p>
 
+<p><dfn data-dfn-type=dfn data-noexport="" id=wtf-text>WTF text<a class=self-link href=#wtf-text></a></dfn>, for the purpose of this specification,
+  is a sequence of <a data-link-type=dfn href=#code-point title="code points">code points</a>
+  that does not contain any <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pair">surrogate code unit pair</a>.
+  That is, the set of values that can be encoded in <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a>.</p>
+
 <p><dfn data-dfn-type=dfn data-noexport="" id=utf-8>UTF-8<a class=self-link href=#utf-8></a></dfn> is an encoding of <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a> using 8-bit bytes.
   Each <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar value">Unicode scalar value</a> is represented as a sequence of one to four bytes.</p>
 
@@ -1027,9 +1032,7 @@ Generalized UTF-8</span><a class=self-link href=#generalized-utf-8></a></h2>
 The WTF-16 encoding</span><a class=self-link href=#the-wtf-16-encoding></a></h2>
 
 <p><dfn data-dfn-type=dfn data-noexport="" id=wtf-16>WTF-16<a class=self-link href=#wtf-16></a></dfn> (Wobbly Transformation Format − 16-bit)
-  is an encoding of sequences of <a data-link-type=dfn href=#code-point title="code points">code points</a>
-  that do not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
-  using 16-bit <a data-link-type=dfn href=#code-unit title="code units">code units</a>.</p>
+  is an encoding of <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a> using 16-bit <a data-link-type=dfn href=#code-unit title="code units">code units</a>.</p>
 
 <p class=note>Note: Like <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>,
   <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a> can not represent a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
@@ -1049,9 +1052,7 @@ The WTF-16 encoding</span><a class=self-link href=#the-wtf-16-encoding></a></h2>
 <h3 class="heading settled" data-level=4.1 id=encoding-to-wtf-16><span class=secno>4.1. </span><span class=content>
 Encoding to WTF-16</span><a class=self-link href=#encoding-to-wtf-16></a></h3>
 
-<p>To <dfn data-dfn-type=dfn data-noexport="" id=encode-to-wtf-16>encode from
-  a sequence of <a data-link-type=dfn href=#code-point title="code points">code points</a> that does not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
-  to <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a><a class=self-link href=#encode-to-wtf-16></a></dfn>,
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=encode-to-wtf-16>encode from <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a> to <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a><a class=self-link href=#encode-to-wtf-16></a></dfn>,
   run these steps:</p>
 
   <ol>
@@ -1094,8 +1095,7 @@ Encoding to WTF-16</span><a class=self-link href=#encoding-to-wtf-16></a></h3>
 <h3 class="heading settled" data-level=4.2 id=decoding-from-wtf-16><span class=secno>4.2. </span><span class=content>
 Decoding from WTF-16</span><a class=self-link href=#decoding-from-wtf-16></a></h3>
 
-<p>To <dfn data-dfn-type=dfn data-noexport="" id=decode-from-wtf-16>decode from <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a> to
-  a sequence of <a data-link-type=dfn href=#code-point title="code points">code points</a> that does not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a><a class=self-link href=#decode-from-wtf-16></a></dfn>,
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=decode-from-wtf-16>decode from <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a> to <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a><a class=self-link href=#decode-from-wtf-16></a></dfn>,
   run these steps:</p>
 
   <ol>
@@ -1138,13 +1138,11 @@ Decoding from WTF-16</span><a class=self-link href=#decoding-from-wtf-16></a></h
 The WTF-8 encoding</span><a class=self-link href=#the-wtf-8-encoding></a></h2>
 
 <p><dfn data-dfn-type=dfn data-noexport="" id=wtf-8>WTF-8<a class=self-link href=#wtf-8></a></dfn> (Wobbly Transformation Format − 8-bit)
-  is an encoding of sequences of <a data-link-type=dfn href=#code-point title="code points">code points</a>
-  that do not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
-  using 8-bit bytes.</p>
+  is an encoding of <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a> using 8-bit bytes.</p>
 
 <p class=note>Note: Like <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> is artificially restricted to <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a>
   in order to match <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>,
-  <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> is artificially restricted to exclude <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pairs">surrogate code point pairs</a>
+  <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> is artificially restricted to <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a>
   in order to match <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a>.</p>
 
 <p>It is identical to <a data-link-type=dfn href=#generalized-utf-8 title="generalized UTF-8">generalized UTF-8</a>,
@@ -1159,9 +1157,7 @@ The WTF-8 encoding</span><a class=self-link href=#the-wtf-8-encoding></a></h2>
 <h3 class="heading settled" data-level=5.1 id=encoding-to-wtf-8><span class=secno>5.1. </span><span class=content>
 Encoding to WTF-8</span><a class=self-link href=#encoding-to-wtf-8></a></h3>
 
-<p>To <dfn data-dfn-type=dfn data-noexport="" id=encode-to-wtf-8>encode from
-  a sequence of <a data-link-type=dfn href=#code-point title="code points">code points</a> that does not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a>
-  to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a><a class=self-link href=#encode-to-wtf-8></a></dfn>,
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=encode-to-wtf-8>encode from <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a> to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a><a class=self-link href=#encode-to-wtf-8></a></dfn>,
   run these steps:</p>
 
   <ol>
@@ -1214,8 +1210,7 @@ Encoding to WTF-8</span><a class=self-link href=#encoding-to-wtf-8></a></h3>
 <h3 class="heading settled" data-level=5.2 id=decoding-from-wtf-8><span class=secno>5.2. </span><span class=content>
 Decoding from WTF-8</span><a class=self-link href=#decoding-from-wtf-8></a></h3>
 
-<p>To <dfn data-dfn-type=dfn data-noexport="" id=decode-from-wtf-8>decode from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to
-  a sequence of <a data-link-type=dfn href=#code-point title="code points">code points</a> that does not contain any <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">surrogate code point pair</a><a class=self-link href=#decode-from-wtf-8></a></dfn>,
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=decode-from-wtf-8>decode from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to <a data-link-type=dfn href=#wtf-text title="WTF text">WTF text</a><a class=self-link href=#decode-from-wtf-8></a></dfn>,
   run these steps:</p>
 
   <ol>
@@ -1344,8 +1339,8 @@ Converting between WTF-8 and WTF-16</span><a class=self-link href=#converting-wt
 <p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-from-wtf-16-to-wtf-8>convert from <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a> to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a><a class=self-link href=#convert-from-wtf-16-to-wtf-8></a></dfn>, run these steps:</p>
 
   <ul>
-    <li><a data-link-type=dfn href=#decode-from-wtf-16 title="Decode from WTF-16 to a sequence of code points that does not contain any surrogate code point pair">Decode from WTF-16 to a sequence of code points that does not contain any surrogate code point pair</a>
-    <li><a data-link-type=dfn href=#encode-to-wtf-8 title="Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8">Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8</a>
+    <li><a data-link-type=dfn href=#decode-from-wtf-16 title="Decode from WTF-16 to WTF text">Decode from WTF-16 to WTF text</a>
+    <li><a data-link-type=dfn href=#encode-to-wtf-8 title="Encode from WTF text to WTF-8">Encode from WTF text to WTF-8</a>
   </ul>
 
 <p class=note>Note: This conversion never fails and is lossless.</p>
@@ -1353,8 +1348,8 @@ Converting between WTF-8 and WTF-16</span><a class=self-link href=#converting-wt
 <p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-from-wtf-8-to-wtf-16>convert from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a><a class=self-link href=#convert-from-wtf-8-to-wtf-16></a></dfn>, run these steps:</p>
 
   <ul>
-    <li><a data-link-type=dfn href=#decode-from-wtf-8 title="Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair">Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair</a>
-    <li><a data-link-type=dfn href=#encode-to-wtf-16 title="Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-16">Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-16</a>
+    <li><a data-link-type=dfn href=#decode-from-wtf-8 title="Decode from WTF-8 to WTF text">Decode from WTF-8 to WTF text</a>
+    <li><a data-link-type=dfn href=#encode-to-wtf-16 title="Encode from WTF text to WTF-16">Encode from WTF text to WTF-16</a>
   </ul>
 
 <p class=note>Note: This conversion never fails
@@ -1405,11 +1400,11 @@ Concatenating WTF-8 strings</span><a class=self-link href=#concatenating></a></h
         <li>
           Let <var>lead</var> and <var>trail</var> be two <a data-link-type=dfn href=#code-point title="code points">code points</a>,
           the respective results of
-          <a data-link-type=dfn href=#decode-from-wtf-8 title="Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair">decoding from WTF-8</a>
+          <a data-link-type=dfn href=#decode-from-wtf-8 title="Decode from WTF-8 to WTF text">decoding from WTF-8</a>
           these two <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequences">surrogate byte sequences</a>.
         <li>
           Let <var>supplementary</var> be the
-          <a data-link-type=dfn href=#encode-to-wtf-8 title="Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8">encoding to WTF-8</a>
+          <a data-link-type=dfn href=#encode-to-wtf-8 title="Encode from WTF text to WTF-8">encoding to WTF-8</a>
           of a single code point of value
           <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code>
         <li>
@@ -1462,10 +1457,4 @@ Conformance</span><a class=self-link href=#conformance></a></h2>
 
 
 
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>BMP scalar value, <a href=#bmp-scalar-value title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>concatenate two WTF-8 strings, <a href=#concatenate-two-wtf-8-strings title="section 5.5">5.5</a><li>consume, <a href=#consume title="section 2">2</a><li>convert from UTF-8 to WTF-8, <a href=#convert-from-utf-8-to-wtf-8 title="section 5.4">5.4</a><li>convert from WTF-16 to WTF-8, <a href=#convert-from-wtf-16-to-wtf-8 title="section 5.3">5.3</a><li>convert from WTF-8 to WTF-16, <a href=#convert-from-wtf-8-to-wtf-16 title="section 5.3">5.3</a><li>convert lossily from WTF-8 to UTF-8, <a href=#convert-lossily-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>convert strictly from WTF-8 to UTF-8, <a href=#convert-strictly-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>decode from WTF-16 to
-  a sequence of code points that does not contain any surrogate code point pair, <a href=#decode-from-wtf-16 title="section 4.2">4.2</a><li>decode from WTF-8 to
-  a sequence of code points that does not contain any surrogate code point pair, <a href=#decode-from-wtf-8 title="section 5.2">5.2</a><li>encode from
-  a sequence of code points that does not contain any surrogate code point pair
-  to WTF-16, <a href=#encode-to-wtf-16 title="section 4.1">4.1</a><li>encode from
-  a sequence of code points that does not contain any surrogate code point pair
-  to WTF-8, <a href=#encode-to-wtf-8 title="section 5.1">5.1</a><li>generalized UTF-8, <a href=#generalized-utf-8 title="section 3">3</a><li>high surrogate byte sequence, <a href=#high-surrogate-byte-sequence title="section 2.3">2.3</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.1">2.1</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.2">2.2</a><li>ill-formed, <a href=#ill-formed title="section 2">2</a><li>ill-formedness, <a href=#ill-formed title="section 2">2</a><li>lead surrogate byte sequence, <a href=#lead-surrogate-byte-sequence title="section 2.3">2.3</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.1">2.1</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.2">2.2</a><li>low surrogate byte sequence, <a href=#low-surrogate-byte-sequence title="section 2.3">2.3</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.1">2.1</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.2">2.2</a><li>replacement character, <a href=#replacement-character title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate byte sequence, <a href=#surrogate-byte-sequence title="section 2.3">2.3</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.1">2.1</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.1">2.1</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.2">2.2</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.2">2.2</a><li>surrogate pair byte sequence, <a href=#surrogate-pair-byte-sequence title="section 2.3">2.3</a><li>trail surrogate byte sequence, <a href=#trail-surrogate-byte-sequence title="section 2.3">2.3</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.1">2.1</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.2">2.2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate byte sequence, <a href=#unpaired-surrogate-byte-sequence title="section 2.3">2.3</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.1">2.1</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.2">2.2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>well-formedness, <a href=#well-formed title="section 2">2</a><li>WTF-16, <a href=#wtf-16 title="section 4">4</a><li>WTF-8, <a href=#wtf-8 title="section 5">5</a></ul>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>BMP scalar value, <a href=#bmp-scalar-value title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>concatenate two WTF-8 strings, <a href=#concatenate-two-wtf-8-strings title="section 5.5">5.5</a><li>consume, <a href=#consume title="section 2">2</a><li>convert from UTF-8 to WTF-8, <a href=#convert-from-utf-8-to-wtf-8 title="section 5.4">5.4</a><li>convert from WTF-16 to WTF-8, <a href=#convert-from-wtf-16-to-wtf-8 title="section 5.3">5.3</a><li>convert from WTF-8 to WTF-16, <a href=#convert-from-wtf-8-to-wtf-16 title="section 5.3">5.3</a><li>convert lossily from WTF-8 to UTF-8, <a href=#convert-lossily-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>convert strictly from WTF-8 to UTF-8, <a href=#convert-strictly-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>decode from WTF-16 to WTF text, <a href=#decode-from-wtf-16 title="section 4.2">4.2</a><li>decode from WTF-8 to WTF text, <a href=#decode-from-wtf-8 title="section 5.2">5.2</a><li>encode from WTF text to WTF-16, <a href=#encode-to-wtf-16 title="section 4.1">4.1</a><li>encode from WTF text to WTF-8, <a href=#encode-to-wtf-8 title="section 5.1">5.1</a><li>generalized UTF-8, <a href=#generalized-utf-8 title="section 3">3</a><li>high surrogate byte sequence, <a href=#high-surrogate-byte-sequence title="section 2.3">2.3</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.1">2.1</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.2">2.2</a><li>ill-formed, <a href=#ill-formed title="section 2">2</a><li>ill-formedness, <a href=#ill-formed title="section 2">2</a><li>lead surrogate byte sequence, <a href=#lead-surrogate-byte-sequence title="section 2.3">2.3</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.1">2.1</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.2">2.2</a><li>low surrogate byte sequence, <a href=#low-surrogate-byte-sequence title="section 2.3">2.3</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.1">2.1</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.2">2.2</a><li>replacement character, <a href=#replacement-character title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate byte sequence, <a href=#surrogate-byte-sequence title="section 2.3">2.3</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.1">2.1</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.1">2.1</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.2">2.2</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.2">2.2</a><li>surrogate pair byte sequence, <a href=#surrogate-pair-byte-sequence title="section 2.3">2.3</a><li>trail surrogate byte sequence, <a href=#trail-surrogate-byte-sequence title="section 2.3">2.3</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.1">2.1</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.2">2.2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate byte sequence, <a href=#unpaired-surrogate-byte-sequence title="section 2.3">2.3</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.1">2.1</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.2">2.2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>well-formedness, <a href=#well-formed title="section 2">2</a><li>WTF-16, <a href=#wtf-16 title="section 4">4</a><li>WTF-8, <a href=#wtf-8 title="section 5">5</a><li>WTF text, <a href=#wtf-text title="section 2">2</a></ul>
