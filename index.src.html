@@ -628,6 +628,7 @@ Decoding from WTF-8</h3>
 
   <ol>
     <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
+    <li>Let <var>lead surrogate</var> be a boolean flag, initially unset.
     <li>For every byte <var>B</var> of the input, depending on <var>B</var>:
       <dl class=switch>
         <dt>0x00 to 0x7F
@@ -669,6 +670,14 @@ Decoding from WTF-8</h3>
           append a <a>replacement character</a> to <var>result</var>
           and abort this iteration of the loop.
 
+          If <var>B</var> is 0xED,
+          <var>B2</var> is in the range from 0xB0 to 0xBF
+          (<var>B</var> and <var>B2</var> start a <a>trail surrogate byte sequence</a>),
+          and the <var>lead surrogate</var> flag is set,
+          then unset the <var>lead surrogate</var> flag,
+          append a <a>replacement character</a> to <var>result</var>,
+          and abort this iteration of the loop.
+
           If there is no input after <var>B2</var>,
           append a <a>replacement character</a> to <var>result</var>
           and abort this iteration of the loop.
@@ -679,11 +688,17 @@ Decoding from WTF-8</h3>
           append a <a>replacement character</a> to <var>result</var>
           and abort this iteration of the loop.
 
-          Append to <var>result</var> a <a>code point</a> of value
+          Let <var>P</var> be a <a>code point</a> of value
           <code>
             ((<var>B</var> & 0x0F) &lt;&lt; 12) +
             ((<var>B2</var> & 0x3F) &lt;&lt; 6) +
             (<var>B3</var> & 0x3F)</code>
+
+          If <var>P</var> is a <a>lead surrogate code point</a>,
+          set the <var>lead surrogate</var> flag.
+          Otherwise, unset it.
+
+          Append <var>P</var> to <var>result</var>.
 
         <dt>0xF0 to 0xF4
         <dd>
