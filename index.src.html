@@ -85,14 +85,6 @@ Background and motivation</h2>
   arbitrary <a>code unit</a> sequences (even if <a>ill-formed</a> in <a>UTF-16</a>)
   but preserves the other <a>well-formedness</a> constraints of <a>UTF-8</a>.
 
-<!--
-
-Scheme 48
-    UTF-8of16
-    http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15
-
--->
-
 
 <h2 id=terminology>
 Terminology</h2>
@@ -845,3 +837,14 @@ Concatenating WTF-8 strings</h3>
   converting both strings <a title="convert from WTF-8 to WTF-16">to WTF-16</a>,
   concatenating the resulting <a>code unit</a> sequences,
   then converting the concatenation back <a title="convert from WTF-16 to WTF-8">to WTF-8</a>.
+
+<h2 id=implementations>
+Implementations</h2>
+
+  <em>This section is non-normative.</em>
+
+  <a href="http://s48.org/">Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
+  to encode <a href="http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15">filenames
+  and other operating system strings on Windows</a>.
+  UTF-8of16 is identical to <a>WTF-8</a>,
+  but doesn’t seem to take special precautions for <a href="#concatenating">concatenation</a>.

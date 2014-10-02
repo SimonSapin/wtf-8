@@ -606,7 +606,8 @@ Encoding to WTF-8</span></a><li><a href=#decoding-from-wtf-8><span class=secno>5
 Decoding from WTF-8</span></a><li><a href=#converting-wtf-8-wtf-16><span class=secno>5.3</span> <span class=content>
 Converting between WTF-8 and WTF-16</span></a><li><a href=#converting-wtf-8-utf-8><span class=secno>5.4</span> <span class=content>
 Converting between WTF-8 and UTF-8</span></a><li><a href=#concatenating><span class=secno>5.5</span> <span class=content>
-Concatenating WTF-8 strings</span></a></ul><li><a href=#conformance><span class=secno></span> <span class=content>
+Concatenating WTF-8 strings</span></a></ul><li><a href=#implementations><span class=secno>6</span> <span class=content>
+Implementations</span></a><li><a href=#conformance><span class=secno></span> <span class=content>
 Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a><li><a href=#informative><span class=secno></span> <span class=content>Informative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
 
@@ -686,8 +687,6 @@ Background and motivation</span><a class=self-link href=#motivation></a></h2>
   a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that can losslessly represent
   arbitrary <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> sequences (even if <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>)
   but preserves the other <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a> constraints of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.</p>
-
-<p></p>
 
 
 <h2 class="heading settled" data-level=2 id=terminology><span class=secno>2. </span><span class=content>
@@ -1441,6 +1440,17 @@ Concatenating WTF-8 strings</span><a class=self-link href=#concatenating></a></h
   converting both strings <a data-link-type=dfn href=#convert-from-wtf-8-to-wtf-16 title="convert from WTF-8 to WTF-16">to WTF-16</a>,
   concatenating the resulting <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> sequences,
   then converting the concatenation back <a data-link-type=dfn href=#convert-from-wtf-16-to-wtf-8 title="convert from WTF-16 to WTF-8">to WTF-8</a>.</p>
+
+<h2 class="heading settled" data-level=6 id=implementations><span class=secno>6. </span><span class=content>
+Implementations</span><a class=self-link href=#implementations></a></h2>
+
+<p><em>This section is non-normative.</em></p>
+
+<p><a href=http://s48.org/>Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
+  to encode <a href=http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15>filenames
+  and other operating system strings on Windows</a>.
+  UTF-8of16 is identical to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>,
+  but doesn’t seem to take special precautions for <a href=#concatenating>concatenation</a>.</p>
 
 <h2 class="no-ref no-num heading settled" id=conformance><span class=content>
 Conformance</span><a class=self-link href=#conformance></a></h2>
