@@ -29,11 +29,11 @@ body {
   background-repeat: no-repeat;
   color: black;
   counter-reset: exampleno figure issue;
-  font-family: sans-serif;
+  font-family: Helvetica Neue, sans-serif, Droid Sans Fallback;
   line-height: 1.5;
-  margin: 0 auto;
+  margin: 0 1em 0 8em;
   max-width: 50em;
-  padding: 2em 1em 2em 70px;
+  padding: 2em 1em;
 }
 
 /* General structural markup */
@@ -217,6 +217,18 @@ a.self-link::before { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
 dfn > a.self-link::before { content: "#"; }
 
+:target:not(.note):not(.example):not(.warning):not(.domintro)::before {
+    position: absolute;
+    left: 0.25em;
+    transform: rotate(5deg);
+    color: black;
+    content: '\27BC';
+    line-height: 1.25em;
+    margin: -0.4em 0.25em 0 0.25em;
+    padding: 0 0.3em;
+    font-size: 3em;
+    font-size: 3rem;
+}
 
 /* Figures */
 
@@ -326,7 +338,6 @@ pre.idl :link, pre.idl :visited {
   text-align: center;
 }
 .data caption {
-  width: 100%;
   text-align: left;
 }
 .data caption p:first-child {
@@ -355,14 +366,13 @@ pre.idl :link, pre.idl :visited {
 .data colgroup {
   border-left: 2px solid;
 }
-/*.data tbody th:first-child,
 .data tbody td[scope="row"]:first-child {
   text-align: right;
   color: inherit;
   border-right: 2px solid;
   border-top: 1px solid silver;
   padding-right: 1em;
-}*/
+}
 .data.define td:last-child {
   text-align: left;
 }

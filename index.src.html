@@ -197,7 +197,7 @@ Surrogate code units</h3>
 
   A <dfn>surrogate code unit pair</dfn> is a sequence of
   a <a>lead surrogate code unit</a> followed by a <a>trail surrogate code unit</a>.
-  If <a>UTF-16</a>, it represents a <a>supplementary code point</a>.
+  In <a>UTF-16</a>, it represents a <a>supplementary code point</a>.
 
   An <dfn>unpaired surrogate code unit</dfn> is a <a>surrogate code unit</a>
   that is not part of a <a>surrogate code unit pair</a>.
@@ -206,21 +206,68 @@ Surrogate code units</h3>
 <h3 id=surrogates-byte-sequences>
 Surrogate byte sequences</h3>
 
-  A <dfn>surrogate byte sequence</dfn> is a byte sequence
-  that represents a <a>surrogate code point</a> in <a>UTF-8</a>’s underlying algorithm.
-  That is, a sequence of three bytes that matches the following bit pattern
-  (where each <code>x</code> can be either <code>0</code> or <code>1</code>)
+  A <dfn>lead surrogate byte sequence</dfn> or <dfn>high surrogate byte sequence</dfn>
+  is a sequence of three bytes
+  that represents a <a>lead surrogate code point</a> in <a>generalized UTF-8</a>.
 
-  <pre>11101101 101xxxxx 10xxxxxx</pre>
+
+  A <dfn>trail surrogate byte sequence</dfn> or <dfn>low surrogate byte sequence</dfn>
+  is a sequence of three bytes
+  that represents a <a>trail surrogate code point</a> in <a>generalized UTF-8</a>.
+
+  A <dfn>surrogate byte sequence</dfn> is
+  either a <a>lead surrogate byte sequence</a> or a <a>trail surrogate byte sequence</a>.
+  That is, a sequence of three bytes
+  that represents a <a>surrogate code point</a> in <a>generalized UTF-8</a>.
+
+  <table class=data>
+    <caption>
+
+        Table 1. Surrogate byte sequences
+
+        Bytes noted in hexadecimal.
+
+    <tr>
+      <th>
+      <th>First byte
+      <th>Second byte
+      <th>Third byte
+    </tr>
+    <tr>
+      <th><a>Lead surrogate byte sequence</a>
+      <td>ED
+      <td>A0 to AF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <th><a>Trail surrogate byte sequence</a>
+      <td>ED
+      <td>B0 to BF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <th><a>Surrogate byte sequence</a>
+      <td>ED
+      <td>A0 to BF
+      <td>80 to BF
+    </tr>
+  </table>
 
   Note: A <a>surrogate byte sequence</a> is <a>ill-formed</a> in <a>UTF-8</a>.
-  Decoders are required to treat is as an error.
+  Decoders are required to treat is as an error
+
+  A <dfn>surrogate pair byte sequence</dfn> is a sequence six bytes composed of
+  a <a>lead surrogate byte sequence</a> followed by a <a>trail surrogate byte sequence</a>.
+
+  An <dfn>unpaired surrogate byte sequence</dfn> is a <a>surrogate byte sequence</a>
+  that is not part of a <a>surrogate pair byte sequence</a>.
 
 
 <h2 id=generalized-utf8>
 Generalized UTF-8</h2>
 
-  <dfn>Generalized UTF-8</dfn> is an encoding of sequences of <a>code points</a>
+  For the purpose of this specification,
+  <dfn>generalized UTF-8</dfn> is an encoding of sequences of <a>code points</a>
   (not restricted to <a>Unicode scalar values</a>)
   using 8-bit bytes,
   based on the same underlying algorithm as <a>UTF-8</a>.
@@ -232,7 +279,7 @@ Generalized UTF-8</h2>
   <table class=data>
     <caption>
 
-      Table 1. Bit distribution
+      Table 2. Bit distribution
 
       Bytes noted in binary, most significant bit first.
       <code>x</code> bits represent the least significant bits of the code points.
@@ -287,7 +334,7 @@ Generalized UTF-8</h2>
   <table class=data>
     <caption>
 
-        Table 2. Well-formed byte sequences representing a single code point
+        Table 3. Well-formed byte sequences representing a single code point
 
         Bytes noted in hexadecimal.
 
