@@ -5,7 +5,7 @@ Status: LS
 !Issue tracking: <a href="https://github.com/SimonSapin/wtf-8/issues">On GitHub</a>
 !Last updated: [DATE]
 Editor: Simon Sapin, Mozilla https://www.mozilla.org/, https://exyr.org/
-Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
+Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the <a>well-formedness</a> invariant that surrogates must be paired.
 </pre>
 
 <link href="logo-wtf-8.svg" rel="icon">
@@ -73,6 +73,8 @@ Background and motivation</h2>
       code units</a>).
   </ul>
 
+  This specification calls this practice <a>WTF-16</a>.
+
   <a>Unpaired surrogate code units</a> are the only case
   where an arbitrary sequence of <a>code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
   <a>UTF-8</a>, however, is more complex
@@ -110,12 +112,18 @@ Terminology</h2>
   A <dfn>BMP code point</dfn> is a <a>code point</a> in the <a>Basic Multilingual Plane</a>.
 
   A <dfn>supplementary code point</dfn>
-  is a <a>code point</a> in the range from U+10000 to U+10FFFF.
-  That is, a code point not in the Basic Multilingual Plane.
+  is a <a>code point</a> not in the Basic Multilingual Plane.
+  That is, a <a>code point</a> in the range from U+10000 to U+10FFFF.
 
   A <dfn>Unicode scalar value</dfn>
   is a <a>code point</a> that is not a <a>surrogate code point</a>.
-  That is, a code point in the range from U+0000 to U+D7FF, or U+E000 to U+10FFFF.
+  That is, a <a>code point</a> in the range from U+0000 to U+D7FF,
+  or in the range U+E000 to U+10FFFF.
+
+  A <dfn>BMP scalar value</dfn> is a <a>Unicode scalar value</a>
+  in the <a>Basic Multilingual Plane</a>.
+  That is, a <a>code point</a> in the range from U+0000 to U+D7FF,
+  or in the range U+E000 to U+FFFF.
 
   <dfn>Unicode text</dfn> is a sequence of <a>Unicode scalar values</a>.
 
@@ -123,10 +131,8 @@ Terminology</h2>
   Each <a>Unicode scalar value</a> is represented as a sequence of one to four bytes.
 
   <dfn>UTF-16</dfn> is an encoding of <a>Unicode text</a> using 16-bit <a>code units</a>.
-  <a>BMP code points</a> (other than <a title="surrogate code point">surrogates</a>)
-  are represented as a single <a>code unit</a> with the same value.
-  <a>Supplementary code points</a>
-  are represented as a <a>surrogate code unit pair</a>.
+  <a>BMP scalar values</a> are represented as a single <a>code unit</a> with the same value.
+  <a>Supplementary code points</a> are represented as a <a>surrogate code unit pair</a>.
 
   A string is <dfn title="well-formed|well-formedness">well-formed</dfn>
   (not <dfn title="ill-formed|ill-formedness">ill-formed</dfn>)
@@ -145,7 +151,7 @@ Terminology</h2>
     </ul>
   </div>
 
-  The <dfn>replacement character</dfn> is the code point U+FFFD
+  The <dfn>replacement character</dfn> is the <a>code point</a> U+FFFD
   <code>REPLACEMENT CHARACTER</code> (&#xFFFD;).
   It is used as a substitute to replace <a>ill-formed</a> sub-sequences
   during a conversion.
@@ -398,8 +404,31 @@ Generalized UTF-8</h2>
   </table>
 
 
-<h2 id=wtf-8>
-WTF-8</h2>
+<h2 id=wtf-16-encoding>
+The WTF-16 encoding</h2>
+
+  <dfn>WTF-16</dfn> (Wobbly Transformation Format − 16-bit)
+  is an encoding of sequences of <a>code points</a>
+  that do not contain a <a>surrogate code point pair</a>
+  using 16-bit <a>code units</a>.
+
+  Note: Like <a>UTF-16</a>,
+  <a>WTF-16</a> can not represent a <a>surrogate code point pair</a>
+  since the corresponding <a>surrogate code unit pair</a> would instead
+  represent a <a>supplementary code point</a>.
+
+  It is identical to <a>UTF-16</a>,
+  with the <a>well-formedness</a> constraint removed
+  and the added semantics that an <a>unpaired surrogate code unit</a>
+  represents the corresponding <a>surrogate code point</a>.
+  It is a strict superset of <a>UTF-16</a>.
+
+  <a>WTF-16</a> has no <a>well-formedness</a> constraint.
+  Any sequence of <a>code units</a> is <a>well-formed</a> in <a>WTF-16</a>.
+
+
+<h2 id=wtf-8-encoding>
+The WTF-8 encoding</h2>
 
   <dfn>WTF-8</dfn> is…
 
