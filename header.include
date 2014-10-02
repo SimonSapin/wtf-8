@@ -322,11 +322,16 @@ pre.idl :link, pre.idl :visited {
   border: hidden;
 }
 .data {
-  text-align: center;
   width: auto;
+  text-align: center;
 }
 .data caption {
   width: 100%;
+  text-align: left;
+}
+.data caption p:first-child {
+  font-style: italic;
+  text-align: center;
 }
 .data td, .data th {
   padding: 0.5em;
@@ -350,14 +355,14 @@ pre.idl :link, pre.idl :visited {
 .data colgroup {
   border-left: 2px solid;
 }
-.data tbody th:first-child,
+/*.data tbody th:first-child,
 .data tbody td[scope="row"]:first-child {
   text-align: right;
   color: inherit;
   border-right: 2px solid;
   border-top: 1px solid silver;
   padding-right: 1em;
-}
+}*/
 .data.define td:last-child {
   text-align: left;
 }

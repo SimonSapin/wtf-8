@@ -320,11 +320,16 @@ pre.idl :link, pre.idl :visited {
   border: hidden;
 }
 .data {
-  text-align: center;
   width: auto;
+  text-align: center;
 }
 .data caption {
   width: 100%;
+  text-align: left;
+}
+.data caption p:first-child {
+  font-style: italic;
+  text-align: center;
 }
 .data td, .data th {
   padding: 0.5em;
@@ -348,14 +353,14 @@ pre.idl :link, pre.idl :visited {
 .data colgroup {
   border-left: 2px solid;
 }
-.data tbody th:first-child,
+/*.data tbody th:first-child,
 .data tbody td[scope="row"]:first-child {
   text-align: right;
   color: inherit;
   border-right: 2px solid;
   border-top: 1px solid silver;
   padding-right: 1em;
-}
+}*/
 .data.define td:last-child {
   text-align: left;
 }
@@ -551,7 +556,7 @@ span.issue, span.note {
 <div class=head>
   <p data-fill-with=logo></p>
   <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>1 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
+  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>2 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf8/issues>On GitHub</a></span></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=zero.png></a>
 To the extent possible under law, the editors have waived all copyright
@@ -561,7 +566,7 @@ and related or neighboring rights to this work.
 </div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=abstract><span class=content>Abstract</span></h2>
-<div class=p-summary data-fill-with=abstract><p>WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that encodes <a data-link-type=dfn href=#surrogate-code-point title="surrogate code points">surrogate code points</a> if they are not in a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.</p>
+<div class=p-summary data-fill-with=abstract><p>WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that encodes <a data-link-type=dfn href=#surrogate-code-point title="surrogate code points">surrogate code points</a> if they are not in a <a data-link-type=dfn href=#surrogate-code-point-pair title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.</p>
 
 </div>
 <div data-fill-with=at-risk></div>
@@ -572,8 +577,9 @@ Background and motivation</span></a><li><a href=#terminology><span class=secno>2
 Terminology</span></a><ul class=toc><li><a href=#surrogates-code-points><span class=secno>2.1</span> <span class=content>
 Surrogate code points</span></a><li><a href=#surrogates-code-units><span class=secno>2.2</span> <span class=content>
 Surrogate code units</span></a><li><a href=#surrogates-byte-sequences><span class=secno>2.3</span> <span class=content>
-Surrogate byte sequences</span></a></ul><li><a href=#wtf8><span class=secno>3</span> <span class=content>
-WTF-8</span></a><ul class=toc><li><a href=#concatenation><span class=secno>3.1</span> <span class=content>
+Surrogate byte sequences</span></a></ul><li><a href=#generalized-utf8><span class=secno>3</span> <span class=content>
+Generalized UTF-8</span></a><li><a href=#wtf8><span class=secno>4</span> <span class=content>
+WTF-8</span></a><ul class=toc><li><a href=#concatenation><span class=secno>4.1</span> <span class=content>
 Concatenation of WTF-8 strings</span></a></ul><li><a href=#conformance><span class=secno></span> <span class=content>
 Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
@@ -782,14 +788,147 @@ Surrogate byte sequences</span><a class=self-link href=#surrogates-byte-sequence
   Decoders are required to treat is as an error.</p>
 
 
-<h2 class="heading settled" data-level=3 id=wtf8><span class=secno>3. </span><span class=content>
+<h2 class="heading settled" data-level=3 id=generalized-utf8><span class=secno>3. </span><span class=content>
+Generalized UTF-8</span><a class=self-link href=#generalized-utf8></a></h2>
+
+<p><dfn data-dfn-type=dfn data-noexport="" id=generalized-utf-8>Generalized UTF-8<a class=self-link href=#generalized-utf-8></a></dfn> is an encoding of sequences of <a data-link-type=dfn href=#code-point title="code points">code points</a>
+  (not restricted to <a data-link-type=dfn href=#unicode-scalar-value title="Unicode scalar values">Unicode scalar values</a>)
+  using 8-bit bytes,
+  based on the same underlying algorithm as <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.
+  It is a strict superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>
+  (like <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> is a strict superset of ASCII).</p>
+
+<p>Each <a data-link-type=dfn href=#code-point title="code point">code point</a> is encoded as a sequence of one to four bytes:</p>
+
+  <table class=data>
+    <caption>
+
+<p>Table 1. Bit distribution</p>
+
+<p>Bytes noted in binary, most significant bit first.
+      <code>x</code> bits represent the least significant bits of the code points.</p>
+
+    </caption><tr>
+      <th>Code point
+      <th>First byte
+      <th>Second byte
+      <th>Third byte
+      <th>Fourth byte
+    </tr>
+    <tr>
+      <td>U+0000 to U+007F
+      <td>0xxxxxxx
+      <td>
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0080 to U+07FF
+      <td>110xxxxx
+      <td>10xxxxxx
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0800 to U+FFFF
+      <td>1110xxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+      <td>
+    </tr>
+    <tr>
+      <td>U+10000 to U+10FFFF
+      <td>1110xxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+    </tr>
+  </table>
+
+<p>A byte sequence is <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in <a data-link-type=dfn href=#generalized-utf-8 title="generalized UTF-8">generalized UTF-8</a>
+  if and only if:</p>
+
+  <ul>
+    <li>It is the empty string, or
+    <li>
+     It is composed of a byte sequence that is <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in <a data-link-type=dfn href=#generalized-utf-8 title="generalized UTF-8">generalized UTF-8</a>
+     followed by a byte sequence in the following table.
+  </ul>
+
+  <table class=data>
+    <caption>
+
+<p>Table 2. Well-formed byte sequences representing a single code point</p>
+
+<p>Bytes noted in hexadecimal.</p>
+
+    </caption><tr>
+      <th>Code point
+      <th>First byte
+      <th>Second byte
+      <th>Third byte
+      <th>Fourth byte
+    </tr>
+    <tr>
+      <td>U+0000 to U+007F
+      <td>00 to 7F
+      <td>
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0080 to U+07FF
+      <td>C2 to DF
+      <td>80 to BF
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0800 to U+0FFF
+      <td>E0
+      <td><strong>A0</strong> to BF
+      <td>80 to BF
+      <td>
+    </tr>
+    <tr>
+      <td>U+1000 to U+FFFF
+      <td>E1 to EF
+      <td>80 to BF
+      <td>80 to BF
+      <td>
+    </tr>
+    <tr>
+      <td>U+10000 to U+3FFFF
+      <td>F0
+      <td><strong>90</strong> to BF
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <td>U+40000 to U+FFFFF
+      <td>F1 to F3
+      <td>80 to BF
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <td>U+100000 to U+10FFFF
+      <td>F4
+      <td>80 to <strong>8F</strong>
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+  </table>
+
+
+<h2 class="heading settled" data-level=4 id=wtf8><span class=secno>4. </span><span class=content>
 WTF-8</span><a class=self-link href=#wtf8></a></h2>
 
 <p><dfn data-dfn-type=dfn data-noexport="" id=wtf-8>WTF-8<a class=self-link href=#wtf-8></a></dfn> is…</p>
 
 <p class=issue id=issue-9139216e><a class=self-link href=#issue-9139216e></a>Write this.</p>
 
-<h3 class="heading settled" data-level=3.1 id=concatenation><span class=secno>3.1. </span><span class=content>
+<h3 class="heading settled" data-level=4.1 id=concatenation><span class=secno>4.1. </span><span class=content>
 Concatenation of WTF-8 strings</span><a class=self-link href=#concatenation></a></h3>
 
 <p>Concatenating two <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> strings requires extra care to preserve <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a>.</p>
@@ -828,4 +967,4 @@ Conformance</span><a class=self-link href=#conformance></a></h2>
 
 
 
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.1">2.1</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.2">2.2</a><li>ill-formed, <a href=#ill-formed title="section 2">2</a><li>ill-formedness, <a href=#ill-formed title="section 2">2</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.1">2.1</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.2">2.2</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.1">2.1</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.2">2.2</a><li>replacement character, <a href=#replacement-character title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate byte sequence, <a href=#surrogate-byte-sequence title="section 2.3">2.3</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.1">2.1</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.1">2.1</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.2">2.2</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.2">2.2</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.1">2.1</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.2">2.2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.1">2.1</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.2">2.2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>well-formedness, <a href=#well-formed title="section 2">2</a><li>WTF-8, <a href=#wtf-8 title="section 3">3</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div></div>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>Generalized UTF-8, <a href=#generalized-utf-8 title="section 3">3</a><li>high surrogate code point, <a href=#high-surrogate-code-point title="section 2.1">2.1</a><li>high surrogate code unit, <a href=#high-surrogate-code-unit title="section 2.2">2.2</a><li>ill-formed, <a href=#ill-formed title="section 2">2</a><li>ill-formedness, <a href=#ill-formed title="section 2">2</a><li>lead surrogate code point, <a href=#lead-surrogate-code-point title="section 2.1">2.1</a><li>lead surrogate code unit, <a href=#lead-surrogate-code-unit title="section 2.2">2.2</a><li>low surrogate code point, <a href=#low-surrogate-code-point title="section 2.1">2.1</a><li>low surrogate code unit, <a href=#low-surrogate-code-unit title="section 2.2">2.2</a><li>replacement character, <a href=#replacement-character title="section 2">2</a><li>supplementary code point, <a href=#supplementary-code-point title="section 2">2</a><li>surrogate byte sequence, <a href=#surrogate-byte-sequence title="section 2.3">2.3</a><li>surrogate code point, <a href=#surrogate-code-point title="section 2.1">2.1</a><li>surrogate code point pair, <a href=#surrogate-code-point-pair title="section 2.1">2.1</a><li>surrogate code unit, <a href=#surrogate-code-unit title="section 2.2">2.2</a><li>surrogate code unit pair, <a href=#surrogate-code-unit-pair title="section 2.2">2.2</a><li>trail surrogate code point, <a href=#trail-surrogate-code-point title="section 2.1">2.1</a><li>trail surrogate code unit, <a href=#trail-surrogate-code-unit title="section 2.2">2.2</a><li>Unicode scalar value, <a href=#unicode-scalar-value title="section 2">2</a><li>Unicode text, <a href=#unicode-text title="section 2">2</a><li>unpaired surrogate code point, <a href=#unpaired-surrogate-code-point title="section 2.1">2.1</a><li>unpaired surrogate code unit, <a href=#unpaired-surrogate-code-unit title="section 2.2">2.2</a><li>UTF-16, <a href=#utf-16 title="section 2">2</a><li>UTF-8, <a href=#utf-8 title="section 2">2</a><li>well-formed, <a href=#well-formed title="section 2">2</a><li>well-formedness, <a href=#well-formed title="section 2">2</a><li>WTF-8, <a href=#wtf-8 title="section 4">4</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div><div class=issue>Write this.<a href=#issue-9139216e> ↵ </a></div></div>

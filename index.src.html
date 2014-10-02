@@ -5,7 +5,7 @@ Status: LS
 !Issue tracking: <a href="https://github.com/SimonSapin/wtf8/issues">On GitHub</a>
 !Last updated: [DATE]
 Editor: Simon Sapin, Mozilla https://www.mozilla.org/, https://exyr.org/
-Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a super-set of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
+Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the invariant that surrogates must be paired.
 </pre>
 
 <p class=logo><img src=logo-wtf8.svg width=100 height=100>
@@ -215,6 +215,139 @@ Surrogate byte sequences</h3>
 
   Note: A <a>surrogate byte sequence</a> is <a>ill-formed</a> in <a>UTF-8</a>.
   Decoders are required to treat is as an error.
+
+
+<h2 id=generalized-utf8>
+Generalized UTF-8</h2>
+
+  <dfn>Generalized UTF-8</dfn> is an encoding of sequences of <a>code points</a>
+  (not restricted to <a>Unicode scalar values</a>)
+  using 8-bit bytes,
+  based on the same underlying algorithm as <a>UTF-8</a>.
+  It is a strict superset of <a>UTF-8</a>
+  (like <a>UTF-8</a> is a strict superset of ASCII).
+
+  Each <a>code point</a> is encoded as a sequence of one to four bytes:
+
+  <table class=data>
+    <caption>
+
+      Table 1. Bit distribution
+
+      Bytes noted in binary, most significant bit first.
+      <code>x</code> bits represent the least significant bits of the code points.
+
+    <tr>
+      <th>Code point
+      <th>First byte
+      <th>Second byte
+      <th>Third byte
+      <th>Fourth byte
+    </tr>
+    <tr>
+      <td>U+0000 to U+007F
+      <td>0xxxxxxx
+      <td>
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0080 to U+07FF
+      <td>110xxxxx
+      <td>10xxxxxx
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0800 to U+FFFF
+      <td>1110xxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+      <td>
+    </tr>
+    <tr>
+      <td>U+10000 to U+10FFFF
+      <td>1110xxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+      <td>10xxxxxx
+    </tr>
+  </table>
+
+  A byte sequence is <a>well-formed</a> in <a>generalized UTF-8</a>
+  if and only if:
+
+  <ul>
+    <li>It is the empty string, or
+    <li>
+     It is composed of a byte sequence that is <a>well-formed</a> in <a>generalized UTF-8</a>
+     followed by a byte sequence in the following table.
+  </ul>
+
+  <table class=data>
+    <caption>
+
+        Table 2. Well-formed byte sequences representing a single code point
+
+        Bytes noted in hexadecimal.
+
+    <tr>
+      <th>Code point
+      <th>First byte
+      <th>Second byte
+      <th>Third byte
+      <th>Fourth byte
+    </tr>
+    <tr>
+      <td>U+0000 to U+007F
+      <td>00 to 7F
+      <td>
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0080 to U+07FF
+      <td>C2 to DF
+      <td>80 to BF
+      <td>
+      <td>
+    </tr>
+    <tr>
+      <td>U+0800 to U+0FFF
+      <td>E0
+      <td><strong>A0</strong> to BF
+      <td>80 to BF
+      <td>
+    </tr>
+    <tr>
+      <td>U+1000 to U+FFFF
+      <td>E1 to EF
+      <td>80 to BF
+      <td>80 to BF
+      <td>
+    </tr>
+    <tr>
+      <td>U+10000 to U+3FFFF
+      <td>F0
+      <td><strong>90</strong> to BF
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <td>U+40000 to U+FFFFF
+      <td>F1 to F3
+      <td>80 to BF
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+    <tr>
+      <td>U+100000 to U+10FFFF
+      <td>F4
+      <td>80 to <strong>8F</strong>
+      <td>80 to BF
+      <td>80 to BF
+    </tr>
+  </table>
 
 
 <h2 id=wtf8>
