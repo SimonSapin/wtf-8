@@ -233,7 +233,8 @@ dfn > a.self-link::before { content: "#"; }
     font-size: 3rem;
 }
 
-.heading:target:not(.note):not(.example):not(.warning):not(.domintro)::before {
+.heading:target:not(#undefined)::before,
+dt:target:not(#undefined)::before {
     left: -3em;
 }
 
