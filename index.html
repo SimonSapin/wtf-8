@@ -27,11 +27,14 @@ body {
   background-repeat: no-repeat;
   color: black;
   counter-reset: exampleno figure issue;
-  font-family: Helvetica Neue, sans-serif, Droid Sans Fallback;
   line-height: 1.5;
   margin: 0 1em 0 8em;
   max-width: 50em;
   padding: 2em 1em;
+}
+
+html, :before {
+  font: 1em/1.45 Helvetica Neue, sans-serif, Droid Sans Fallback;
 }
 
 /* General structural markup */
@@ -221,11 +224,15 @@ dfn > a.self-link::before { content: "#"; }
     transform: rotate(5deg);
     color: black;
     content: '\27BC';
-    line-height: 1.25em;
-    margin: -0.4em 0.25em 0 0.25em;
+    line-height: 1.5em;
+    margin: -0.55em 0.25em 0 0.25em;
     padding: 0 0.3em;
     font-size: 3em;
     font-size: 3rem;
+}
+
+.heading:target:not(.note):not(.example):not(.warning):not(.domintro)::before {
+    left: -3em;
 }
 
 /* Figures */
