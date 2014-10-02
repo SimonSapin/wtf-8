@@ -723,6 +723,13 @@ Terminology</span><a class=self-link href=#terminology></a></h2>
   <a data-link-type=dfn href=#bmp-scalar-value title="BMP scalar values">BMP scalar values</a> are represented as a single <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> with the same value.
   <a data-link-type=dfn href=#supplementary-code-point title="Supplementary code points">Supplementary code points</a> are represented as a <a data-link-type=dfn href=#surrogate-code-unit-pair title="surrogate code unit pair">surrogate code unit pair</a>.</p>
 
+<p class=note>Note: this specification is only concerned with the UTF-16
+  <a href=http://www.unicode.org/glossary/#character_encoding_form>encoding form</a>
+  (based on <a data-link-type=dfn href=#code-unit title="code units">code units</a>),
+  and not with the
+  <a href=http://www.unicode.org/glossary/#character_encoding_scheme>encoding scheme</a>
+  (based on bytes, with UTF-16BE and UTF-16LE variants).</p>
+
 <p>A string is <dfn data-dfn-type=dfn data-noexport="" id=well-formed title=well-formed|well-formedness>well-formed<a class=self-link href=#well-formed></a></dfn>
   (not <dfn data-dfn-type=dfn data-noexport="" id=ill-formed title=ill-formed|ill-formedness>ill-formed<a class=self-link href=#ill-formed></a></dfn>)
   in a given encoding if it follows the specification of that encoding.

@@ -134,6 +134,13 @@ Terminology</h2>
   <a>BMP scalar values</a> are represented as a single <a>code unit</a> with the same value.
   <a>Supplementary code points</a> are represented as a <a>surrogate code unit pair</a>.
 
+  Note: this specification is only concerned with the UTF-16
+  <a href="http://www.unicode.org/glossary/#character_encoding_form">encoding form</a>
+  (based on <a>code units</a>),
+  and not with the
+  <a href="http://www.unicode.org/glossary/#character_encoding_scheme">encoding scheme</a>
+  (based on bytes, with UTF-16BE and UTF-16LE variants).
+
   A string is <dfn title="well-formed|well-formedness">well-formed</dfn>
   (not <dfn title="ill-formed|ill-formedness">ill-formed</dfn>)
   in a given encoding if it follows the specification of that encoding.
