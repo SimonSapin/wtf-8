@@ -602,7 +602,9 @@ Encoding to WTF-16</span></a><li><a href=#decoding-from-wtf-16><span class=secno
 Decoding from WTF-16</span></a></ul><li><a href=#the-wtf-8-encoding><span class=secno>5</span> <span class=content>
 The WTF-8 encoding</span></a><ul class=toc><li><a href=#encoding-to-wtf-8><span class=secno>5.1</span> <span class=content>
 Encoding to WTF-8</span></a><li><a href=#decoding-from-wtf-8><span class=secno>5.2</span> <span class=content>
-Decoding from WTF-8</span></a><li><a href=#concatenation><span class=secno>5.3</span> <span class=content>
+Decoding from WTF-8</span></a><li><a href=#converting-wtf-8-wtf-16><span class=secno>5.3</span> <span class=content>
+Converting between WTF-8 and WTF-16</span></a><li><a href=#converting-wtf-8-utf-8><span class=secno>5.4</span> <span class=content>
+Converting between WTF-8 and UTF-8</span></a><li><a href=#concatenation><span class=secno>5.5</span> <span class=content>
 Concatenation of WTF-8 strings</span></a></ul><li><a href=#conformance><span class=secno></span> <span class=content>
 Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
@@ -1336,7 +1338,57 @@ Decoding from WTF-8</span><a class=self-link href=#decoding-from-wtf-8></a></h3>
   and the resulting sequence is <a data-link-type=dfn href=#unicode-text title="Unicode text">Unicode text</a>.</p>
 
 
-<h3 class="heading settled" data-level=5.3 id=concatenation><span class=secno>5.3. </span><span class=content>
+<h3 class="heading settled" data-level=5.3 id=converting-wtf-8-wtf-16><span class=secno>5.3. </span><span class=content>
+Converting between WTF-8 and WTF-16</span><a class=self-link href=#converting-wtf-8-wtf-16></a></h3>
+
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-from-wtf-16-to-wtf-8>convert from <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a> to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a><a class=self-link href=#convert-from-wtf-16-to-wtf-8></a></dfn>, run these steps:</p>
+
+  <ul>
+    <li><a data-link-type=dfn href=#decode-from-wtf-16-to-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair title="Decode from WTF-16 to a sequence of code points that does not contain any surrogate code point pair">Decode from WTF-16 to a sequence of code points that does not contain any surrogate code point pair</a>
+    <li><a data-link-type=dfn href=#encode-from-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair-to-wtf-8 title="Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8">Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8</a>
+  </ul>
+
+<p class=note>Note: This conversion never fails and is lossless.</p>
+
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-from-wtf-8-to-wtf-16>convert from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to <a data-link-type=dfn href=#wtf-16 title=WTF-16>WTF-16</a><a class=self-link href=#convert-from-wtf-8-to-wtf-16></a></dfn>, run these steps:</p>
+
+  <ul>
+    <li><a data-link-type=dfn href=#decode-from-wtf-8-to-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair title="Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair">Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair</a>
+    <li><a data-link-type=dfn href=#encode-from-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair-to-wtf-16 title="Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-16">Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-16</a>
+  </ul>
+
+<p class=note>Note: This conversion never fails
+  and, if the input is <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>, is lossless.</p>
+
+
+<h3 class="heading settled" data-level=5.4 id=converting-wtf-8-utf-8><span class=secno>5.4. </span><span class=content>
+Converting between WTF-8 and UTF-8</span><a class=self-link href=#converting-wtf-8-utf-8></a></h3>
+
+<p>Since <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> is a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>,
+  any sequence of byte that is <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>
+  is also <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> and represents the same text.
+  To <dfn data-dfn-type=dfn data-noexport="" id=convert-from-utf-8-to-wtf-8>convert from <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a><a class=self-link href=#convert-from-utf-8-to-wtf-8></a></dfn>,
+  return the input unchanged.</p>
+
+<p class=note>Note: This conversion never fails and is losseless.</p>
+
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-lossily-from-wtf-8-to-utf-8>convert lossily from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a><a class=self-link href=#convert-lossily-from-wtf-8-to-utf-8></a></dfn>,
+  replace any <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequence">surrogate byte sequence</a> with &lt;0xEF, 0xBF, 0xBD&gt;,
+  the sequence of three bytes that encode the <a data-link-type=dfn href=#replacement-character title="replacement character">replacement character</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.</p>
+
+<p class=note>Note: This conversion never fails but is lossy.</p>
+
+<p>To <dfn data-dfn-type=dfn data-noexport="" id=convert-strictly-from-wtf-8-to-utf-8>convert strictly from <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> to <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a><a class=self-link href=#convert-strictly-from-wtf-8-to-utf-8></a></dfn>, run these steps:</p>
+
+  <ol>
+    <li>If the input contains a <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequence">surrogate byte sequence</a>, return failure.
+    <li>Otherwise, return the input unchanged.
+  </ol>
+
+<p class=note>Note: This conversion is losseless when it succeeds, but it can fail.</p>
+
+
+<h3 class="heading settled" data-level=5.5 id=concatenation><span class=secno>5.5. </span><span class=content>
 Concatenation of WTF-8 strings</span><a class=self-link href=#concatenation></a></h3>
 
 <p>Concatenating two <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> strings requires extra care to preserve <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a>.</p>
@@ -1375,7 +1427,7 @@ Conformance</span><a class=self-link href=#conformance></a></h2>
 
 
 
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>BMP scalar value, <a href=#bmp-scalar-value title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>consume, <a href=#consume title="section 2">2</a><li>decode from WTF-16 to
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-unicode title=UNICODE><a class=self-link href=#biblio-unicode></a>[UNICODE]<dd>The Unicode Consortium. <a href=http://www.unicode.org/versions/latest/>The Unicode Standard</a>. URL: <a href=http://www.unicode.org/versions/latest/>http://www.unicode.org/versions/latest/</a><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Basic Multilingual Plane, <a href=#basic-multilingual-plane title="section 2">2</a><li>BMP code point, <a href=#bmp-code-point title="section 2">2</a><li>BMP scalar value, <a href=#bmp-scalar-value title="section 2">2</a><li>code point, <a href=#code-point title="section 2">2</a><li>code unit, <a href=#code-unit title="section 2">2</a><li>consume, <a href=#consume title="section 2">2</a><li>convert from UTF-8 to WTF-8, <a href=#convert-from-utf-8-to-wtf-8 title="section 5.4">5.4</a><li>convert from WTF-16 to WTF-8, <a href=#convert-from-wtf-16-to-wtf-8 title="section 5.3">5.3</a><li>convert from WTF-8 to WTF-16, <a href=#convert-from-wtf-8-to-wtf-16 title="section 5.3">5.3</a><li>convert lossily from WTF-8 to UTF-8, <a href=#convert-lossily-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>convert strictly from WTF-8 to UTF-8, <a href=#convert-strictly-from-wtf-8-to-utf-8 title="section 5.4">5.4</a><li>decode from WTF-16 to
   a sequence of code points that does not contain any surrogate code point pair, <a href=#decode-from-wtf-16-to-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair title="section 4.2">4.2</a><li>decode from WTF-8 to
   a sequence of code points that does not contain any surrogate code point pair, <a href=#decode-from-wtf-8-to-a-sequence-of-code-points-that-does-not-contain-any-surrogate-code-point-pair title="section 5.2">5.2</a><li>encode from
   a sequence of code points that does not contain any surrogate code point pair

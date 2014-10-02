@@ -743,6 +743,56 @@ Decoding from WTF-8</h3>
   and the resulting sequence is <a>Unicode text</a>.
 
 
+<h3 id=converting-wtf-8-wtf-16>
+Converting between WTF-8 and WTF-16</h3>
+
+  To <dfn>convert from <a>WTF-16</a> to <a>WTF-8</a></dfn>, run these steps:
+
+  <ul>
+    <li><a>Decode from WTF-16 to a sequence of code points that does not contain any surrogate code point pair</a>
+    <li><a>Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-8</a>
+  </ul>
+
+  Note: This conversion never fails and is lossless.
+
+  To <dfn>convert from <a>WTF-8</a> to <a>WTF-16</a></dfn>, run these steps:
+
+  <ul>
+    <li><a>Decode from WTF-8 to a sequence of code points that does not contain any surrogate code point pair</a>
+    <li><a>Encode from a sequence of code points that does not contain any surrogate code point pair to WTF-16</a>
+  </ul>
+
+  Note: This conversion never fails
+  and, if the input is <a>well-formed</a> in <a>WTF-8</a>, is lossless.
+
+
+<h3 id=converting-wtf-8-utf-8>
+Converting between WTF-8 and UTF-8</h3>
+
+  Since <a>WTF-8</a> is a superset of <a>UTF-8</a>,
+  any sequence of byte that is <a>well-formed</a> in <a>UTF-8</a>
+  is also <a>well-formed</a> in <a>WTF-8</a> and represents the same text.
+  To <dfn>convert from <a>UTF-8</a> to <a>WTF-8</a></dfn>,
+  return the input unchanged.
+
+  Note: This conversion never fails and is losseless.
+
+  To <dfn>convert lossily from <a>WTF-8</a> to <a>UTF-8</a></dfn>,
+  replace any <a>surrogate byte sequence</a> with &lt;0xEF, 0xBF, 0xBD>,
+  the sequence of three bytes that encode the <a>replacement character</a> in <a>UTF-8</a>.
+
+  Note: This conversion never fails but is lossy.
+
+  To <dfn>convert strictly from <a>WTF-8</a> to <a>UTF-8</a></dfn>, run these steps:
+
+  <ol>
+    <li>If the input contains a <a>surrogate byte sequence</a>, return failure.
+    <li>Otherwise, return the input unchanged.
+  </ol>
+
+  Note: This conversion is losseless when it succeeds, but it can fail.
+
+
 <h3 id=concatenation>
 Concatenation of WTF-8 strings</h3>
 
