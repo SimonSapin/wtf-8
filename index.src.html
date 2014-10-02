@@ -426,6 +426,86 @@ The WTF-16 encoding</h2>
   <a>WTF-16</a> has no <a>well-formedness</a> constraint.
   Any sequence of <a>code units</a> is <a>well-formed</a> in <a>WTF-16</a>.
 
+  To <dfn>encode
+  a sequence of <a>code points</a> that does not contain a <a>surrogate code point pair</a>
+  to <a>WTF-16</a></dfn>,
+  run these steps:
+
+  <ol>
+    <li>Let <var>result</var> be a sequence of <a>code units</a>, initially empty.
+    <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
+      <ol>
+        <li>If <var>P</var> is a <a>supplementary code point</a>, run these substeps:
+          <ol>
+            <li>
+              Append to <var>result</var> a <a>code unit</a> of value
+              <code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
+            <li>
+              Append to <var>result</var> a <a>code unit</a> of value
+              <code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
+          </ol>
+        <li>Otherwise (<var>P</var> is a <a>BMP code point</a>),
+          append to <var>result</var> a <a>code unit</a> of value <var>P</var>.
+      </ol>
+    <li>Return <var>result</var>.
+  </ol>
+
+  Note: If the input is restricted to <a>Unicode text</a>,
+  this is identical to encoding <a>UTF-16</a>
+  and the resulting sequence is <a>well-formed</a> in <a>UTF-16</a>.
+
+  <div class=note>
+
+    If, on the other hand, the input <em>does</em> contain a <a>surrogate code point pair</a>,
+    the conversion will be incorrect and
+    the resulting <a>WTF-16</a> string will not represent the original code points.
+
+    This situation should be considered an error,
+    but this specification does not define how to handle it.
+    Possibilities include aborting the conversion,
+    or replacing one of the <a>surrogate code points</a> of the pair
+    with a <a>replacement character</a>.
+  </div>
+
+  To <dfn>decode <a>WTF-16</a> to
+  a sequence of <a>code points</a> that does not contain a <a>surrogate code point pair</a></dfn>,
+  run these steps:
+
+  <ol>
+    <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
+    <li>For every <a>code unit</a> <var>U</var> of the input, run these substeps:
+      <ol>
+        <li>
+          If <var>U</var> is a <a>lead surrogate code unit</a>
+          run these substeps:
+          <ol>
+            <li>
+              Consume the next <a>code unit</a> of the input
+              (so that it is skipped by the “for every <var>U</var>” loop)
+              and let <var>next</var> be it.
+            <li>
+              If <var>next</var> is a <a>trail surrogate code unit</a>,
+              append to <var>result</var> a <a>code point</a> of value
+              <code>
+                0x10000 +
+                (<var>lead surrogate</var> - 0xD800) × 0x400 +
+                (<var>U</var> - 0xDC00)</code>.
+            <li>
+              Otherwise,
+              append to <var>result</var> a <a>code point</a> of value <var>U</var>,
+              then a <a>code point</a> of value <var>next</var>.
+          </ol>
+        <li>
+          Otherwise,
+          append to <var>result</var> a <a>code point</a> of value <var>U</var>.
+      </ol>
+    <li>Return <var>result</var>.
+  </ol>
+
+  Note: If the input is <a>well-formed</a> in <a>UTF-16</a>,
+  this is identical to decoding <a>UTF-16</a>
+  and the resulting sequence is <a>Unicode text</a>.
+
 
 <h2 id=wtf-8-encoding>
 The WTF-8 encoding</h2>
