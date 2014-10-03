@@ -519,8 +519,8 @@ Decoding from WTF-16</h3>
               append to <var>result</var> a <a>code point</a> of value
               <code>
                 0x10000 +
-                ((<var>lead surrogate</var> - 0xD800) &lt;&lt; 10) +
-                (<var>U</var> - 0xDC00)</code>.
+                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
+                (<var>next</var> - 0xDC00)</code>.
             <li>
               Otherwise,
               append to <var>result</var> a <a>code point</a> of value <var>U</var>,

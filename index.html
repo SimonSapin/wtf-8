@@ -1122,8 +1122,8 @@ Decoding from WTF-16</span><a class=self-link href=#decoding-from-wtf-16></a></h
               append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value
               <code>
                 0x10000 +
-                ((<var>lead surrogate</var> - 0xD800) &lt;&lt; 10) +
-                (<var>U</var> - 0xDC00)</code>.
+                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
+                (<var>next</var> - 0xDC00)</code>.
             <li>
               Otherwise,
               append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value <var>U</var>,
