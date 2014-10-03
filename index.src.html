@@ -73,8 +73,6 @@ Background and motivation</h2>
       code units</a>).
   </ul>
 
-  This specification calls this practice <a>WTF-16</a>.
-
   <a>Unpaired surrogate code units</a> are the only case
   where an arbitrary sequence of <a>code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
   <a>UTF-8</a>, however, is more complex
@@ -118,11 +116,6 @@ Terminology</h2>
   or in the range U+E000 to U+FFFF.
 
   <dfn>Unicode text</dfn> is a sequence of <a>Unicode scalar values</a>.
-
-  <dfn>WTF code points</dfn>, for the purpose of this specification,
-  is a sequence of <a>code points</a>
-  that does not contain any <a>surrogate code unit pair</a>.
-  That is, the set of values that can be encoded in <a>WTF-16</a>.
 
   <dfn>UTF-8</dfn> is an encoding of <a>Unicode text</a> using 8-bit bytes.
   Each <a>Unicode scalar value</a> is represented as a sequence of one to four bytes.
@@ -425,38 +418,28 @@ Generalized UTF-8</h2>
   </table>
 
 
-<h2 id=the-wtf-16-encoding>
-The WTF-16 encoding</h2>
+<h2 id=ill-formed-utf-16>
+Potentially ill-formed UTF-16</h2>
 
-  <dfn>WTF-16</dfn> (Wobbly Transformation Format − 16-bit)
-  is an encoding of <a>WTF code points</a> using 16-bit <a>code units</a>.
+  A sequence of 16-bit <a>code units</a> is <dfn>potentially ill-formed UTF-16</dfn>
+  if it is intended to be interpreted as <a>UTF-16</a>,
+  but is not necessarily <a>well-formed</a> in <a>UTF-16</a>.
+  It effectively encodes a sequence of <a>code point</a>
+  that do not contain any <a>surrogate code point pair</a>.
 
   Note: Like <a>UTF-16</a>,
-  <a>WTF-16</a> can not represent a <a>surrogate code point pair</a>
+  <a>potentially ill-formed UTF-16</a> can not represent a <a>surrogate code point pair</a>
   since the corresponding <a>surrogate code unit pair</a> would instead
   represent a <a>supplementary code point</a>.
 
-  It is identical to <a>UTF-16</a>,
-  with the <a>well-formedness</a> constraint removed
-  and the added semantics that an <a>unpaired surrogate code unit</a>
-  represents the corresponding <a>surrogate code point</a>.
-  It is a strict superset of <a>UTF-16</a>.
-
-  <a>WTF-16</a> has no <a>well-formedness</a> constraint.
-  Any sequence of <a>code units</a> is <a>well-formed</a> in <a>WTF-16</a>.
-
-  <a>WTF-16</a> must not be used for interchange.
-  It has no
-  <a href="https://encoding.spec.whatwg.org/#names-and-labels">
-  encoding label</a> [[ENCODING]] or
-  <a href="http://www.iana.org/assignments/character-sets/character-sets.xhtml">
-  IANA charset alias</a> [[CHARSETS]].
+  Any sequence of <a>code units</a> has an interpretation as <a>potentially ill-formed UTF-16</a>.
 
 
-<h3 id=encoding-to-wtf-16>
-Encoding to WTF-16</h3>
+<h3 id=encoding-ill-formed-utf-16>
+Encoding</h3>
 
-  To <dfn id=encode-to-wtf-16>encode from <a>WTF code points</a> to <a>WTF-16</a></dfn>,
+  To <dfn id=encode-ill-formed-utf-16>encode from <a>code points</a> to
+  <a>potentially ill-formed UTF-16</a></dfn>,
   run these steps:
 
   <ol>
@@ -477,14 +460,14 @@ Encoding to WTF-16</h3>
   </ol>
 
   Note: If the input is restricted to <a>Unicode text</a>,
-  this is identical to encoding <a>UTF-16</a>
+  this is identical to encoding to <a>UTF-16</a>
   and the resulting sequence is <a>well-formed</a> in <a>UTF-16</a>.
 
   <div class=note>
 
-    If, on the other hand, the input <em>does</em> contain a <a>surrogate code point pair</a>,
+    If, on the other hand, the input contains a <a>surrogate code point pair</a>,
     the conversion will be incorrect and
-    the resulting <a>WTF-16</a> string will not represent the original code points.
+    the resulting sequence will not represent the original code points.
 
     This situation should be considered an error,
     but this specification does not define how to handle it.
@@ -494,10 +477,11 @@ Encoding to WTF-16</h3>
   </div>
 
 
-<h3 id=decoding-from-wtf-16>
-Decoding from WTF-16</h3>
+<h3 id=decoding-ill-formed-utf-16>
+Decoding</h3>
 
-  To <dfn id=decode-from-wtf-16>decode from <a>WTF-16</a> to <a>WTF code points</a></dfn>,
+  To <dfn id=decode-ill-formed-utf-16>decode from <a>potentially ill-formed UTF-16</a>
+  to <a>code points</a></dfn>,
   run these steps:
 
   <ol>
@@ -531,6 +515,9 @@ Decoding from WTF-16</h3>
     <li>Return <var>result</var>.
   </ol>
 
+  Note: By construction,
+  the resulting sequence does not contain a <a>surrogate code point pair</a>.
+
   Note: If the input is <a>well-formed</a> in <a>UTF-16</a>,
   this is identical to decoding <a>UTF-16</a>
   and the resulting sequence is <a>Unicode text</a>.
@@ -540,12 +527,14 @@ Decoding from WTF-16</h3>
 The WTF-8 encoding</h2>
 
   <dfn>WTF-8</dfn> (Wobbly Transformation Format − 8-bit)
-  is an encoding of <a>WTF code points</a> using 8-bit bytes.
+  is an encoding of <a>code point</a> sequences
+  that do not contain any <a>surrogate code point pair</a>
+  using 8-bit bytes.
 
   Note: Like <a>UTF-8</a> is artificially restricted to <a>Unicode text</a>
   in order to match <a>UTF-16</a>,
-  <a>WTF-8</a> is artificially restricted to <a>WTF code points</a>
-  in order to match <a>WTF-16</a>.
+  <a>WTF-8</a> is artificially restricted to exclude <a>surrogate code point pairs</a>
+  in order to match <a>potentially ill-formed UTF-16</a>.
 
   It is identical to <a>generalized UTF-8</a>,
   with the additional <a>well-formedness</a> constraint that
@@ -568,7 +557,7 @@ The WTF-8 encoding</h2>
 <h3 id=encoding-to-wtf-8>
 Encoding to WTF-8</h3>
 
-  To <dfn id=encode-to-wtf-8>encode from <a>WTF code points</a> to <a>WTF-8</a></dfn>,
+  To <dfn id=encode-to-wtf-8>encode from <a>code points</a> to <a>WTF-8</a></dfn>,
   run these steps:
 
   <ol>
@@ -621,7 +610,7 @@ Encoding to WTF-8</h3>
 <h3 id=decoding-from-wtf-8>
 Decoding from WTF-8</h3>
 
-  To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>WTF code points</a></dfn>,
+  To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>code points</a></dfn>,
   run these steps:
 
   <ol>
@@ -759,23 +748,25 @@ Decoding from WTF-8</h3>
   and the resulting sequence is <a>Unicode text</a>.
 
 
-<h3 id=converting-wtf-8-wtf-16>
-Converting between WTF-8 and WTF-16</h3>
+<h3 id=converting-wtf-8-ill-formed-utf-16>
+Converting between WTF-8 and potentially ill-formed UTF-16</h3>
 
-  To <dfn>convert from <a>WTF-16</a> to <a>WTF-8</a></dfn>, run these steps:
+  To <dfn>convert from <a>potentially ill-formed UTF-16</a> to <a>WTF-8</a></dfn>,
+  run these steps:
 
   <ul>
-    <li><a>Decode from WTF-16 to WTF code points</a>
-    <li><a>Encode from WTF code points to WTF-8</a>
+    <li><a>Decode from potentially ill-formed UTF-16 to code points</a>
+    <li><a>Encode from code points to WTF-8</a>
   </ul>
 
   Note: This conversion never fails and is lossless.
 
-  To <dfn>convert from <a>WTF-8</a> to <a>WTF-16</a></dfn>, run these steps:
+  To <dfn>convert from <a>WTF-8</a> to <a>potentially ill-formed UTF-16</a></dfn>,
+  run these steps:
 
   <ul>
-    <li><a>Decode from WTF-8 to WTF code points</a>
-    <li><a>Encode from WTF code points to WTF-16</a>
+    <li><a>Decode from WTF-8 to code points</a>
+    <li><a>Encode from code points to potentially ill-formed UTF-16</a>
   </ul>
 
   Note: This conversion never fails
@@ -826,11 +817,11 @@ Concatenating WTF-8 strings</h3>
         <li>
           Let <var>lead</var> and <var>trail</var> be two <a>code points</a>,
           the respective results of
-          <a title="Decode from WTF-8 to WTF code points">decoding from WTF-8</a>
+          <a title="Decode from WTF-8 to code points">decoding from WTF-8</a>
           these two <a>surrogate byte sequences</a>.
         <li>
           Let <var>supplementary</var> be the
-          <a title="Encode from WTF code points to WTF-8">encoding to WTF-8</a>
+          <a title="Encode from code points to WTF-8">encoding to WTF-8</a>
           of a single code point of value
           <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code>
         <li>
@@ -847,9 +838,13 @@ Concatenating WTF-8 strings</h3>
   </ol>
 
   Note: This is equivalent to
-  converting both strings <a title="convert from WTF-8 to WTF-16">to WTF-16</a>,
+  converting both strings
+  <a title="convert from WTF-8 to potentially ill-formed UTF-16">
+  to potentially ill-formed UTF-16</a>,
   concatenating the resulting <a>code unit</a> sequences,
-  then converting the concatenation back <a title="convert from WTF-16 to WTF-8">to WTF-8</a>.
+  then converting the concatenation back
+  <a title="convert from potentially ill-formed UTF-16 to WTF-8">to WTF-8</a>.
+
 
 <h2 id=implementations>
 Implementations</h2>
