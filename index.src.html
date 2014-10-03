@@ -12,6 +12,31 @@ Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF
 <p class=logo><img src=logo-wtf-8.svg width=100 height=100>
 
 
+<h2 id=intended-audience>
+Intended audience</h2>
+
+  <a>WTF-8</a> is a hack intended to be used internally in self-contained systems
+  with components that need to support <a>potentially ill-formed UTF-16</a>
+  for legacy reasons.
+
+  Any <a>WTF-8</a> data <em>must</em> be converted
+  to an <a title="Unicode text">Unicode</a> encoding at the system’s boundary
+  before being emitted.
+  <a>UTF-8</a> is recommended.
+  <a>WTF-8</a> <em>must not</em> be used to represent text
+  in a file format or for transmission over the Internet.
+
+  In particular,
+  the <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a> [[ENCODING]]
+  defines <a>UTF-8</a> and other encodings for the Web.
+  There is no and will not be any
+  <a href="https://encoding.spec.whatwg.org/#names-and-labels">
+  encoding label</a> [[ENCODING]] or
+  <a href="http://www.iana.org/assignments/character-sets/character-sets.xhtml">
+  IANA charset alias</a> [[CHARSETS]]
+  for <a>WTF-8</a>.
+
+
 <h2 id=motivation>
 Background and motivation</h2>
 
@@ -544,14 +569,8 @@ The WTF-8 encoding</h2>
 
   Note: Similarly, <a>UTF-8</a> is a strict superset of ASCII.
 
-  <a>WTF-8</a> must not be used for interchange.
-  It has no
-  <a href="https://encoding.spec.whatwg.org/#names-and-labels">
-  encoding label</a> [[ENCODING]] or
-  <a href="http://www.iana.org/assignments/character-sets/character-sets.xhtml">
-  IANA charset alias</a> [[CHARSETS]].
-
-  Issue: Define “interchange”.
+  <a>WTF-8</a> <em>must not</em> be used for interchange.
+  See <a href="#intended-audience">Intended audience</a>.
 
 
 <h3 id=encoding-wtf-8>
