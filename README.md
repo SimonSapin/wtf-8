@@ -1,4 +1,4 @@
 The WTF-8 encoding specification
 --------------------------------
 
-[Latest version](http://simonsapin.github.io/wtf8/)
+[Latest version](https://simonsapin.github.io/wtf8/)
