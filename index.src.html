@@ -284,6 +284,111 @@ Surrogate byte sequences</h3>
   that is not part of a <a>surrogate pair byte sequence</a>.
 
 
+<h2 id=ill-formed-utf-16>
+Potentially ill-formed UTF-16</h2>
+
+  A sequence of 16-bit <a>code units</a> is <dfn>potentially ill-formed UTF-16</dfn>
+  if it is intended to be interpreted as <a>UTF-16</a>,
+  but is not necessarily <a>well-formed</a> in <a>UTF-16</a>.
+  It effectively encodes a sequence of <a>code point</a>
+  that do not contain any <a>surrogate code point pair</a>.
+
+  Note: Like <a>UTF-16</a>,
+  <a>potentially ill-formed UTF-16</a> can not represent a <a>surrogate code point pair</a>
+  since the corresponding <a>surrogate code unit pair</a> would instead
+  represent a <a>supplementary code point</a>.
+
+  Any sequence of <a>code units</a> has an interpretation as <a>potentially ill-formed UTF-16</a>.
+
+
+<h3 id=encoding-ill-formed-utf-16>
+Encoding</h3>
+
+  To <dfn id=encode-ill-formed-utf-16>encode from <a>code points</a> to
+  <a>potentially ill-formed UTF-16</a></dfn>,
+  run these steps:
+
+  <ol>
+    <li>Let <var>result</var> be a sequence of <a>code units</a>, initially empty.
+    <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
+      <ol>
+        <li>
+          If <var>P</var> is a <a>supplementary code point</a>,
+          append to <var>result</var> two <a>code units</a> of values:
+          <ol>
+            <li><code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
+            <li><code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
+          </ol>
+        <li>Otherwise (<var>P</var> is a <a>BMP code point</a>),
+          append to <var>result</var> a <a>code unit</a> of value <var>P</var>.
+      </ol>
+    <li>Return <var>result</var>.
+  </ol>
+
+  Note: If the input is restricted to <a>Unicode text</a>,
+  this is identical to encoding to <a>UTF-16</a>
+  and the resulting sequence is <a>well-formed</a> in <a>UTF-16</a>.
+
+  <div class=note>
+
+    If, on the other hand, the input contains a <a>surrogate code point pair</a>,
+    the conversion will be incorrect and
+    the resulting sequence will not represent the original code points.
+
+    This situation should be considered an error,
+    but this specification does not define how to handle it.
+    Possibilities include aborting the conversion,
+    or replacing one of the <a>surrogate code points</a> of the pair
+    with a <a>replacement character</a>.
+  </div>
+
+
+<h3 id=decoding-ill-formed-utf-16>
+Decoding</h3>
+
+  To <dfn id=decode-ill-formed-utf-16>decode from <a>potentially ill-formed UTF-16</a>
+  to <a>code points</a></dfn>,
+  run these steps:
+
+  <ol>
+    <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
+    <li>For every <a>code unit</a> <var>U</var> of the input, run these substeps:
+      <ol>
+        <li>
+          If <var>U</var> is a <a>lead surrogate code unit</a>
+          and is not the last <a>code unit</a> of the input,
+          run these substeps:
+          <ol>
+            <li>
+              Let <var>next</var> be the next <a>code unit</a> of the input,
+              and <a>consume</a> it.
+            <li>
+              If <var>next</var> is a <a>trail surrogate code unit</a>,
+              append to <var>result</var> a <a>code point</a> of value
+              <code>
+                0x10000 +
+                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
+                (<var>next</var> - 0xDC00)</code>.
+            <li>
+              Otherwise (<var>next</var> is not a <a>trail surrogate code unit</a>),
+              append to <var>result</var> a <a>code point</a> of value <var>U</var>,
+              then a <a>code point</a> of value <var>next</var>.
+          </ol>
+        <li>
+          Otherwise,
+          append to <var>result</var> a <a>code point</a> of value <var>U</var>.
+      </ol>
+    <li>Return <var>result</var>.
+  </ol>
+
+  Note: By construction,
+  the resulting sequence does not contain a <a>surrogate code point pair</a>.
+
+  Note: If the input is <a>well-formed</a> in <a>UTF-16</a>,
+  this is identical to decoding <a>UTF-16</a>
+  and the resulting sequence is <a>Unicode text</a>.
+
+
 <h2 id=generalized-utf-8>
 Generalized UTF-8</h2>
 
@@ -418,111 +523,6 @@ Generalized UTF-8</h2>
   </table>
 
 
-<h2 id=ill-formed-utf-16>
-Potentially ill-formed UTF-16</h2>
-
-  A sequence of 16-bit <a>code units</a> is <dfn>potentially ill-formed UTF-16</dfn>
-  if it is intended to be interpreted as <a>UTF-16</a>,
-  but is not necessarily <a>well-formed</a> in <a>UTF-16</a>.
-  It effectively encodes a sequence of <a>code point</a>
-  that do not contain any <a>surrogate code point pair</a>.
-
-  Note: Like <a>UTF-16</a>,
-  <a>potentially ill-formed UTF-16</a> can not represent a <a>surrogate code point pair</a>
-  since the corresponding <a>surrogate code unit pair</a> would instead
-  represent a <a>supplementary code point</a>.
-
-  Any sequence of <a>code units</a> has an interpretation as <a>potentially ill-formed UTF-16</a>.
-
-
-<h3 id=encoding-ill-formed-utf-16>
-Encoding</h3>
-
-  To <dfn id=encode-ill-formed-utf-16>encode from <a>code points</a> to
-  <a>potentially ill-formed UTF-16</a></dfn>,
-  run these steps:
-
-  <ol>
-    <li>Let <var>result</var> be a sequence of <a>code units</a>, initially empty.
-    <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
-      <ol>
-        <li>
-          If <var>P</var> is a <a>supplementary code point</a>,
-          append to <var>result</var> two <a>code units</a> of values:
-          <ol>
-            <li><code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
-            <li><code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
-          </ol>
-        <li>Otherwise (<var>P</var> is a <a>BMP code point</a>),
-          append to <var>result</var> a <a>code unit</a> of value <var>P</var>.
-      </ol>
-    <li>Return <var>result</var>.
-  </ol>
-
-  Note: If the input is restricted to <a>Unicode text</a>,
-  this is identical to encoding to <a>UTF-16</a>
-  and the resulting sequence is <a>well-formed</a> in <a>UTF-16</a>.
-
-  <div class=note>
-
-    If, on the other hand, the input contains a <a>surrogate code point pair</a>,
-    the conversion will be incorrect and
-    the resulting sequence will not represent the original code points.
-
-    This situation should be considered an error,
-    but this specification does not define how to handle it.
-    Possibilities include aborting the conversion,
-    or replacing one of the <a>surrogate code points</a> of the pair
-    with a <a>replacement character</a>.
-  </div>
-
-
-<h3 id=decoding-ill-formed-utf-16>
-Decoding</h3>
-
-  To <dfn id=decode-ill-formed-utf-16>decode from <a>potentially ill-formed UTF-16</a>
-  to <a>code points</a></dfn>,
-  run these steps:
-
-  <ol>
-    <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
-    <li>For every <a>code unit</a> <var>U</var> of the input, run these substeps:
-      <ol>
-        <li>
-          If <var>U</var> is a <a>lead surrogate code unit</a>
-          and is not the last <a>code unit</a> of the input,
-          run these substeps:
-          <ol>
-            <li>
-              Let <var>next</var> be the next <a>code unit</a> of the input,
-              and <a>consume</a> it.
-            <li>
-              If <var>next</var> is a <a>trail surrogate code unit</a>,
-              append to <var>result</var> a <a>code point</a> of value
-              <code>
-                0x10000 +
-                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
-                (<var>next</var> - 0xDC00)</code>.
-            <li>
-              Otherwise (<var>next</var> is not a <a>trail surrogate code unit</a>),
-              append to <var>result</var> a <a>code point</a> of value <var>U</var>,
-              then a <a>code point</a> of value <var>next</var>.
-          </ol>
-        <li>
-          Otherwise,
-          append to <var>result</var> a <a>code point</a> of value <var>U</var>.
-      </ol>
-    <li>Return <var>result</var>.
-  </ol>
-
-  Note: By construction,
-  the resulting sequence does not contain a <a>surrogate code point pair</a>.
-
-  Note: If the input is <a>well-formed</a> in <a>UTF-16</a>,
-  this is identical to decoding <a>UTF-16</a>
-  and the resulting sequence is <a>Unicode text</a>.
-
-
 <h2 id=the-wtf-8-encoding>
 The WTF-8 encoding</h2>
 
@@ -554,8 +554,8 @@ The WTF-8 encoding</h2>
   Issue: Define “interchange”.
 
 
-<h3 id=encoding-to-wtf-8>
-Encoding to WTF-8</h3>
+<h3 id=encoding-wtf-8>
+Encoding</h3>
 
   To <dfn id=encode-to-wtf-8>encode from <a>code points</a> to <a>WTF-8</a></dfn>,
   run these steps:
@@ -607,8 +607,8 @@ Encoding to WTF-8</h3>
   </div>
 
 
-<h3 id=decoding-from-wtf-8>
-Decoding from WTF-8</h3>
+<h3 id=decoding-wtf-8>
+Decoding</h3>
 
   To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>code points</a></dfn>,
   run these steps:
