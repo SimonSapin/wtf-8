@@ -1459,11 +1459,17 @@ Implementations</span><a class=self-link href=#implementations></a></h2>
 
 <p><em>This section is non-normative.</em></p>
 
-<p><a href=http://s48.org/>Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
-  to encode <a href=http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15>filenames
-  and other operating system strings on Windows</a>.
-  UTF-8of16 is identical to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>,
-  but doesn’t seem to take special precautions for <a href=#concatenating>concatenation</a>.</p>
+  <ul>
+    <li>
+      <a href=http://s48.org/>Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
+      to encode <a href=http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15>filenames
+      and other operating system strings on Windows</a>.
+      UTF-8of16 is identical to <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>,
+      but doesn’t seem to take special precautions for <a href=#concatenating>concatenation</a>.
+    <li>
+      <a href=https://github.com/mathiasbynens/wtf-8>wtf-8.js</a>
+      implements this specification in JavaScript.
+  </ul>
 
 <h2 class="no-ref no-num heading settled" id=conformance><span class=content>
 Conformance</span><a class=self-link href=#conformance></a></h2>

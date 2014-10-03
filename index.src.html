@@ -856,8 +856,14 @@ Implementations</h2>
 
   <em>This section is non-normative.</em>
 
-  <a href="http://s48.org/">Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
-  to encode <a href="http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15">filenames
-  and other operating system strings on Windows</a>.
-  UTF-8of16 is identical to <a>WTF-8</a>,
-  but doesn’t seem to take special precautions for <a href="#concatenating">concatenation</a>.
+  <ul>
+    <li>
+      <a href="http://s48.org/">Scheme 48</a> uses an encoding they call <em>UTF-8of16</em>
+      to encode <a href="http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15">filenames
+      and other operating system strings on Windows</a>.
+      UTF-8of16 is identical to <a>WTF-8</a>,
+      but doesn’t seem to take special precautions for <a href="#concatenating">concatenation</a>.
+    <li>
+      <a href="https://github.com/mathiasbynens/wtf-8">wtf-8.js</a>
+      implements this specification in JavaScript.
+  </ul>
