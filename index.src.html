@@ -463,14 +463,12 @@ Encoding to WTF-16</h3>
     <li>Let <var>result</var> be a sequence of <a>code units</a>, initially empty.
     <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
       <ol>
-        <li>If <var>P</var> is a <a>supplementary code point</a>, run these substeps:
+        <li>
+          If <var>P</var> is a <a>supplementary code point</a>,
+          append to <var>result</var> two <a>code units</a> of values:
           <ol>
-            <li>
-              Append to <var>result</var> a <a>code unit</a> of value
-              <code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
-            <li>
-              Append to <var>result</var> a <a>code unit</a> of value
-              <code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
+            <li><code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
+            <li><code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
           </ol>
         <li>Otherwise (<var>P</var> is a <a>BMP code point</a>),
           append to <var>result</var> a <a>code unit</a> of value <var>P</var>.
@@ -522,7 +520,7 @@ Decoding from WTF-16</h3>
                 ((<var>U</var> - 0xD800) &lt;&lt; 10) +
                 (<var>next</var> - 0xDC00)</code>.
             <li>
-              Otherwise,
+              Otherwise (<var>next</var> is not a <a>trail surrogate code unit</a>),
               append to <var>result</var> a <a>code point</a> of value <var>U</var>,
               then a <a>code point</a> of value <var>next</var>.
           </ol>
