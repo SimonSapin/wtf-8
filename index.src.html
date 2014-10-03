@@ -119,7 +119,7 @@ Terminology</h2>
 
   <dfn>Unicode text</dfn> is a sequence of <a>Unicode scalar values</a>.
 
-  <dfn>WTF text</dfn>, for the purpose of this specification,
+  <dfn>WTF code points</dfn>, for the purpose of this specification,
   is a sequence of <a>code points</a>
   that does not contain any <a>surrogate code unit pair</a>.
   That is, the set of values that can be encoded in <a>WTF-16</a>.
@@ -429,7 +429,7 @@ Generalized UTF-8</h2>
 The WTF-16 encoding</h2>
 
   <dfn>WTF-16</dfn> (Wobbly Transformation Format − 16-bit)
-  is an encoding of <a>WTF text</a> using 16-bit <a>code units</a>.
+  is an encoding of <a>WTF code points</a> using 16-bit <a>code units</a>.
 
   Note: Like <a>UTF-16</a>,
   <a>WTF-16</a> can not represent a <a>surrogate code point pair</a>
@@ -456,7 +456,7 @@ The WTF-16 encoding</h2>
 <h3 id=encoding-to-wtf-16>
 Encoding to WTF-16</h3>
 
-  To <dfn id=encode-to-wtf-16>encode from <a>WTF text</a> to <a>WTF-16</a></dfn>,
+  To <dfn id=encode-to-wtf-16>encode from <a>WTF code points</a> to <a>WTF-16</a></dfn>,
   run these steps:
 
   <ol>
@@ -497,7 +497,7 @@ Encoding to WTF-16</h3>
 <h3 id=decoding-from-wtf-16>
 Decoding from WTF-16</h3>
 
-  To <dfn id=decode-from-wtf-16>decode from <a>WTF-16</a> to <a>WTF text</a></dfn>,
+  To <dfn id=decode-from-wtf-16>decode from <a>WTF-16</a> to <a>WTF code points</a></dfn>,
   run these steps:
 
   <ol>
@@ -540,11 +540,11 @@ Decoding from WTF-16</h3>
 The WTF-8 encoding</h2>
 
   <dfn>WTF-8</dfn> (Wobbly Transformation Format − 8-bit)
-  is an encoding of <a>WTF text</a> using 8-bit bytes.
+  is an encoding of <a>WTF code points</a> using 8-bit bytes.
 
   Note: Like <a>UTF-8</a> is artificially restricted to <a>Unicode text</a>
   in order to match <a>UTF-16</a>,
-  <a>WTF-8</a> is artificially restricted to <a>WTF text</a>
+  <a>WTF-8</a> is artificially restricted to <a>WTF code points</a>
   in order to match <a>WTF-16</a>.
 
   It is identical to <a>generalized UTF-8</a>,
@@ -568,7 +568,7 @@ The WTF-8 encoding</h2>
 <h3 id=encoding-to-wtf-8>
 Encoding to WTF-8</h3>
 
-  To <dfn id=encode-to-wtf-8>encode from <a>WTF text</a> to <a>WTF-8</a></dfn>,
+  To <dfn id=encode-to-wtf-8>encode from <a>WTF code points</a> to <a>WTF-8</a></dfn>,
   run these steps:
 
   <ol>
@@ -621,7 +621,7 @@ Encoding to WTF-8</h3>
 <h3 id=decoding-from-wtf-8>
 Decoding from WTF-8</h3>
 
-  To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>WTF text</a></dfn>,
+  To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>WTF code points</a></dfn>,
   run these steps:
 
   <ol>
@@ -765,8 +765,8 @@ Converting between WTF-8 and WTF-16</h3>
   To <dfn>convert from <a>WTF-16</a> to <a>WTF-8</a></dfn>, run these steps:
 
   <ul>
-    <li><a>Decode from WTF-16 to WTF text</a>
-    <li><a>Encode from WTF text to WTF-8</a>
+    <li><a>Decode from WTF-16 to WTF code points</a>
+    <li><a>Encode from WTF code points to WTF-8</a>
   </ul>
 
   Note: This conversion never fails and is lossless.
@@ -774,8 +774,8 @@ Converting between WTF-8 and WTF-16</h3>
   To <dfn>convert from <a>WTF-8</a> to <a>WTF-16</a></dfn>, run these steps:
 
   <ul>
-    <li><a>Decode from WTF-8 to WTF text</a>
-    <li><a>Encode from WTF text to WTF-16</a>
+    <li><a>Decode from WTF-8 to WTF code points</a>
+    <li><a>Encode from WTF code points to WTF-16</a>
   </ul>
 
   Note: This conversion never fails
@@ -826,11 +826,11 @@ Concatenating WTF-8 strings</h3>
         <li>
           Let <var>lead</var> and <var>trail</var> be two <a>code points</a>,
           the respective results of
-          <a title="Decode from WTF-8 to WTF text">decoding from WTF-8</a>
+          <a title="Decode from WTF-8 to WTF code points">decoding from WTF-8</a>
           these two <a>surrogate byte sequences</a>.
         <li>
           Let <var>supplementary</var> be the
-          <a title="Encode from WTF text to WTF-8">encoding to WTF-8</a>
+          <a title="Encode from WTF code points to WTF-8">encoding to WTF-8</a>
           of a single code point of value
           <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code>
         <li>
