@@ -581,49 +581,61 @@ Encoding</h3>
 
   <ol>
     <li>Let <var>result</var> be a sequence of bytes, initially empty.
-    <li>For every <a>code point</a> <var>P</var> of the input, depending on <var>P</var>:
-      <dl class=switch>
-        <dt>U+0000 to U+007F
-        <dd>Append to <var>result</var> one byte of value <var>P<var>.
-        <dt>U+0080 to U+07FF
-        <dd>
-          Append to <var>result</var> two bytes of values:
-          <ol>
-            <li><code>0xC0 | (<var>P<var> >> 6)</code>
-            <li><code>0x80 | (<var>P<var> & 0x3F)</code>
-          </ol>
-        <dt>U+0800 to U+FFFF
-        <dd>
-          Append to <var>result</var> three bytes of values
-          <ol>
-            <li><code>0xC0 | (<var>P<var> >> 12)</code>
-            <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
-            <li><code>0x80 | (<var>P<var> & 0x3F)</code>
-          </ol>
-        <dt>U+FFFF to U+10FFFF
-        <dd>
-          Append to <var>result</var> four bytes of values
-          <ol>
-            <li><code>0xC0 | (<var>P<var> >> 18)</code>
-            <li><code>0x80 | ((<var>P<var> >> 12) & 0x3F)</code>
-            <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
-            <li><code>0x80 | (<var>P<var> & 0x3F)</code>
-          </ol>
-      </dl>
+    <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
+      <ol>
+        <li>
+
+          If <var>P</var> is a <a>lead surrogate code point</a>,
+          <var>P</var> is not the last <a>code point</a> of the input,
+          and the next <a>code point</a> is a <a>trail surrogate code point</a>,
+          set <var>P</var>’s value to:
+          <code>
+            0x10000 +
+            ((<var>P</var> - 0xD800) &lt;&lt; 10) +
+            (<var>next code point</var> - 0xDC00)</code>.
+
+        <li>Depending on <var>P</var>:
+          <dl class=switch>
+            <dt>U+0000 to U+007F
+            <dd>Append to <var>result</var> one byte of value <var>P<var>.
+            <dt>U+0080 to U+07FF
+            <dd>
+              Append to <var>result</var> two bytes of values:
+              <ol>
+                <li><code>0xC0 | (<var>P<var> >> 6)</code>
+                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+              </ol>
+            <dt>U+0800 to U+FFFF
+            <dd>
+              Append to <var>result</var> three bytes of values
+              <ol>
+                <li><code>0xC0 | (<var>P<var> >> 12)</code>
+                <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
+                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+              </ol>
+            <dt>U+FFFF to U+10FFFF
+            <dd>
+              Append to <var>result</var> four bytes of values
+              <ol>
+                <li><code>0xC0 | (<var>P<var> >> 18)</code>
+                <li><code>0x80 | ((<var>P<var> >> 12) & 0x3F)</code>
+                <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
+                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+              </ol>
+          </dl>
+      </ol>
     <li>Return <var>result</var>.
   </ol>
 
-  <div class=note>
-
-    If the input <em>does</em> contain a <a>surrogate code point pair</a>,
-    the resulting sequence will be <a>ill-formed</a> in <a>WTF-8</a>.
-
-    This situation should be considered an error,
-    but this specification does not define how to handle it.
-    Possibilities include aborting the conversion,
-    or replacing one of the <a>surrogate code points</a> of the pair
-    with a <a>replacement character</a>.
-  </div>
+  Note: If the input contains a <a>surrogate code point pair</a>,
+  the resulting byte sequence will be not represent
+  the original sequence of <a>code points</a>.
+  Instead, it will represent the same <a>code points</a>
+  as if had been encoded in <a>potentially ill-formed UTF-16</a>.
+  This is also consistent with
+  encoding each <a>code point</a> to <a>WTF-8</a> individually,
+  and <a title="concatenate two WTF-8 strings">concatenating</a>
+  the resulting <a>WTF-8</a> byte sequences.
 
 
 <h3 id=decoding-wtf-8>
