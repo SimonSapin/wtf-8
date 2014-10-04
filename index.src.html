@@ -577,7 +577,8 @@ The WTF-8 encoding</h2>
 <h3 id=encoding-wtf-8>
 Encoding</h3>
 
-  To <dfn id=encode-to-wtf-8>encode from <a>code points</a> to <a>WTF-8</a></dfn>,
+  To <dfn id=encode-to-wtf-8>encode from <a>code points</a>
+  to <a>well-formed</a> <a>WTF-8</a></dfn>,
   run these steps:
 
   <ol>
@@ -642,12 +643,22 @@ Encoding</h3>
 <h3 id=decoding-wtf-8>
 Decoding</h3>
 
-  To <dfn id=decode-from-wtf-8>decode from <a>WTF-8</a> to <a>code points</a></dfn>,
+  To <dfn id=decode-from-wtf-8>decode from <a>well-formed</a> <a>WTF-8</a>
+  to <a>code points</a></dfn>,
   run these steps:
+
+  Note: Since <a>WTF-8</a> <em>must not</em> be used for interchange
+  (see <a href="#intended-audience">Intended audience</a>),
+  this algorithm is deliberately not defined for arbitrary byte sequences.
+  It is only defined for byte sequences known to be <a>well-formed</a> in <a>WTF-8</a>,
+  such as sequences
+  <a title="encode from code points to well-formed WTF-8">encoded from code points</a>,
+  <a title="convert from potentially ill-formed UTF-16 to WTF-8">converted from UTF-16</a>, or
+  <a title="concatenate two WTF-8 strings">concatenated</a>
+  from sequences themselves <a>well-formed</a> in WTF-8</a>.
 
   <ol>
     <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
-    <li>Let <var>lead surrogate</var> be a boolean flag, initially unset.
     <li>For every byte <var>B</var> of the input, depending on <var>B</var>:
       <dl class=switch>
         <dt>0x00 to 0x7F
@@ -655,16 +666,7 @@ Decoding</h3>
 
         <dt>0xC2 to 0xDF
         <dd>
-
-          If there is no input after <var>B</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
           Let <var>B2</var> be the next byte and <a>consume</a> it.
-
-          If <var>B2</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
 
           Append to <var>result</var> a <a>code point</a> of value
           <code>
@@ -673,94 +675,19 @@ Decoding</h3>
 
         <dt>0xE0 to 0xEF
         <dd>
+          Let <var>B2</var> and <var>B3</var> be the next two bytes,
+          and <a>consume</a> them.
 
-          If there is no input after <var>B</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>B2</var> be the next byte and <a>consume</a> it.
-
-          If <var>B2</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If <var>B</var> is 0xE0
-          and <var>B2</var> is not in the range from <strong>0xA0</strong> to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If <var>B</var> is 0xED,
-          <var>B2</var> is in the range from 0xB0 to 0xBF
-          (<var>B</var> and <var>B2</var> start a <a>trail surrogate byte sequence</a>),
-          and the <var>lead surrogate</var> flag is set,
-          then unset the <var>lead surrogate</var> flag,
-          append a <a>replacement character</a> to <var>result</var>,
-          and abort this iteration of the loop.
-
-          If there is no input after <var>B2</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>B3</var> be the next byte and <a>consume</a> it.
-
-          If <var>B3</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>P</var> be a <a>code point</a> of value
+          Append to <var>result</var> a <a>code point</a> of value
           <code>
             ((<var>B</var> & 0x0F) &lt;&lt; 12) +
             ((<var>B2</var> & 0x3F) &lt;&lt; 6) +
             (<var>B3</var> & 0x3F)</code>
 
-          If <var>P</var> is a <a>lead surrogate code point</a>,
-          set the <var>lead surrogate</var> flag.
-          Otherwise, unset it.
-
-          Append <var>P</var> to <var>result</var>.
-
         <dt>0xF0 to 0xF4
         <dd>
-
-          If there is no input after <var>B</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>B2</var> be the next byte and <a>consume</a> it.
-
-          If <var>B2</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If <var>B</var> is 0xF0
-          and <var>B2</var> is not in the range from <strong>0x90</strong> to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If <var>B</var> is 0xF4
-          and <var>B2</var> is not in the range from 0x80 to <strong>0x8F</strong>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If there is no input after <var>B2</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>B3</var> be the next byte and <a>consume</a> it.
-
-          If <var>B3</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          If there is no input after <var>B3</var>,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
-
-          Let <var>B4</var> be the next byte and <a>consume</a> it.
-
-          If <var>B4</var> is not in the range from 0x80 to 0xBF,
-          append a <a>replacement character</a> to <var>result</var>
-          and abort this iteration of the loop.
+          Let <var>B2</var>, <var>B3</var>, and <var>B4</var> be the next three bytes,
+          and <a>consume</a> them.
 
           Append to <var>result</var> a <a>code point</a> of value
           <code>
@@ -768,14 +695,11 @@ Decoding</h3>
             ((<var>B2</var> & 0x3F) &lt;&lt; 12) +
             ((<var>B3</var> & 0x3F) &lt;&lt; 6) +
             (<var>B4</var> & 0x3F)</code>
-
-        <dt>Anything else
-        <dd>Append a <a>replacement character</a> to <var>result</var>.
       </dl>
     <li>Return <var>result</var>.
   </ol>
 
-  Note: If the input is <a>well-formed</a> in <a>UTF-8</a>,
+  Note: If the input is also <a>well-formed</a> in <a>UTF-8</a>,
   this is identical to decoding <a>UTF-8</a>
   and the resulting sequence is <a>Unicode text</a>.
 
@@ -788,7 +712,7 @@ Converting between WTF-8 and potentially ill-formed UTF-16</h3>
 
   <ul>
     <li><a>Decode from potentially ill-formed UTF-16 to code points</a>
-    <li><a>Encode from code points to WTF-8</a>
+    <li><a>Encode from code points to well-formed WTF-8</a>
   </ul>
 
   Note: This conversion never fails and is lossless.
@@ -797,7 +721,7 @@ Converting between WTF-8 and potentially ill-formed UTF-16</h3>
   run these steps:
 
   <ul>
-    <li><a>Decode from WTF-8 to code points</a>
+    <li><a>Decode from well-formed WTF-8 to code points</a>
     <li><a>Encode from code points to potentially ill-formed UTF-16</a>
   </ul>
 
@@ -849,11 +773,11 @@ Concatenating WTF-8 strings</h3>
         <li>
           Let <var>lead</var> and <var>trail</var> be two <a>code points</a>,
           the respective results of
-          <a title="Decode from WTF-8 to code points">decoding from WTF-8</a>
+          <a title="Decode from well-formed WTF-8 to code points">decoding from WTF-8</a>
           these two <a>surrogate byte sequences</a>.
         <li>
           Let <var>supplementary</var> be the
-          <a title="Encode from code points to WTF-8">encoding to WTF-8</a>
+          <a title="Encode from code points to well-formed WTF-8">encoding to WTF-8</a>
           of a single code point of value
           <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code>
         <li>
