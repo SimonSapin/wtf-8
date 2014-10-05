@@ -109,6 +109,30 @@ Background and motivation</h2>
   but preserves the other <a>well-formedness</a> constraints of <a>UTF-8</a>.
 
 
+<h3 id=cesu-8>
+Differences with CESU-8</h3>
+
+  Unicode defines a <a href="http://www.unicode.org/reports/tr26/">
+  Compatibility Encoding Scheme for UTF-16: 8-Bit (CESU-8)</a>.
+  <a>WTF-8</a> is different from CESU-8.
+
+  CESU-8 encodes <a>supplementary code points</a> as <a>surrogate pair byte sequences</a>
+  of six bytes,
+  whereas <a>WTF-8</a>, like <a>UTF-8</a>, encodes them as sequences of four bytes.
+  Therefore, CESU-8 is not a superset of <a>UTF-8</a>.
+
+  It is unclear whether <a>unpaired surrogate byte sequences</a>
+  are supposed to be <a>well-formed</a> in CESU-8.
+
+  <!--
+  CESU-8 was probably not designed,
+  but rather just happened when 16-bit based systems
+  tried to emit <a>UTF-8</a> but failed to handle <a>surrogate code unit pairs</a> properly.
+  Unicode Technical Report #26, which defines CESU-8,
+  was written as after the fact to specify existing practices.
+  -->
+
+
 <h2 id=terminology>
 Terminology</h2>
 

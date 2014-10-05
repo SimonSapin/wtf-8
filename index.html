@@ -593,7 +593,8 @@ and related or neighboring rights to this work.
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
 <div data-fill-with=table-of-contents><ul class=toc><li><a href=#intended-audience><span class=secno>1</span> <span class=content>
 Intended audience</span></a><li><a href=#motivation><span class=secno>2</span> <span class=content>
-Background and motivation</span></a><li><a href=#terminology><span class=secno>3</span> <span class=content>
+Background and motivation</span></a><ul class=toc><li><a href=#cesu-8><span class=secno>2.1</span> <span class=content>
+Differences with CESU-8</span></a></ul><li><a href=#terminology><span class=secno>3</span> <span class=content>
 Terminology</span></a><ul class=toc><li><a href=#surrogates-code-points><span class=secno>3.1</span> <span class=content>
 Surrogate code points</span></a><li><a href=#surrogates-code-units><span class=secno>3.2</span> <span class=content>
 Surrogate code units</span></a><li><a href=#surrogates-byte-sequences><span class=secno>3.3</span> <span class=content>
@@ -711,6 +712,24 @@ Background and motivation</span><a class=self-link href=#motivation></a></h2>
   a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a> that can losslessly represent
   arbitrary <a data-link-type=dfn href=#code-unit title="code unit">code unit</a> sequences (even if <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-16 title=UTF-16>UTF-16</a>)
   but preserves the other <a data-link-type=dfn href=#well-formed title=well-formedness>well-formedness</a> constraints of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.</p>
+
+
+<h3 class="heading settled" data-level=2.1 id=cesu-8><span class=secno>2.1. </span><span class=content>
+Differences with CESU-8</span><a class=self-link href=#cesu-8></a></h3>
+
+<p>Unicode defines a <a href=http://www.unicode.org/reports/tr26/>
+  Compatibility Encoding Scheme for UTF-16: 8-Bit (CESU-8)</a>.
+  <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a> is different from CESU-8.</p>
+
+<p>CESU-8 encodes <a data-link-type=dfn href=#supplementary-code-point title="supplementary code points">supplementary code points</a> as <a data-link-type=dfn href=#surrogate-pair-byte-sequence title="surrogate pair byte sequences">surrogate pair byte sequences</a>
+  of six bytes,
+  whereas <a data-link-type=dfn href=#wtf-8 title=WTF-8>WTF-8</a>, like <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>, encodes them as sequences of four bytes.
+  Therefore, CESU-8 is not a superset of <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.</p>
+
+<p>It is unclear whether <a data-link-type=dfn href=#unpaired-surrogate-byte-sequence title="unpaired surrogate byte sequences">unpaired surrogate byte sequences</a>
+  are supposed to be <a data-link-type=dfn href=#well-formed title=well-formed>well-formed</a> in CESU-8.</p>
+
+  
 
 
 <h2 class="heading settled" data-level=3 id=terminology><span class=secno>3. </span><span class=content>
