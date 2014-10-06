@@ -55,18 +55,18 @@ Background and motivation</h2>
   and the <a>UTF-16</a> encoding was introduced.
   This encoding preserves compatibility with existing 16-bit based systems
   and represents new (<a title="supplementary code point">supplementary</a>) code points
-  as a <a title="surrogate code unit pair">pair</a> of “surrogates”.
+  as a <a title="surrogate 16-bit code unit pair">pair</a> of “surrogates”.
 
   <a>UTF-16</a> is designed to represent any Unicode text,
   but it can not represent a <a>surrogate code point pair</a>
-  since the corresponding <a>surrogate code unit pairs</a>
+  since the corresponding <a>surrogate 16-bit code unit pairs</a>
   would instead represent a <a>supplementary code point</a>.
   Therefore, the concept of <a>Unicode scalar value</a> was introduced
   and <a>Unicode text</a> was restricted to not contain any <a>surrogate code point</a>.
   (This was presumably deemed simpler that only restricting pairs.)
 
   <a>UTF-16</a> was redefined to be <a>ill-formed</a>
-  if it contains <a>unpaired surrogate code units</a>.
+  if it contains <a>unpaired surrogate 16-bit code units</a>.
   <a>UTF-8</a> was similarly redefined to be <a>ill-formed</a>
   if it contains <a>surrogate byte sequences</a>.
 
@@ -98,14 +98,14 @@ Background and motivation</h2>
       code units</a>).
   </ul>
 
-  <a>Unpaired surrogate code units</a> are the only case
-  where an arbitrary sequence of <a>code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
+  <a>Unpaired surrogate 16-bit code units</a> are the only case
+  where an arbitrary sequence of <a>16-bit code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
   <a>UTF-8</a>, however, is more complex
   and maintaining its <a>well-formedness</a> is arguably more valuable.
 
   This specification defines <a>WTF-8</a>,
   a superset of <a>UTF-8</a> that can losslessly represent
-  arbitrary <a>code unit</a> sequences (even if <a>ill-formed</a> in <a>UTF-16</a>)
+  arbitrary sequences of <a>16-bit code unit</a> (even if <a>ill-formed</a> in <a>UTF-16</a>)
   but preserves the other <a>well-formedness</a> constraints of <a>UTF-8</a>.
 
 
@@ -128,7 +128,7 @@ Differences with CESU-8</h3>
   <!--
   CESU-8 was probably not designed,
   but rather just happened when 16-bit based systems
-  tried to emit <a>UTF-8</a> but failed to handle <a>surrogate code unit pairs</a> properly.
+  tried to emit <a>UTF-8</a> but failed to handle <a>surrogate 16-bit code unit pairs</a> properly.
   Unicode Technical Report #26, which defines CESU-8,
   was written as after the fact to specify existing practices.
   -->
@@ -138,8 +138,7 @@ Differences with CESU-8</h3>
 Terminology</h2>
 
   These definitions correspond to those of the
-  <a href="http://www.unicode.org/glossary/">Glossary of Unicode Terms</a> [[!UNICODE]],
-  except for <a>code unit</a> which is slightly different for the purpose of this specification.
+  <a href="http://www.unicode.org/glossary/">Glossary of Unicode Terms</a>. [[!UNICODE]]
 
   A Unicode <dfn>code point</dfn> is any value in the Unicode codespace;
   that is, the range of integers from 0 to 1114111.
@@ -170,13 +169,13 @@ Terminology</h2>
   <dfn>UTF-8</dfn> is an encoding of <a>Unicode text</a> using 8-bit bytes.
   Each <a>Unicode scalar value</a> is represented as a sequence of one to four bytes.
 
-  <dfn>UTF-16</dfn> is an encoding of <a>Unicode text</a> using 16-bit <a>code units</a>.
-  <a>BMP scalar values</a> are represented as a single <a>code unit</a> with the same value.
-  <a>Supplementary code points</a> are represented as a <a>surrogate code unit pair</a>.
+  <dfn>UTF-16</dfn> is an encoding of <a>Unicode text</a> using <a>16-bit code units</a>.
+  <a>BMP scalar values</a> are represented as a single <a>16-bit code unit</a> with the same value.
+  <a>Supplementary code points</a> are represented as a <a>surrogate 16-bit code unit pair</a>.
 
   Note: this specification is only concerned with the UTF-16
   <a href="http://www.unicode.org/glossary/#character_encoding_form">encoding form</a>
-  (based on <a>code units</a>),
+  (based on <a>16-bit code units</a>),
   and not with the
   <a href="http://www.unicode.org/glossary/#character_encoding_scheme">encoding scheme</a>
   (based on bytes, with UTF-16BE and UTF-16LE variants).
@@ -193,7 +192,7 @@ Terminology</h2>
     In particular:
 
     <ul>
-      <li><a>Unpaired surrogate code units</a> are <a>ill-formed</a> in <a>UTF-16</a>.
+      <li><a>Unpaired surrogate 16-bit code units</a> are <a>ill-formed</a> in <a>UTF-16</a>.
       <li><a>Surrogate byte sequences</a> are <a>ill-formed</a> in <a>UTF-8</a>.
       <li><a>Surrogate pair byte sequences</a> are <a>ill-formed</a> in <a>WTF-8</a>.
     </ul>
@@ -204,17 +203,13 @@ Terminology</h2>
   It is used as a substitute to replace <a>ill-formed</a> sub-sequences
   during a conversion.
 
-  A <dfn>code unit</dfn>, for the purpose of this specification,
-  is a 16-bit integer used in <a>UTF-16</a>.
+  A <dfn>16-bit code unit</dfn> is a 16-bit integer used in <a>UTF-16</a>.
   It is noted with a “0x” prefix and four hexadecimal digits:
-  the first and last code units are 0x0000 and 0xFFFF.
+  the first and last 16-bit code units are 0x0000 and 0xFFFF.
 
-  Note: The byte serialization or memory representation of a <a>code unit</a>
+  Note: The byte serialization or memory representation of a <a>16-bit code unit</a>
   (little-endian or big-endian)
   is out of scope for this specification.
-
-  Note: Unicode also uses this term for 8-bit and 32-bit code units
-  in the UTF-8 and UTF-32 encodings.
 
   When an algorithm iterates over a sequence (“For every <var>i</var> in …”),
   <dfn title="consume">consuming</dfn> the next item means advancing in the sequence
@@ -255,24 +250,24 @@ Surrogate code points</h3>
 
 
 <h3 id=surrogates-code-units>
-Surrogate code units</h3>
+Surrogate 16-bit code units</h3>
 
-  A <dfn>lead surrogate code unit</dfn> or <dfn>high surrogate code unit</dfn>
-  is a <a>code unit</a> in the range from 0xD800 to 0xDBFF.
+  A <dfn>lead surrogate 16-bit code unit</dfn> or <dfn>high surrogate 16-bit code unit</dfn>
+  is a <a>16-bit code unit</a> in the range from 0xD800 to 0xDBFF.
 
-  A <dfn>trail surrogate code unit</dfn> or <dfn>low surrogate code unit</dfn>
-  is a <a>code unit</a> in the range from 0xDC00 to 0xDFFF.
+  A <dfn>trail surrogate 16-bit code unit</dfn> or <dfn>low surrogate 16-bit code unit</dfn>
+  is a <a>16-bit code unit</a> in the range from 0xDC00 to 0xDFFF.
 
-  A <dfn>surrogate code unit</dfn> is
-  either a <a>lead surrogate code unit</a> or a <a>trail surrogate code unit</a>.
-  That is, a <a>code unit</a> in the range from 0xD800 to 0xDFFF.
+  A <dfn>surrogate 16-bit code unit</dfn> is
+  either a <a>lead surrogate 16-bit code unit</a> or a <a>trail surrogate 16-bit code unit</a>.
+  That is, a <a>16-bit code unit</a> in the range from 0xD800 to 0xDFFF.
 
-  A <dfn>surrogate code unit pair</dfn> is a sequence of
-  a <a>lead surrogate code unit</a> followed by a <a>trail surrogate code unit</a>.
+  A <dfn>surrogate 16-bit code unit pair</dfn> is a sequence of
+  a <a>lead surrogate 16-bit code unit</a> followed by a <a>trail surrogate 16-bit code unit</a>.
   In <a>UTF-16</a>, it represents a <a>supplementary code point</a>.
 
-  An <dfn>unpaired surrogate code unit</dfn> is a <a>surrogate code unit</a>
-  that is not part of a <a>surrogate code unit pair</a>.
+  An <dfn>unpaired surrogate 16-bit code unit</dfn> is a <a>surrogate 16-bit code unit</a>
+  that is not part of a <a>surrogate 16-bit code unit pair</a>.
 
 
 <h3 id=surrogates-byte-sequences>
@@ -338,7 +333,7 @@ Surrogate byte sequences</h3>
 <h2 id=ill-formed-utf-16>
 Potentially ill-formed UTF-16</h2>
 
-  A sequence of 16-bit <a>code units</a> is <dfn>potentially ill-formed UTF-16</dfn>
+  A sequence of <a>16-bit code units</a> is <dfn>potentially ill-formed UTF-16</dfn>
   if it is intended to be interpreted as <a>UTF-16</a>,
   but is not necessarily <a>well-formed</a> in <a>UTF-16</a>.
   It effectively encodes a sequence of <a>code point</a>
@@ -346,10 +341,11 @@ Potentially ill-formed UTF-16</h2>
 
   Note: Like <a>UTF-16</a>,
   <a>potentially ill-formed UTF-16</a> can not represent a <a>surrogate code point pair</a>
-  since the corresponding <a>surrogate code unit pair</a> would instead
+  since the corresponding <a>surrogate 16-bit code unit pair</a> would instead
   represent a <a>supplementary code point</a>.
 
-  Any sequence of <a>code units</a> has an interpretation as <a>potentially ill-formed UTF-16</a>.
+  Any sequence of <a>16-bit code units</a>
+  has an interpretation as <a>potentially ill-formed UTF-16</a>.
 
 
 <h3 id=encoding-ill-formed-utf-16>
@@ -360,18 +356,18 @@ Encoding</h3>
   run these steps:
 
   <ol>
-    <li>Let <var>result</var> be a sequence of <a>code units</a>, initially empty.
+    <li>Let <var>result</var> be a sequence of <a>16-bit code units</a>, initially empty.
     <li>For every <a>code point</a> <var>P</var> of the input, run these substeps:
       <ol>
         <li>
           If <var>P</var> is a <a>supplementary code point</a>,
-          append to <var>result</var> two <a>code units</a> of values:
+          append to <var>result</var> two <a>16-bit code units</a> of values:
           <ol>
             <li><code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code>
             <li><code>((<var>P</var> - 0x10000) & 0x3FF) + 0xDC00</code>
           </ol>
         <li>Otherwise (<var>P</var> is a <a>BMP code point</a>),
-          append to <var>result</var> a <a>code unit</a> of value <var>P</var>.
+          append to <var>result</var> a <a>16-bit code unit</a> of value <var>P</var>.
       </ol>
     <li>Return <var>result</var>.
   </ol>
@@ -403,25 +399,25 @@ Decoding</h3>
 
   <ol>
     <li>Let <var>result</var> be a sequence of <a>code points</a>, initially empty.
-    <li>For every <a>code unit</a> <var>U</var> of the input, run these substeps:
+    <li>For every <a>16-bit code unit</a> <var>U</var> of the input, run these substeps:
       <ol>
         <li>
-          If <var>U</var> is a <a>lead surrogate code unit</a>
-          and is not the last <a>code unit</a> of the input,
+          If <var>U</var> is a <a>lead surrogate 16-bit code unit</a>
+          and is not the last <a>16-bit code unit</a> of the input,
           run these substeps:
           <ol>
             <li>
-              Let <var>next</var> be the next <a>code unit</a> of the input,
+              Let <var>next</var> be the next <a>16-bit code unit</a> of the input,
               and <a>consume</a> it.
             <li>
-              If <var>next</var> is a <a>trail surrogate code unit</a>,
+              If <var>next</var> is a <a>trail surrogate 16-bit code unit</a>,
               append to <var>result</var> a <a>code point</a> of value
               <code>
                 0x10000 +
                 ((<var>U</var> - 0xD800) &lt;&lt; 10) +
                 (<var>next</var> - 0xDC00)</code>.
             <li>
-              Otherwise (<var>next</var> is not a <a>trail surrogate code unit</a>),
+              Otherwise (<var>next</var> is not a <a>trail surrogate 16-bit code unit</a>),
               append to <var>result</var> a <a>code point</a> of value <var>U</var>,
               then a <a>code point</a> of value <var>next</var>.
           </ol>
@@ -794,7 +790,7 @@ Concatenating WTF-8 strings</h3>
 
   <ol>
     <li>
-      If the left input string ends with a <a>lead surrogate byte sequence</a>
+      If the left input string   ends with a <a>lead surrogate byte sequence</a>
       and the right input string starts with a <a>trail surrogate byte sequence</a>,
       run these substeps:
       <ol>
@@ -825,7 +821,7 @@ Concatenating WTF-8 strings</h3>
   converting both strings
   <a title="convert from WTF-8 to potentially ill-formed UTF-16">
   to potentially ill-formed UTF-16</a>,
-  concatenating the resulting <a>code unit</a> sequences,
+  concatenating the resulting <a>16-bit code unit</a> sequences,
   then converting the concatenation back
   <a title="convert from potentially ill-formed UTF-16 to WTF-8">to WTF-8</a>.
 
