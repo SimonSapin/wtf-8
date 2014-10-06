@@ -770,6 +770,9 @@ Converting between WTF-8 and UTF-8</h3>
   with the sequence of three bytes &lt;0xEF, 0xBF, 0xBD>,
   the <a>UTF-8</a> encoding of the <a>replacement character</a>.
 
+  Note: Since <a>surrogate byte sequences</a> are also three bytes long,
+  this conversion can be done <em>in place</em>.
+
   Note: This conversion never fails but is lossy.
 
   To <dfn>convert strictly from <a>WTF-8</a> to <a>UTF-8</a></dfn>, run these steps:
@@ -858,5 +861,6 @@ Acknowledgments</h2>
   Thanks for feedback and contributions from
   Anne van Kesteren,
   David Baron,
+  Henri Sivonen,
   James Graham,
   and Mathias Bynens.
