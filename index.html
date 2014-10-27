@@ -575,7 +575,7 @@ span.issue, span.note {
 <div class=head>
   <p data-fill-with=logo></p>
   <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>14 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf-8/issues>On GitHub</a></span></dl></div>
+  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>27 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf-8/issues>On GitHub</a></span></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=zero.png></a>
 To the extent possible under law, the editors have waived all copyright
@@ -873,6 +873,11 @@ Surrogate 16-bit code units</span><a class=self-link href=#surrogates-code-units
 <h3 class="heading settled" data-level=3.3 id=surrogates-byte-sequences><span class=secno>3.3. </span><span class=content>
 Surrogate byte sequences</span><a class=self-link href=#surrogates-byte-sequences></a></h3>
 
+<p class=note>Note: A <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequence">surrogate byte sequence</a>
+  (and therefore any byte sequence described in this section)
+  is <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.
+  Decoders are required to treat it a an error.</p>
+
 <p>A <dfn data-dfn-type=dfn data-noexport="" id=lead-surrogate-byte-sequence>lead surrogate byte sequence<a class=self-link href=#lead-surrogate-byte-sequence></a></dfn> or <dfn data-dfn-type=dfn data-noexport="" id=high-surrogate-byte-sequence>high surrogate byte sequence<a class=self-link href=#high-surrogate-byte-sequence></a></dfn>
   is a sequence of three bytes
   that represents a <a data-link-type=dfn href=#lead-surrogate-code-point title="lead surrogate code point">lead surrogate code point</a> in <a data-link-type=dfn href=#generalized-utf-8 title="generalized UTF-8">generalized UTF-8</a>.</p>
@@ -919,9 +924,6 @@ Surrogate byte sequences</span><a class=self-link href=#surrogates-byte-sequence
       <td>80 to BF
     </tr>
   </table>
-
-<p class=note>Note: A <a data-link-type=dfn href=#surrogate-byte-sequence title="surrogate byte sequence">surrogate byte sequence</a> is <a data-link-type=dfn href=#ill-formed title=ill-formed>ill-formed</a> in <a data-link-type=dfn href=#utf-8 title=UTF-8>UTF-8</a>.
-  Decoders are required to treat is as an error</p>
 
 <p>A <dfn data-dfn-type=dfn data-noexport="" id=surrogate-pair-byte-sequence>surrogate pair byte sequence<a class=self-link href=#surrogate-pair-byte-sequence></a></dfn> is a sequence six bytes composed of
   a <a data-link-type=dfn href=#lead-surrogate-byte-sequence title="lead surrogate byte sequence">lead surrogate byte sequence</a> followed by a <a data-link-type=dfn href=#trail-surrogate-byte-sequence title="trail surrogate byte sequence">trail surrogate byte sequence</a>.</p>

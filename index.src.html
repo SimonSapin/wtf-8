@@ -273,6 +273,11 @@ Surrogate 16-bit code units</h3>
 <h3 id=surrogates-byte-sequences>
 Surrogate byte sequences</h3>
 
+  Note: A <a>surrogate byte sequence</a>
+  (and therefore any byte sequence described in this section)
+  is <a>ill-formed</a> in <a>UTF-8</a>.
+  Decoders are required to treat it a an error.
+
   A <dfn>lead surrogate byte sequence</dfn> or <dfn>high surrogate byte sequence</dfn>
   is a sequence of three bytes
   that represents a <a>lead surrogate code point</a> in <a>generalized UTF-8</a>.
@@ -319,9 +324,6 @@ Surrogate byte sequences</h3>
       <td>80 to BF
     </tr>
   </table>
-
-  Note: A <a>surrogate byte sequence</a> is <a>ill-formed</a> in <a>UTF-8</a>.
-  Decoders are required to treat is as an error
 
   A <dfn>surrogate pair byte sequence</dfn> is a sequence six bytes composed of
   a <a>lead surrogate byte sequence</a> followed by a <a>trail surrogate byte sequence</a>.
