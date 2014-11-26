@@ -404,25 +404,17 @@ Decoding</h3>
     <li>For every <a>16-bit code unit</a> <var>U</var> of the input, run these substeps:
       <ol>
         <li>
-          If <var>U</var> is a <a>lead surrogate 16-bit code unit</a>
-          and is not the last <a>16-bit code unit</a> of the input,
-          run these substeps:
-          <ol>
-            <li>
-              Let <var>next</var> be the next <a>16-bit code unit</a> of the input,
-              and <a>consume</a> it.
-            <li>
-              If <var>next</var> is a <a>trail surrogate 16-bit code unit</a>,
-              append to <var>result</var> a <a>code point</a> of value
-              <code>
-                0x10000 +
-                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
-                (<var>next</var> - 0xDC00)</code>.
-            <li>
-              Otherwise (<var>next</var> is not a <a>trail surrogate 16-bit code unit</a>),
-              append to <var>result</var> a <a>code point</a> of value <var>U</var>,
-              then a <a>code point</a> of value <var>next</var>.
-          </ol>
+          If <var>U</var> is a <a>lead surrogate 16-bit code unit</a>,
+          <var>U</var> is not the last <a>16-bit code unit</a> of the input,
+          and the next <a>16-bit code unit</a> of the input <var>next</var>
+          is a <a>trail surrogate 16-bit code unit</a>,
+          then
+          <a>consume</a> <var>next</var>
+          and append to <var>result</var> a <a>code point</a> of value
+          <code>
+            0x10000 +
+            ((<var>U</var> - 0xD800) &lt;&lt; 10) +
+            (<var>next</var> - 0xDC00)</code>.
         <li>
           Otherwise,
           append to <var>result</var> a <a>code point</a> of value <var>U</var>.
@@ -866,6 +858,7 @@ Acknowledgments</h2>
   Thanks for feedback and contributions from
   Anne van Kesteren,
   David Baron,
+  Dylan Petonke,
   Henri Sivonen,
   James Graham,
   Mathias Bynens,

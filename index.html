@@ -575,7 +575,7 @@ span.issue, span.note {
 <div class=head>
   <p data-fill-with=logo></p>
   <h1 class="p-name no-ref" id=title>The WTF-8 encoding</h1>
-  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>27 October 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf-8/issues>On GitHub</a></span></dl></div>
+  <div data-fill-with=spec-metadata><dl><dt>Editor:<dd><div class="p-author h-card vcard"><a class="p-name fn u-url url" href=https://exyr.org/>Simon Sapin</a> (<a class="p-org org" href=https://www.mozilla.org/>Mozilla</a>)</div><dt>Last updated:<dd><span>26 November 2014</span><dt>Issue tracking:<dd><span><a href=https://github.com/SimonSapin/wtf-8/issues>On GitHub</a></span></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=zero.png></a>
 To the extent possible under law, the editors have waived all copyright
@@ -1004,25 +1004,17 @@ Decoding</span><a class=self-link href=#decoding-ill-formed-utf-16></a></h3>
     <li>For every <a data-link-type=dfn href=#16-bit-code-unit title="16-bit code unit">16-bit code unit</a> <var>U</var> of the input, run these substeps:
       <ol>
         <li>
-          If <var>U</var> is a <a data-link-type=dfn href=#lead-surrogate-16-bit-code-unit title="lead surrogate 16-bit code unit">lead surrogate 16-bit code unit</a>
-          and is not the last <a data-link-type=dfn href=#16-bit-code-unit title="16-bit code unit">16-bit code unit</a> of the input,
-          run these substeps:
-          <ol>
-            <li>
-              Let <var>next</var> be the next <a data-link-type=dfn href=#16-bit-code-unit title="16-bit code unit">16-bit code unit</a> of the input,
-              and <a data-link-type=dfn href=#consume title=consume>consume</a> it.
-            <li>
-              If <var>next</var> is a <a data-link-type=dfn href=#trail-surrogate-16-bit-code-unit title="trail surrogate 16-bit code unit">trail surrogate 16-bit code unit</a>,
-              append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value
-              <code>
-                0x10000 +
-                ((<var>U</var> - 0xD800) &lt;&lt; 10) +
-                (<var>next</var> - 0xDC00)</code>.
-            <li>
-              Otherwise (<var>next</var> is not a <a data-link-type=dfn href=#trail-surrogate-16-bit-code-unit title="trail surrogate 16-bit code unit">trail surrogate 16-bit code unit</a>),
-              append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value <var>U</var>,
-              then a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value <var>next</var>.
-          </ol>
+          If <var>U</var> is a <a data-link-type=dfn href=#lead-surrogate-16-bit-code-unit title="lead surrogate 16-bit code unit">lead surrogate 16-bit code unit</a>,
+          <var>U</var> is not the last <a data-link-type=dfn href=#16-bit-code-unit title="16-bit code unit">16-bit code unit</a> of the input,
+          and the next <a data-link-type=dfn href=#16-bit-code-unit title="16-bit code unit">16-bit code unit</a> of the input <var>next</var>
+          is a <a data-link-type=dfn href=#trail-surrogate-16-bit-code-unit title="trail surrogate 16-bit code unit">trail surrogate 16-bit code unit</a>,
+          then
+          <a data-link-type=dfn href=#consume title=consume>consume</a> <var>next</var>
+          and append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value
+          <code>
+            0x10000 +
+            ((<var>U</var> - 0xD800) &lt;&lt; 10) +
+            (<var>next</var> - 0xDC00)</code>.
         <li>
           Otherwise,
           append to <var>result</var> a <a data-link-type=dfn href=#code-point title="code point">code point</a> of value <var>U</var>.
@@ -1466,6 +1458,7 @@ Acknowledgments</span><a class=self-link href=#acknowledgments></a></h2>
 <p>Thanks for feedback and contributions from
   Anne van Kesteren,
   David Baron,
+  Dylan Petonke,
   Henri Sivonen,
   James Graham,
   Mathias Bynens,
