@@ -5,7 +5,7 @@ Status: LS
 !Issue tracking: <a href="https://github.com/SimonSapin/wtf-8/issues">On GitHub</a>
 !Last updated: [DATE]
 Editor: Simon Sapin, Mozilla https://www.mozilla.org/, https://exyr.org/
-Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a title="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the <a>well-formedness</a> invariant that surrogates must be paired.
+Abstract: WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a>UTF-8</a> that encodes <a>surrogate code points</a> if they are not in a <a lt="surrogate code point pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a>UTF-16</a> internally but don’t enforce the <a>well-formedness</a> invariant that surrogates must be paired.
 </pre>
 
 <link href="logo-wtf-8.svg" rel="icon">
@@ -20,7 +20,7 @@ Intended audience</h2>
   for legacy reasons.
 
   Any <a>WTF-8</a> data <em>must</em> be converted
-  to a <a title="Unicode text">Unicode</a> encoding at the system’s boundary
+  to a <a lt="Unicode text">Unicode</a> encoding at the system’s boundary
   before being emitted.
   <a>UTF-8</a> is recommended.
   <a>WTF-8</a> <em>must not</em> be used to represent text
@@ -54,8 +54,8 @@ Background and motivation</h2>
   Unicode was extended to 1114111 <a>code points</a> from U+0000 to U+10FFFF,
   and the <a>UTF-16</a> encoding was introduced.
   This encoding preserves compatibility with existing 16-bit based systems
-  and represents new (<a title="supplementary code point">supplementary</a>) code points
-  as a <a title="surrogate 16-bit code unit pair">pair</a> of “surrogates”.
+  and represents new (<a lt="supplementary code point">supplementary</a>) code points
+  as a <a lt="surrogate 16-bit code unit pair">pair</a> of “surrogates”.
 
   <a>UTF-16</a> is designed to represent any Unicode text,
   but it can not represent a <a>surrogate code point pair</a>
@@ -180,8 +180,8 @@ Terminology</h2>
   <a href="http://www.unicode.org/glossary/#character_encoding_scheme">encoding scheme</a>
   (based on bytes, with UTF-16BE and UTF-16LE variants).
 
-  A string is <dfn title="well-formed|well-formedness">well-formed</dfn>
-  (not <dfn title="ill-formed|ill-formedness">ill-formed</dfn>)
+  A string is <dfn lt="well-formed|well-formedness">well-formed</dfn>
+  (not <dfn lt="ill-formed|ill-formedness">ill-formed</dfn>)
   in a given encoding if it follows the specification of that encoding.
   [[!UNICODE]] defines
   <a href="http://www.unicode.org/glossary/#well_formed_code_unit_sequence">
@@ -212,7 +212,7 @@ Terminology</h2>
   is out of scope for this specification.
 
   When an algorithm iterates over a sequence (“For every <var>i</var> in …”),
-  <dfn title="consume">consuming</dfn> the next item means advancing in the sequence
+  <dfn lt="consume">consuming</dfn> the next item means advancing in the sequence
   such that that item will be skipped during the following iteration of the loop:
   the item after the next becomes the next item.
 
@@ -651,7 +651,7 @@ Encoding</h3>
   as if had been encoded in <a>potentially ill-formed UTF-16</a>.
   This is also consistent with
   encoding each <a>code point</a> to <a>WTF-8</a> individually,
-  and <a title="concatenate two WTF-8 strings">concatenating</a>
+  and <a lt="concatenate two WTF-8 strings">concatenating</a>
   the resulting <a>WTF-8</a> byte sequences.
 
 
@@ -667,9 +667,9 @@ Decoding</h3>
   this algorithm is deliberately not defined for arbitrary byte sequences.
   It is only defined for byte sequences known to be <a>well-formed</a> in <a>WTF-8</a>,
   such as sequences
-  <a title="encode from code points to well-formed WTF-8">encoded from code points</a>,
-  <a title="convert from potentially ill-formed UTF-16 to WTF-8">converted from UTF-16</a>, or
-  <a title="concatenate two WTF-8 strings">concatenated</a>
+  <a lt="encode from code points to well-formed WTF-8">encoded from code points</a>,
+  <a lt="convert from potentially ill-formed UTF-16 to WTF-8">converted from UTF-16</a>, or
+  <a lt="concatenate two WTF-8 strings">concatenated</a>
   from sequences themselves <a>well-formed</a> in WTF-8</a>.
 
   <ol>
@@ -791,11 +791,11 @@ Concatenating WTF-8 strings</h3>
         <li>
           Let <var>lead</var> and <var>trail</var> be two <a>code points</a>,
           the respective results of
-          <a title="Decode from well-formed WTF-8 to code points">decoding from WTF-8</a>
+          <a lt="Decode from well-formed WTF-8 to code points">decoding from WTF-8</a>
           these two <a>surrogate byte sequences</a>.
         <li>
           Let <var>supplementary</var> be the
-          <a title="Encode from code points to well-formed WTF-8">encoding to WTF-8</a>
+          <a lt="Encode from code points to well-formed WTF-8">encoding to WTF-8</a>
           of a single code point of value
           <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code>
         <li>
@@ -813,11 +813,11 @@ Concatenating WTF-8 strings</h3>
 
   Note: This is equivalent to
   converting both strings
-  <a title="convert from WTF-8 to potentially ill-formed UTF-16">
+  <a lt="convert from WTF-8 to potentially ill-formed UTF-16">
   to potentially ill-formed UTF-16</a>,
   concatenating the resulting <a>16-bit code unit</a> sequences,
   then converting the concatenation back
-  <a title="convert from potentially ill-formed UTF-16 to WTF-8">to WTF-8</a>.
+  <a lt="convert from potentially ill-formed UTF-16 to WTF-8">to WTF-8</a>.
 
 
 <h2 id=implementations>
