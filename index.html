@@ -1913,7 +1913,14 @@ Implementations</span><a class="self-link" href="#implementations"></a></h2>
     
    <li>
       <a href="https://github.com/SimonSapin/rust-wtf8">rust-wtf8</a>
-      implements this specification in Rust.
+      implements this specification in <a href="http://www.rust-lang.org/">Rust</a>.
+    
+   <li>
+      On Windows (which uses <a data-link-type="dfn" href="#potentially-ill_formed-utf_16">potentially ill-formed UTF-16</a> in its APIs),
+      the standard library
+      <a href="https://github.com/rust-lang/rfcs/blob/master/text/0517-io-os-reform.md#string-handling">uses WTF-8</a>
+      internally for <em>OS strings</em>,
+      but does not expose the <a data-link-type="dfn" href="#wtf_8">WTF-8</a> byte sequences.
   
   </ul>
 
