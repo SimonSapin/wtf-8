@@ -602,7 +602,7 @@ span.issue, span.note {
      <dt>Change history:
      <dd><span><a href="https://github.com/SimonSapin/wtf-8/commits/gh-pages">On GitHub</a></span>
      <dt>Last updated:
-     <dd><span>27 May 2015</span>
+     <dd><span>28 May 2015</span>
     </dl>
    </div>
   
@@ -827,9 +827,9 @@ Differences with CESU-8</span><a class="self-link" href="#cesu-8"></a></h3>
   Therefore, CESU-8 is not a superset of <a data-link-type="dfn" href="#utf_8">UTF-8</a>.</p>
 
 
-  <p>It is unclear whether <a data-link-type="dfn" href="#unpaired-surrogate-byte-sequence">unpaired surrogate byte sequences</a>
-  are supposed to be <a data-link-type="dfn" href="#well_formed">well-formed</a> in CESU-8.
-  If so, they are encoded the same as in <a data-link-type="dfn" href="#wtf_8">WTF-8</a>.</p>
+  <p>CESU-8 is also a mapping on <a data-link-type="dfn" href="#utf_16">UTF-16</a> code units.
+  Therefore <a data-link-type="dfn" href="#unpaired-surrogate-byte-sequence">unpaired surrogate byte sequences</a> are <a data-link-type="dfn" href="#ill_formed">ill-formed</a> in CESU-8,
+  whereas supporting them is the entire point of <a data-link-type="dfn" href="#wtf_8">WTF-8</a>.</p>
 
   
 
@@ -1944,6 +1944,7 @@ Acknowledgments</span><a class="self-link" href="#acknowledgments"></a></h2>
   Dylan Petonke,
   Henri Sivonen,
   James Graham,
+  Kevin Ballard,
   Mathias Bynens,
   Sam Tobin-Hochstadt,
   Tab Atkins.</p>

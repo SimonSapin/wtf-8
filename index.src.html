@@ -122,9 +122,9 @@ Differences with CESU-8</h3>
   whereas <a>WTF-8</a>, like <a>UTF-8</a>, encodes them as sequences of four bytes.
   Therefore, CESU-8 is not a superset of <a>UTF-8</a>.
 
-  It is unclear whether <a>unpaired surrogate byte sequences</a>
-  are supposed to be <a>well-formed</a> in CESU-8.
-  If so, they are encoded the same as in <a>WTF-8</a>.
+  CESU-8 is also a mapping on <a>UTF-16</a> code units.
+  Therefore <a>unpaired surrogate byte sequences</a> are <a>ill-formed</a> in CESU-8,
+  whereas supporting them is the entire point of <a>WTF-8</a>.
 
   <!--
   CESU-8 was probably not designed,
@@ -869,6 +869,7 @@ Acknowledgments</h2>
   Dylan Petonke,
   Henri Sivonen,
   James Graham,
+  Kevin Ballard,
   Mathias Bynens,
   Sam Tobin-Hochstadt,
   Tab Atkins.
