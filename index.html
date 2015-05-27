@@ -602,7 +602,7 @@ span.issue, span.note {
      <dt>Change history:
      <dd><span><a href="https://github.com/SimonSapin/wtf-8/commits/gh-pages">On GitHub</a></span>
      <dt>Last updated:
-     <dd><span>11 May 2015</span>
+     <dd><span>27 May 2015</span>
     </dl>
    </div>
   
@@ -1135,7 +1135,8 @@ Potentially ill-formed UTF-16</span><a class="self-link" href="#ill-formed-utf-1
   <p class="note" role="note">Note: Like <a data-link-type="dfn" href="#utf_16">UTF-16</a>,
   <a data-link-type="dfn" href="#potentially-ill_formed-utf_16">potentially ill-formed UTF-16</a> can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair">surrogate code point pair</a>
   since the corresponding <a data-link-type="dfn" href="#surrogate-16_bit-code-unit-pair">surrogate 16-bit code unit pair</a> would instead
-  represent a <a data-link-type="dfn" href="#supplementary-code-point">supplementary code point</a>.</p>
+  represent a <a data-link-type="dfn" href="#supplementary-code-point">supplementary code point</a>.
+  Unlike <a data-link-type="dfn" href="#well_formed">well-formed</a> <a data-link-type="dfn" href="#utf_16">UTF-16</a>, it might contain isolated <a data-link-type="dfn" href="#surrogate-code-point">surrogate code points</a>.</p>
 
 
   <p>Any sequence of <a data-link-type="dfn" href="#16_bit-code-unit">16-bit code units</a>
@@ -1944,7 +1945,8 @@ Acknowledgments</span><a class="self-link" href="#acknowledgments"></a></h2>
   Henri Sivonen,
   James Graham,
   Mathias Bynens,
-  and Sam Tobin-Hochstadt.</p>
+  Sam Tobin-Hochstadt,
+  Tab Atkins.</p>
 
 
 

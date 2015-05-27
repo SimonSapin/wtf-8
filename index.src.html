@@ -346,6 +346,7 @@ Potentially ill-formed UTF-16</h2>
   <a>potentially ill-formed UTF-16</a> can not represent a <a>surrogate code point pair</a>
   since the corresponding <a>surrogate 16-bit code unit pair</a> would instead
   represent a <a>supplementary code point</a>.
+  Unlike <a>well-formed</a> <a>UTF-16</a>, it might contain isolated <a>surrogate code points</a>.
 
   Any sequence of <a>16-bit code units</a>
   has an interpretation as <a>potentially ill-formed UTF-16</a>.
@@ -869,4 +870,5 @@ Acknowledgments</h2>
   Henri Sivonen,
   James Graham,
   Mathias Bynens,
-  and Sam Tobin-Hochstadt.
+  Sam Tobin-Hochstadt,
+  Tab Atkins.
