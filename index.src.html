@@ -47,8 +47,11 @@ Background and motivation</h2>
   was published in 1991,
   it defined 65536 <a>code points</a> from U+0000 to U+FFFF
   and assigned characters to around half of them.
-  Many software implementations chose the obvious memory reprentation
+  Many software implementations chose the obvious memory representation
   for Unicode text of 16 bits per <a>code point</a> / character.
+
+  At the time, “Unicode” was synonymous with that particular encoding.
+  To disambiguate, that encoding is now called <dfn>UCS-2</dfn>.
 
   As subsequent versions of Unicode assigned more characters,
   it became apparent that 65536 <a>code points</a> would not be sufficient.
@@ -98,6 +101,9 @@ Background and motivation</h2>
       (<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa383751%28v=vs.85%29.aspx#WCHAR">16-bit
       code units</a>).
   </ul>
+
+  We say that strings in these systems are encoded in <a>potentially ill-formed UTF-16</a>
+  or <a>WTF-16</a>.
 
   <a>Unpaired surrogate 16-bit code units</a> are the only case
   where an arbitrary sequence of <a>16-bit code units</a> is <a>ill-formed</a> in <a>UTF-16</a>.
@@ -350,6 +356,11 @@ Potentially ill-formed UTF-16</h2>
 
   Any sequence of <a>16-bit code units</a>
   has an interpretation as <a>potentially ill-formed UTF-16</a>.
+
+  <dfn>WTF-16</dfn> is sometimes used as a shorter name for <a>potentially ill-formed UTF-16</a>,
+  especially in the context of systems were originally designed for <a>UCS-2</a>
+  and later upgraded to <a>UTF-16</a> but never enforced <a>well-formedness</a>,
+  either by neglect or because of backward-compatibility constraints.
 
 
 <h3 id=encoding-ill-formed-utf-16>
@@ -871,5 +882,6 @@ Acknowledgments</h2>
   James Graham,
   Kevin Ballard,
   Mathias Bynens,
+  Ms2ger,
   Sam Tobin-Hochstadt,
   Tab Atkins.
