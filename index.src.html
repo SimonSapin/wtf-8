@@ -432,7 +432,7 @@ Decoding</h3>
   and the resulting sequence is <a>Unicode text</a>.
 
 
-<h2 id=generalized-utf-8>
+<h2 id=generalized-utf8>
 Generalized UTF-8</h2>
 
   For the purpose of this specification,
@@ -606,40 +606,40 @@ Encoding</h3>
 
           If <var>P</var> is a <a>lead surrogate code point</a>,
           <var>P</var> is not the last <a>code point</a> of the input,
-          and the next <a>code point</a> is a <a>trail surrogate code point</a>,
+          and the <var>next</var> <a>code point</a> is a <a>trail surrogate code point</a>,
           set <var>P</var>’s value to:
           <code>
             0x10000 +
             ((<var>P</var> - 0xD800) &lt;&lt; 10) +
-            (<var>next code point</var> - 0xDC00)</code>.
+            (<var>next</var> - 0xDC00)</code>.
 
         <li>Depending on <var>P</var>:
           <dl class=switch>
             <dt>U+0000 to U+007F
-            <dd>Append to <var>result</var> one byte of value <var>P<var>.
+            <dd>Append to <var>result</var> one byte of value <var>P</var>.
             <dt>U+0080 to U+07FF
             <dd>
               Append to <var>result</var> two bytes of values:
               <ol>
-                <li><code>0xC0 | (<var>P<var> >> 6)</code>
-                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+                <li><code>0xC0 | (<var>P</var> >> 6)</code>
+                <li><code>0x80 | (<var>P</var> & 0x3F)</code>
               </ol>
             <dt>U+0800 to U+FFFF
             <dd>
               Append to <var>result</var> three bytes of values
               <ol>
-                <li><code>0xC0 | (<var>P<var> >> 12)</code>
-                <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
-                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+                <li><code>0xC0 | (<var>P</var> >> 12)</code>
+                <li><code>0x80 | ((<var>P</var> >> 6) & 0x3F)</code>
+                <li><code>0x80 | (<var>P</var> & 0x3F)</code>
               </ol>
             <dt>U+FFFF to U+10FFFF
             <dd>
               Append to <var>result</var> four bytes of values
               <ol>
-                <li><code>0xC0 | (<var>P<var> >> 18)</code>
-                <li><code>0x80 | ((<var>P<var> >> 12) & 0x3F)</code>
-                <li><code>0x80 | ((<var>P<var> >> 6) & 0x3F)</code>
-                <li><code>0x80 | (<var>P<var> & 0x3F)</code>
+                <li><code>0xC0 | (<var>P</var> >> 18)</code>
+                <li><code>0x80 | ((<var>P</var> >> 12) & 0x3F)</code>
+                <li><code>0x80 | ((<var>P</var> >> 6) & 0x3F)</code>
+                <li><code>0x80 | (<var>P</var> & 0x3F)</code>
               </ol>
           </dl>
       </ol>
@@ -679,7 +679,7 @@ Decoding</h3>
     <li>For every byte <var>B</var> of the input, depending on <var>B</var>:
       <dl class=switch>
         <dt>0x00 to 0x7F
-        <dd>Append to <var>result</var> a <a>code point</a> of value <var>B<var>.
+        <dd>Append to <var>result</var> a <a>code point</a> of value <var>B</var>.
 
         <dt>0xC2 to 0xDF
         <dd>
@@ -808,7 +808,7 @@ Concatenating WTF-8 strings</h3>
           that removes the three intial bytes.
         <li>
           Return the concatenation of
-          <var>left</var>, <var>supplementary</var>, and <var>right<var>.
+          <var>left</var>, <var>supplementary</var>, and <var>right</var>.
       </ol>
     <li>Otherwise, return the concatenation of the two input byte sequences
   </ol>
