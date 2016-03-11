@@ -283,7 +283,7 @@ Surrogate byte sequences</h3>
   Note: A <a>surrogate byte sequence</a>
   (and therefore any byte sequence described in this section)
   is <a>ill-formed</a> in <a>UTF-8</a>.
-  Decoders are required to treat it a an error.
+  Decoders are required to treat it as an error.
 
   A <dfn>lead surrogate byte sequence</dfn> or <dfn>high surrogate byte sequence</dfn>
   is a sequence of three bytes
@@ -816,7 +816,7 @@ Concatenating WTF-8 strings</h3>
           that removes the three final bytes.
         <li>
           Let <var>right</var> be substring of the right input string
-          that removes the three intial bytes.
+          that removes the three initial bytes.
         <li>
           Return the concatenation of
           <var>left</var>, <var>supplementary</var>, and <var>right</var>.
