@@ -570,15 +570,55 @@ span.issue, span.note {
   border-right-style: solid;
 }
   </style>
-  <meta content="Bikeshed 1.0.0" name="generator">
+  <meta content="Bikeshed version 5a13603bcd59b77875c0c2472b981928dd11f21e" name="generator">
   <link href="logo-wtf-8.svg" rel="icon">
-<style>
+<style>/* style-md-lists */
+
+/* This is a weird hack for me not yet following the commonmark spec
+   regarding paragraph and lists. */
+[data-md] > :first-child {
+    margin-top: 0;
+}
+[data-md] > :last-child {
+    margin-bottom: 0;
+}</style>
+<style>/* style-counters */
+
+body {
+    counter-reset: example figure issue;
+}
+.issue {
+    counter-increment: issue;
+}
+.issue:not(.no-marker)::before {
+    content: "Issue " counter(issue);
+}
+
+.example {
+    counter-increment: example;
+}
+.example:not(.no-marker)::before {
+    content: "Example " counter(example);
+}
+.invalid.example:not(.no-marker)::before,
+.illegal.example:not(.no-marker)::before {
+    content: "Invalid Example" counter(example);
+}
+
+figcaption {
+    counter-increment: figure;
+}
+figcaption:not(.no-marker)::before {
+    content: "Figure " counter(figure) " ";
+}</style>
+<style>/* style-dfn-panel */
+
         .dfn-panel {
-            display: inline-block;
             position: absolute;
             z-index: 35;
             height: auto;
             width: -webkit-fit-content;
+            width: fit-content;
             max-width: 300px;
             max-height: 500px;
             overflow: auto;
@@ -594,12 +634,13 @@ span.issue, span.note {
         .dfn-panel a { color: black; }
         .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
         .dfn-panel > b + b { margin-top: 0.25em; }
-        .dfn-panel > span { display: list-item; list-style: inside; }
+        .dfn-panel ul { padding: 0; }
+        .dfn-panel li { list-style: inside; }
         .dfn-panel.activated {
             display: inline-block;
             position: fixed;
             left: .5em;
-            bottom: .5em;
+            bottom: 2em;
             margin: 0 auto;
             max-width: calc(100vw - 1.5em - .4em - .5em);
             max-height: 30vh;
@@ -607,10 +648,118 @@ span.issue, span.note {
 
         .dfn-paneled { cursor: pointer; }
         </style>
+<style>/* style-selflinks */
+
+.heading, .issue, .note, .example, li, dt {
+    position: relative;
+}
+a.self-link {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (3.5rem - 26px));
+    width: calc(3.5rem - 26px);
+    height: 2em;
+    text-align: center;
+    border: none;
+    transition: opacity .2s;
+    opacity: .5;
+}
+a.self-link:hover {
+    opacity: 1;
+}
+.heading > a.self-link {
+    font-size: 83%;
+}
+li > a.self-link {
+    left: calc(-1 * (3.5rem - 26px) - 2em);
+}
+dfn > a.self-link {
+    top: auto;
+    left: auto;
+    opacity: 0;
+    width: 1.5em;
+    height: 1.5em;
+    background: gray;
+    color: white;
+    font-style: normal;
+    transition: opacity .2s, background-color .2s, color .2s;
+}
+dfn:hover > a.self-link {
+    opacity: 1;
+}
+dfn > a.self-link:hover {
+    color: black;
+}
+
+a.self-link::before            { content: "¶"; }
+.heading > a.self-link::before { content: "§"; }
+dfn > a.self-link::before      { content: "#"; }</style>
+<style>/* style-autolinks */
+
+.css.css, .property.property, .descriptor.descriptor {
+    color: #005a9c;
+    font-size: inherit;
+    font-family: inherit;
+}
+.css::before, .property::before, .descriptor::before {
+    content: "‘";
+}
+.css::after, .property::after, .descriptor::after {
+    content: "’";
+}
+.property, .descriptor {
+    /* Don't wrap property and descriptor names */
+    white-space: nowrap;
+}
+.type { /* CSS value <type> */
+    font-style: italic;
+}
+pre .property::before, pre .property::after {
+    content: "";
+}
+[data-link-type="property"]::before,
+[data-link-type="propdesc"]::before,
+[data-link-type="descriptor"]::before,
+[data-link-type="value"]::before,
+[data-link-type="function"]::before,
+[data-link-type="at-rule"]::before,
+[data-link-type="selector"]::before,
+[data-link-type="maybe"]::before {
+    content: "‘";
+}
+[data-link-type="property"]::after,
+[data-link-type="propdesc"]::after,
+[data-link-type="descriptor"]::after,
+[data-link-type="value"]::after,
+[data-link-type="function"]::after,
+[data-link-type="at-rule"]::after,
+[data-link-type="selector"]::after,
+[data-link-type="maybe"]::after {
+    content: "’";
+}
+
+[data-link-type].production::before,
+[data-link-type].production::after,
+.prod [data-link-type]::before,
+.prod [data-link-type]::after {
+    content: "";
+}
+
+[data-link-type=element],
+[data-link-type=element-attr] {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: .9em;
+}
+[data-link-type=element]::before { content: "<" }
+[data-link-type=element]::after  { content: ">" }
+
+[data-link-type=biblio] {
+    white-space: pre;
+}</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
-   <h1 class="p-name no-ref" id="title">The WTF-8 encoding</h1>
+   <h1>The WTF-8 encoding</h1>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt class="editor">Editor:
@@ -630,12 +779,13 @@ and related or neighboring rights to this work. </p>
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
   <div class="p-summary" data-fill-with="abstract">
-   <p>WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a data-link-type="dfn" href="#utf-8">UTF-8</a> that encodes <a data-link-type="dfn" href="#surrogate-code-point">surrogate code points</a> if they are not in a <a data-link-type="dfn" href="#surrogate-code-point-pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a data-link-type="dfn" href="#utf-16">UTF-16</a> internally but don’t enforce the <a data-link-type="dfn" href="#well-formed">well-formedness</a> invariant that surrogates must be paired.</p>
+   <h2 class="no-num no-toc no-ref heading settled" id="abstract①"><span class="content">Abstract</span></h2>
+   <p>WTF-8 (Wobbly Transformation Format − 8-bit) is a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8">UTF-8</a> that encodes <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point">surrogate code points</a> if they are not in a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair">pair</a>. It represents, in a way compatible with UTF-8, text from systems such as JavaScript and Windows that use <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16">UTF-16</a> internally but don’t enforce the <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed">well-formedness</a> invariant that surrogates must be paired.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <h2 class="no-num no-toc no-ref heading settled" id="contents"><span class="content">Table of Contents</span></h2>
   <div data-fill-with="table-of-contents">
-   <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
+   <h2 class="no-num no-toc no-ref" id="contents①">Table of Contents</h2>
    <ol class="toc" role="directory">
     <li><a href="#intended-audience"><span class="secno">1</span> <span class="content"> Intended audience</span></a>
     <li>
@@ -684,187 +834,111 @@ and related or neighboring rights to this work. </p>
   </div>
   <p class="logo"><img height="100" src="logo-wtf-8.svg" width="100"> </p>
   <h2 class="heading settled" data-level="1" id="intended-audience"><span class="secno">1. </span><span class="content"> Intended audience</span><a class="self-link" href="#intended-audience"></a></h2>
-  <p><a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-1">WTF-8</a> is a hack intended to be used internally in self-contained systems
-  with components that need to support <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-1">potentially ill-formed UTF-16</a> for legacy reasons.</p>
-  <p>Any <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-2">WTF-8</a> data <em>must</em> be converted
-  to a <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-1">Unicode</a> encoding at the system’s boundary
-  before being emitted. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-1">UTF-8</a> is recommended. <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-3">WTF-8</a> <em>must not</em> be used to represent text
+  <p><a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8">WTF-8</a> is a hack intended to be used internally in self-contained systems
+  with components that need to support <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16">potentially ill-formed UTF-16</a> for legacy reasons.</p>
+  <p>Any <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①">WTF-8</a> data <em>must</em> be converted
+  to a <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text">Unicode</a> encoding at the system’s boundary
+  before being emitted. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①">UTF-8</a> is recommended. <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②">WTF-8</a> <em>must not</em> be used to represent text
   in a file format or for transmission over the Internet.</p>
   <p>In particular,
-  the <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a> <a data-link-type="biblio" href="#biblio-whatwg-encoding">[ENCODING]</a> defines <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-2">UTF-8</a> and other encodings for the Web.
-  There is no and will not be any <a href="https://encoding.spec.whatwg.org/#names-and-labels"> encoding label</a> <a data-link-type="biblio" href="#biblio-whatwg-encoding">[ENCODING]</a> or <a href="http://www.iana.org/assignments/character-sets/character-sets.xhtml"> IANA charset alias</a> <a data-link-type="biblio" href="#biblio-charsets">[CHARSETS]</a> for <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-4">WTF-8</a>.</p>
+  the <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a> <a data-link-type="biblio" href="#biblio-encoding">[ENCODING]</a> defines <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②">UTF-8</a> and other encodings for the Web.
+  There is no and will not be any <a href="https://encoding.spec.whatwg.org/#names-and-labels"> encoding label</a> <a data-link-type="biblio" href="#biblio-encoding">[ENCODING]</a> or <a href="http://www.iana.org/assignments/character-sets/character-sets.xhtml"> IANA charset alias</a> <a data-link-type="biblio" href="#biblio-charsets">[CHARSETS]</a> for <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8③">WTF-8</a>.</p>
   <h2 class="heading settled" data-level="2" id="motivation"><span class="secno">2. </span><span class="content"> Background and motivation</span><a class="self-link" href="#motivation"></a></h2>
   <p><em>This section is non-normative.</em></p>
   <p>When <a href="http://www.unicode.org/versions/Unicode1.0.0/">Unicode 1.0</a> was published in 1991,
-  it defined 65536 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-1">code points</a> from U+0000 to U+FFFF
+  it defined 65536 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point">code points</a> from U+0000 to U+FFFF
   and assigned characters to around half of them.
   Many software implementations chose the obvious memory representation
-  for Unicode text of 16 bits per <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-2">code point</a> / character.</p>
+  for Unicode text of 16 bits per <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①">code point</a> / character.</p>
   <p>At the time, “Unicode” was synonymous with that particular encoding.
-  To disambiguate, that encoding is now called <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="UCS-2" data-noexport="" id="ucs-2">UCS-2<span class="dfn-panel" data-deco=""><b><a href="#ucs-2">#ucs-2</a></b><b>Referenced in:</b><span><a href="#ref-for-ucs-2-1">4. 
-Potentially ill-formed UTF-16</a></span></span></dfn>.</p>
+  To disambiguate, that encoding is now called <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="ucs-2">UCS-2</dfn>.</p>
   <p>As subsequent versions of Unicode assigned more characters,
-  it became apparent that 65536 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-3">code points</a> would not be sufficient.
-  Unicode was extended to 1114111 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-4">code points</a> from U+0000 to U+10FFFF,
-  and the <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-1">UTF-16</a> encoding was introduced.
+  it became apparent that 65536 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②">code points</a> would not be sufficient.
+  Unicode was extended to 1114111 <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③">code points</a> from U+0000 to U+10FFFF,
+  and the <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①">UTF-16</a> encoding was introduced.
   This encoding preserves compatibility with existing 16-bit based systems
-  and represents new (<a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-1">supplementary</a>) code points
-  as a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair-1">pair</a> of “surrogates”.</p>
-  <p><a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-2">UTF-16</a> is designed to represent any Unicode text,
-  but it can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-1">surrogate code point pair</a> since the corresponding <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair-2">surrogate 16-bit code unit pairs</a> would instead represent a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-2">supplementary code point</a>.
-  Therefore, the concept of <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value-1">Unicode scalar value</a> was introduced
-  and <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-2">Unicode text</a> was restricted to not contain any <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-1">surrogate code point</a>.
+  and represents new (<a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point">supplementary</a>) code points
+  as a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair">pair</a> of “surrogates”.</p>
+  <p><a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16②">UTF-16</a> is designed to represent any Unicode text,
+  but it can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair①">surrogate code point pair</a> since the corresponding <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair①">surrogate 16-bit code unit pairs</a> would instead represent a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point①">supplementary code point</a>.
+  Therefore, the concept of <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value">Unicode scalar value</a> was introduced
+  and <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text①">Unicode text</a> was restricted to not contain any <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point①">surrogate code point</a>.
   (This was presumably deemed simpler that only restricting pairs.)</p>
-  <p><a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-3">UTF-16</a> was redefined to be <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-1">ill-formed</a> if it contains <a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit-1">unpaired surrogate 16-bit code units</a>. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-3">UTF-8</a> was similarly redefined to be <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-2">ill-formed</a> if it contains <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-1">surrogate byte sequences</a>.</p>
+  <p><a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16③">UTF-16</a> was redefined to be <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed">ill-formed</a> if it contains <a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit">unpaired surrogate 16-bit code units</a>. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8③">UTF-8</a> was similarly redefined to be <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed①">ill-formed</a> if it contains <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence">surrogate byte sequences</a>.</p>
   <p>Meanwhile, 16-bit based systems had little to no incentive
   to do anything about surrogates:
   For several years,
-  Unicode did not assign any character to <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-3">supplementary code points</a>,
+  Unicode did not assign any character to <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point②">supplementary code points</a>,
   and then (until emoji) only comparatively rare characters.
   Additionally, the Unicode Standard does not require conforming implementations
-  to maintain <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-1">well-formedness</a> of <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-4">UTF-16</a> strings.</p>
+  to maintain <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①">well-formedness</a> of <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16④">UTF-16</a> strings.</p>
   <p>As a result, surrogates do occur in practice and need to be preserved.
   For example:</p>
   <ul>
    <li> In ECMAScript (a.k.a. JavaScript), <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-4.3.16"> a <code>String</code> value</a> is defined as a sequence of 16-bit integers
-      that <em>usually</em> represents <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-5">UTF-16</a> text
-      but may or may not be <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-2">well-formed</a>. 
+      that <em>usually</em> represents <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16⑤">UTF-16</a> text
+      but may or may not be <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed②">well-formed</a>. 
    <li> <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd374069%28v=vs.85%29.aspx"> Windows applications normally use UTF-16</a>, but <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx#maxpath"> the file system treats path and file names as an opaque sequence of <code>WCHAR</code>s</a> (<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa383751%28v=vs.85%29.aspx#WCHAR">16-bit
       code units</a>). 
   </ul>
-  <p>We say that strings in these systems are encoded in <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-2">potentially ill-formed UTF-16</a> or <a data-link-type="dfn" href="#wtf-16" id="ref-for-wtf-16-1">WTF-16</a>.</p>
-  <p><a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit-2">Unpaired surrogate 16-bit code units</a> are the only case
-  where an arbitrary sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-1">16-bit code units</a> is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-3">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-6">UTF-16</a>. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-4">UTF-8</a>, however, is more complex
-  and maintaining its <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-3">well-formedness</a> is arguably more valuable.</p>
-  <p>This specification defines <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-5">WTF-8</a>,
-  a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-5">UTF-8</a> that can losslessly represent
-  arbitrary sequences of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-2">16-bit code unit</a> (even if <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-4">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-7">UTF-16</a>)
-  but preserves the other <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-4">well-formedness</a> constraints of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-6">UTF-8</a>.</p>
+  <p>We say that strings in these systems are encoded in <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16①">potentially ill-formed UTF-16</a> or <a data-link-type="dfn" href="#wtf-16" id="ref-for-wtf-16">WTF-16</a>.</p>
+  <p><a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit①">Unpaired surrogate 16-bit code units</a> are the only case
+  where an arbitrary sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit">16-bit code units</a> is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed②">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16⑥">UTF-16</a>. <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8④">UTF-8</a>, however, is more complex
+  and maintaining its <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed③">well-formedness</a> is arguably more valuable.</p>
+  <p>This specification defines <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8④">WTF-8</a>,
+  a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8⑤">UTF-8</a> that can losslessly represent
+  arbitrary sequences of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①">16-bit code unit</a> (even if <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed③">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16⑦">UTF-16</a>)
+  but preserves the other <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed④">well-formedness</a> constraints of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8⑥">UTF-8</a>.</p>
   <h3 class="heading settled" data-level="2.1" id="cesu-8"><span class="secno">2.1. </span><span class="content"> Differences with CESU-8</span><a class="self-link" href="#cesu-8"></a></h3>
-  <p>Unicode defines a <a href="http://www.unicode.org/reports/tr26/"> Compatibility Encoding Scheme for UTF-16: 8-Bit (CESU-8)</a>. <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-6">WTF-8</a> is different from CESU-8.</p>
-  <p>CESU-8 encodes <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-4">supplementary code points</a> as <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence-1">surrogate pair byte sequences</a> of six bytes,
-  whereas <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-7">WTF-8</a>, like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-7">UTF-8</a>, encodes them as sequences of four bytes.
-  Therefore, CESU-8 is not a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-8">UTF-8</a>.</p>
-  <p>CESU-8 is also a mapping on <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-8">UTF-16</a> code units.
-  Therefore <a data-link-type="dfn" href="#unpaired-surrogate-byte-sequence" id="ref-for-unpaired-surrogate-byte-sequence-1">unpaired surrogate byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-5">ill-formed</a> in CESU-8,
-  whereas supporting them is the entire point of <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-8">WTF-8</a>.</p>
+  <p>Unicode defines a <a href="http://www.unicode.org/reports/tr26/"> Compatibility Encoding Scheme for UTF-16: 8-Bit (CESU-8)</a>. <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8⑤">WTF-8</a> is different from CESU-8.</p>
+  <p>CESU-8 encodes <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point③">supplementary code points</a> as <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence">surrogate pair byte sequences</a> of six bytes,
+  whereas <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8⑥">WTF-8</a>, like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8⑦">UTF-8</a>, encodes them as sequences of four bytes.
+  Therefore, CESU-8 is not a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8⑧">UTF-8</a>.</p>
+  <p>CESU-8 is also a mapping on <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16⑧">UTF-16</a> code units.
+  Therefore <a data-link-type="dfn" href="#unpaired-surrogate-byte-sequence" id="ref-for-unpaired-surrogate-byte-sequence">unpaired surrogate byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed④">ill-formed</a> in CESU-8,
+  whereas supporting them is the entire point of <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8⑦">WTF-8</a>.</p>
   <h2 class="heading settled" data-level="3" id="terminology"><span class="secno">3. </span><span class="content"> Terminology</span><a class="self-link" href="#terminology"></a></h2>
   <p>These definitions correspond to those of the <a href="http://www.unicode.org/glossary/">Glossary of Unicode Terms</a>. <a data-link-type="biblio" href="#biblio-unicode">[UNICODE]</a></p>
-  <p>A Unicode <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="code point" data-noexport="" id="code-point">code point<span class="dfn-panel" data-deco=""><b><a href="#code-point">#code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-code-point-1">2. 
-Background and motivation</a> <a href="#ref-for-code-point-2">(2)</a> <a href="#ref-for-code-point-3">(3)</a> <a href="#ref-for-code-point-4">(4)</a></span><span><a href="#ref-for-code-point-5">3. 
-Terminology</a> <a href="#ref-for-code-point-6">(2)</a> <a href="#ref-for-code-point-7">(3)</a> <a href="#ref-for-code-point-8">(4)</a> <a href="#ref-for-code-point-9">(5)</a> <a href="#ref-for-code-point-10">(6)</a> <a href="#ref-for-code-point-11">(7)</a> <a href="#ref-for-code-point-12">(8)</a></span><span><a href="#ref-for-code-point-13">3.1. 
-Surrogate code points</a> <a href="#ref-for-code-point-14">(2)</a> <a href="#ref-for-code-point-15">(3)</a></span><span><a href="#ref-for-code-point-16">4. 
-Potentially ill-formed UTF-16</a></span><span><a href="#ref-for-code-point-17">4.1. 
-Encoding</a> <a href="#ref-for-code-point-18">(2)</a></span><span><a href="#ref-for-code-point-19">4.2. 
-Decoding</a> <a href="#ref-for-code-point-20">(2)</a> <a href="#ref-for-code-point-21">(3)</a> <a href="#ref-for-code-point-22">(4)</a></span><span><a href="#ref-for-code-point-23">5. 
-Generalized UTF-8</a> <a href="#ref-for-code-point-24">(2)</a></span><span><a href="#ref-for-code-point-25">6. 
-The WTF-8 encoding</a></span><span><a href="#ref-for-code-point-26">6.1. 
-Encoding</a> <a href="#ref-for-code-point-27">(2)</a> <a href="#ref-for-code-point-28">(3)</a> <a href="#ref-for-code-point-29">(4)</a> <a href="#ref-for-code-point-30">(5)</a> <a href="#ref-for-code-point-31">(6)</a> <a href="#ref-for-code-point-32">(7)</a></span><span><a href="#ref-for-code-point-33">6.2. 
-Decoding</a> <a href="#ref-for-code-point-34">(2)</a> <a href="#ref-for-code-point-35">(3)</a> <a href="#ref-for-code-point-36">(4)</a> <a href="#ref-for-code-point-37">(5)</a> <a href="#ref-for-code-point-38">(6)</a></span><span><a href="#ref-for-code-point-39">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> is any value in the Unicode codespace;
+  <p>A Unicode <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="code-point">code point</dfn> is any value in the Unicode codespace;
   that is, the range of integers from 0 to 1114111.
   It is noted with a “U+” prefix and four to six hexadecimal digits:
   the first and last code points are U+0000 and U+10FFFF.</p>
-  <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="Basic Multilingual Plane" data-noexport="" id="basic-multilingual-plane">Basic Multilingual Plane<span class="dfn-panel" data-deco=""><b><a href="#basic-multilingual-plane">#basic-multilingual-plane</a></b><b>Referenced in:</b><span><a href="#ref-for-basic-multilingual-plane-1">3. 
-Terminology</a> <a href="#ref-for-basic-multilingual-plane-2">(2)</a></span></span></dfn> is
-  the range of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-5">code points</a> from U+0000 to U+FFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="BMP code point" data-noexport="" id="bmp-code-point">BMP code point<span class="dfn-panel" data-deco=""><b><a href="#bmp-code-point">#bmp-code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-bmp-code-point-1">4.1. 
-Encoding</a></span></span></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-6">code point</a> in the <a data-link-type="dfn" href="#basic-multilingual-plane" id="ref-for-basic-multilingual-plane-1">Basic Multilingual Plane</a>.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="supplementary code point" data-noexport="" id="supplementary-code-point">supplementary code point<span class="dfn-panel" data-deco=""><b><a href="#supplementary-code-point">#supplementary-code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-supplementary-code-point-1">2. 
-Background and motivation</a> <a href="#ref-for-supplementary-code-point-2">(2)</a> <a href="#ref-for-supplementary-code-point-3">(3)</a></span><span><a href="#ref-for-supplementary-code-point-4">2.1. 
-Differences with CESU-8</a></span><span><a href="#ref-for-supplementary-code-point-5">3. 
-Terminology</a></span><span><a href="#ref-for-supplementary-code-point-6">3.2. 
-Surrogate 16-bit code units</a></span><span><a href="#ref-for-supplementary-code-point-7">4. 
-Potentially ill-formed UTF-16</a></span><span><a href="#ref-for-supplementary-code-point-8">4.1. 
-Encoding</a></span></span></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-7">code point</a> not in the Basic Multilingual Plane.
-  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-8">code point</a> in the range from U+10000 to U+10FFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="Unicode scalar value" data-noexport="" id="unicode-scalar-value">Unicode scalar value<span class="dfn-panel" data-deco=""><b><a href="#unicode-scalar-value">#unicode-scalar-value</a></b><b>Referenced in:</b><span><a href="#ref-for-unicode-scalar-value-1">2. 
-Background and motivation</a></span><span><a href="#ref-for-unicode-scalar-value-2">3. 
-Terminology</a> <a href="#ref-for-unicode-scalar-value-3">(2)</a> <a href="#ref-for-unicode-scalar-value-4">(3)</a></span><span><a href="#ref-for-unicode-scalar-value-5">5. 
-Generalized UTF-8</a></span></span></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-9">code point</a> that is not a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-2">surrogate code point</a>.
-  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-10">code point</a> in the range from U+0000 to U+D7FF,
+  <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="basic-multilingual-plane">Basic Multilingual Plane</dfn> is
+  the range of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point④">code points</a> from U+0000 to U+FFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="bmp-code-point">BMP code point</dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point⑤">code point</a> in the <a data-link-type="dfn" href="#basic-multilingual-plane" id="ref-for-basic-multilingual-plane">Basic Multilingual Plane</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="supplementary-code-point">supplementary code point</dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point⑥">code point</a> not in the Basic Multilingual Plane.
+  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point⑦">code point</a> in the range from U+10000 to U+10FFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="unicode-scalar-value">Unicode scalar value</dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point⑧">code point</a> that is not a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point②">surrogate code point</a>.
+  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point⑨">code point</a> in the range from U+0000 to U+D7FF,
   or in the range U+E000 to U+10FFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="BMP scalar value" data-noexport="" id="bmp-scalar-value">BMP scalar value<span class="dfn-panel" data-deco=""><b><a href="#bmp-scalar-value">#bmp-scalar-value</a></b><b>Referenced in:</b><span><a href="#ref-for-bmp-scalar-value-1">3. 
-Terminology</a></span></span></dfn> is a <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value-2">Unicode scalar value</a> in the <a data-link-type="dfn" href="#basic-multilingual-plane" id="ref-for-basic-multilingual-plane-2">Basic Multilingual Plane</a>.
-  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-11">code point</a> in the range from U+0000 to U+D7FF,
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="bmp-scalar-value">BMP scalar value</dfn> is a <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value①">Unicode scalar value</a> in the <a data-link-type="dfn" href="#basic-multilingual-plane" id="ref-for-basic-multilingual-plane①">Basic Multilingual Plane</a>.
+  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⓪">code point</a> in the range from U+0000 to U+D7FF,
   or in the range U+E000 to U+FFFF.</p>
-  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="Unicode text" data-noexport="" id="unicode-text">Unicode text<span class="dfn-panel" data-deco=""><b><a href="#unicode-text">#unicode-text</a></b><b>Referenced in:</b><span><a href="#ref-for-unicode-text-1">1. 
-Intended audience</a></span><span><a href="#ref-for-unicode-text-2">2. 
-Background and motivation</a></span><span><a href="#ref-for-unicode-text-3">3. 
-Terminology</a> <a href="#ref-for-unicode-text-4">(2)</a></span><span><a href="#ref-for-unicode-text-5">4.1. 
-Encoding</a></span><span><a href="#ref-for-unicode-text-6">4.2. 
-Decoding</a></span><span><a href="#ref-for-unicode-text-7">6. 
-The WTF-8 encoding</a></span><span><a href="#ref-for-unicode-text-8">6.2. 
-Decoding</a></span></span></dfn> is a sequence of <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value-3">Unicode scalar values</a>.</p>
-  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="UTF-8" data-noexport="" id="utf-8">UTF-8<span class="dfn-panel" data-deco=""><b><a href="#utf-8">#utf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-utf-8-1">1. 
-Intended audience</a> <a href="#ref-for-utf-8-2">(2)</a></span><span><a href="#ref-for-utf-8-3">2. 
-Background and motivation</a> <a href="#ref-for-utf-8-4">(2)</a> <a href="#ref-for-utf-8-5">(3)</a> <a href="#ref-for-utf-8-6">(4)</a></span><span><a href="#ref-for-utf-8-7">2.1. 
-Differences with CESU-8</a> <a href="#ref-for-utf-8-8">(2)</a></span><span><a href="#ref-for-utf-8-9">3. 
-Terminology</a> <a href="#ref-for-utf-8-10">(2)</a></span><span><a href="#ref-for-utf-8-11">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-utf-8-12">5. 
-Generalized UTF-8</a> <a href="#ref-for-utf-8-13">(2)</a> <a href="#ref-for-utf-8-14">(3)</a></span><span><a href="#ref-for-utf-8-15">6. 
-The WTF-8 encoding</a> <a href="#ref-for-utf-8-16">(2)</a> <a href="#ref-for-utf-8-17">(3)</a></span><span><a href="#ref-for-utf-8-18">6.2. 
-Decoding</a> <a href="#ref-for-utf-8-19">(2)</a></span><span><a href="#ref-for-utf-8-20">6.4. 
-Converting between WTF-8 and UTF-8</a> <a href="#ref-for-utf-8-21">(2)</a> <a href="#ref-for-utf-8-22">(3)</a> <a href="#ref-for-utf-8-23">(4)</a> <a href="#ref-for-utf-8-24">(5)</a> <a href="#ref-for-utf-8-25">(6)</a></span></span></dfn> is an encoding of <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-3">Unicode text</a> using 8-bit bytes.
-  Each <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value-4">Unicode scalar value</a> is represented as a sequence of one to four bytes.</p>
-  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="UTF-16" data-noexport="" id="utf-16">UTF-16<span class="dfn-panel" data-deco=""><b><a href="#utf-16">#utf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-utf-16-1">2. 
-Background and motivation</a> <a href="#ref-for-utf-16-2">(2)</a> <a href="#ref-for-utf-16-3">(3)</a> <a href="#ref-for-utf-16-4">(4)</a> <a href="#ref-for-utf-16-5">(5)</a> <a href="#ref-for-utf-16-6">(6)</a> <a href="#ref-for-utf-16-7">(7)</a></span><span><a href="#ref-for-utf-16-8">2.1. 
-Differences with CESU-8</a></span><span><a href="#ref-for-utf-16-9">3. 
-Terminology</a> <a href="#ref-for-utf-16-10">(2)</a> <a href="#ref-for-utf-16-11">(3)</a></span><span><a href="#ref-for-utf-16-12">3.2. 
-Surrogate 16-bit code units</a></span><span><a href="#ref-for-utf-16-13">4. 
-Potentially ill-formed UTF-16</a> <a href="#ref-for-utf-16-14">(2)</a> <a href="#ref-for-utf-16-15">(3)</a> <a href="#ref-for-utf-16-16">(4)</a> <a href="#ref-for-utf-16-17">(5)</a></span><span><a href="#ref-for-utf-16-18">4.1. 
-Encoding</a> <a href="#ref-for-utf-16-19">(2)</a></span><span><a href="#ref-for-utf-16-20">4.2. 
-Decoding</a> <a href="#ref-for-utf-16-21">(2)</a></span><span><a href="#ref-for-utf-16-22">6. 
-The WTF-8 encoding</a></span></span></dfn> is an encoding of <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-4">Unicode text</a> using <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-3">16-bit code units</a>. <a data-link-type="dfn" href="#bmp-scalar-value" id="ref-for-bmp-scalar-value-1">BMP scalar values</a> are represented as a single <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-4">16-bit code unit</a> with the same value. <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-5">Supplementary code points</a> are represented as a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair-3">surrogate 16-bit code unit pair</a>.</p>
-  <p class="note" role="note">Note: this specification is only concerned with the UTF-16 <a href="http://www.unicode.org/glossary/#character_encoding_form">encoding form</a> (based on <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-5">16-bit code units</a>),
+  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="unicode-text">Unicode text</dfn> is a sequence of <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value②">Unicode scalar values</a>.</p>
+  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="utf-8">UTF-8</dfn> is an encoding of <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text②">Unicode text</a> using 8-bit bytes.
+  Each <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value③">Unicode scalar value</a> is represented as a sequence of one to four bytes.</p>
+  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="utf-16">UTF-16</dfn> is an encoding of <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text③">Unicode text</a> using <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit②">16-bit code units</a>. <a data-link-type="dfn" href="#bmp-scalar-value" id="ref-for-bmp-scalar-value">BMP scalar values</a> are represented as a single <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit③">16-bit code unit</a> with the same value. <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point④">Supplementary code points</a> are represented as a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair②">surrogate 16-bit code unit pair</a>.</p>
+  <p class="note" role="note"><span>Note:</span> this specification is only concerned with the UTF-16 <a href="http://www.unicode.org/glossary/#character_encoding_form">encoding form</a> (based on <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit④">16-bit code units</a>),
   and not with the <a href="http://www.unicode.org/glossary/#character_encoding_scheme">encoding scheme</a> (based on bytes, with UTF-16BE and UTF-16LE variants).</p>
-  <p>A string is <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="well-formed|well-formedness" data-noexport="" id="well-formed">well-formed<span class="dfn-panel" data-deco=""><b><a href="#well-formed">#well-formed</a></b><b>Referenced in:</b><span><a href="#ref-for-well-formed-1">2. 
-Background and motivation</a> <a href="#ref-for-well-formed-2">(2)</a> <a href="#ref-for-well-formed-3">(3)</a> <a href="#ref-for-well-formed-4">(4)</a></span><span><a href="#ref-for-well-formed-5">4. 
-Potentially ill-formed UTF-16</a> <a href="#ref-for-well-formed-6">(2)</a> <a href="#ref-for-well-formed-7">(3)</a></span><span><a href="#ref-for-well-formed-8">4.1. 
-Encoding</a></span><span><a href="#ref-for-well-formed-9">4.2. 
-Decoding</a></span><span><a href="#ref-for-well-formed-10">5. 
-Generalized UTF-8</a> <a href="#ref-for-well-formed-11">(2)</a></span><span><a href="#ref-for-well-formed-12">6. 
-The WTF-8 encoding</a></span><span><a href="#ref-for-well-formed-13">6.1. 
-Encoding</a></span><span><a href="#ref-for-well-formed-14">6.2. 
-Decoding</a> <a href="#ref-for-well-formed-15">(2)</a> <a href="#ref-for-well-formed-16">(3)</a> <a href="#ref-for-well-formed-17">(4)</a></span><span><a href="#ref-for-well-formed-18">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a></span><span><a href="#ref-for-well-formed-19">6.4. 
-Converting between WTF-8 and UTF-8</a> <a href="#ref-for-well-formed-20">(2)</a></span><span><a href="#ref-for-well-formed-21">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> (not <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="ill-formed|ill-formedness" data-noexport="" id="ill-formed">ill-formed<span class="dfn-panel" data-deco=""><b><a href="#ill-formed">#ill-formed</a></b><b>Referenced in:</b><span><a href="#ref-for-ill-formed-1">2. 
-Background and motivation</a> <a href="#ref-for-ill-formed-2">(2)</a> <a href="#ref-for-ill-formed-3">(3)</a> <a href="#ref-for-ill-formed-4">(4)</a></span><span><a href="#ref-for-ill-formed-5">2.1. 
-Differences with CESU-8</a></span><span><a href="#ref-for-ill-formed-6">3. 
-Terminology</a> <a href="#ref-for-ill-formed-7">(2)</a> <a href="#ref-for-ill-formed-8">(3)</a> <a href="#ref-for-ill-formed-9">(4)</a></span><span><a href="#ref-for-ill-formed-10">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-ill-formed-11">6. 
-The WTF-8 encoding</a></span></span></dfn>)
-  in a given encoding if it follows the specification of that encoding. <a data-link-type="biblio" href="#biblio-unicode">[UNICODE]</a> defines <a href="http://www.unicode.org/glossary/#well_formed_code_unit_sequence"> Well-Formed Code Unit Sequence</a> for <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-9">UTF-8</a> and <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-9">UTF-16</a>.</p>
+  <p>A string is <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="well-formed|well-formedness" data-noexport="" id="well-formed">well-formed</dfn> (not <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="ill-formed|ill-formedness" data-noexport="" id="ill-formed">ill-formed</dfn>)
+  in a given encoding if it follows the specification of that encoding. <a data-link-type="biblio" href="#biblio-unicode">[UNICODE]</a> defines <a href="http://www.unicode.org/glossary/#well_formed_code_unit_sequence"> Well-Formed Code Unit Sequence</a> for <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8⑨">UTF-8</a> and <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16⑨">UTF-16</a>.</p>
   <div class="note" role="note">
     In particular: 
    <ul>
-    <li><a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit-3">Unpaired surrogate 16-bit code units</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-6">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-10">UTF-16</a>. 
-    <li><a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-2">Surrogate byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-7">ill-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-10">UTF-8</a>. 
-    <li><a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence-2">Surrogate pair byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-8">ill-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-9">WTF-8</a>. 
+    <li><a data-link-type="dfn" href="#unpaired-surrogate-16-bit-code-unit" id="ref-for-unpaired-surrogate-16-bit-code-unit②">Unpaired surrogate 16-bit code units</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed⑤">ill-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⓪">UTF-16</a>. 
+    <li><a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence①">Surrogate byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed⑥">ill-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⓪">UTF-8</a>. 
+    <li><a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence①">Surrogate pair byte sequences</a> are <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed⑦">ill-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8⑧">WTF-8</a>. 
    </ul>
   </div>
-  <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="replacement character" data-noexport="" id="replacement-character">replacement character<span class="dfn-panel" data-deco=""><b><a href="#replacement-character">#replacement-character</a></b><b>Referenced in:</b><span><a href="#ref-for-replacement-character-1">4.1. 
-Encoding</a></span><span><a href="#ref-for-replacement-character-2">6.4. 
-Converting between WTF-8 and UTF-8</a></span></span></dfn> is the <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-12">code point</a> U+FFFD <code>REPLACEMENT CHARACTER</code> (�).
-  It is used as a substitute to replace <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-9">ill-formed</a> sub-sequences
+  <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="replacement-character">replacement character</dfn> is the <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①①">code point</a> U+FFFD <code>REPLACEMENT CHARACTER</code> (�).
+  It is used as a substitute to replace <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed⑧">ill-formed</a> sub-sequences
   during a conversion.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="16-bit code unit" data-noexport="" id="16-bit-code-unit">16-bit code unit<span class="dfn-panel" data-deco=""><b><a href="#16-bit-code-unit">#16-bit-code-unit</a></b><b>Referenced in:</b><span><a href="#ref-for-16-bit-code-unit-1">2. 
-Background and motivation</a> <a href="#ref-for-16-bit-code-unit-2">(2)</a></span><span><a href="#ref-for-16-bit-code-unit-3">3. 
-Terminology</a> <a href="#ref-for-16-bit-code-unit-4">(2)</a> <a href="#ref-for-16-bit-code-unit-5">(3)</a> <a href="#ref-for-16-bit-code-unit-6">(4)</a></span><span><a href="#ref-for-16-bit-code-unit-7">3.2. 
-Surrogate 16-bit code units</a> <a href="#ref-for-16-bit-code-unit-8">(2)</a> <a href="#ref-for-16-bit-code-unit-9">(3)</a></span><span><a href="#ref-for-16-bit-code-unit-10">4. 
-Potentially ill-formed UTF-16</a> <a href="#ref-for-16-bit-code-unit-11">(2)</a></span><span><a href="#ref-for-16-bit-code-unit-12">4.1. 
-Encoding</a> <a href="#ref-for-16-bit-code-unit-13">(2)</a> <a href="#ref-for-16-bit-code-unit-14">(3)</a></span><span><a href="#ref-for-16-bit-code-unit-15">4.2. 
-Decoding</a> <a href="#ref-for-16-bit-code-unit-16">(2)</a> <a href="#ref-for-16-bit-code-unit-17">(3)</a></span><span><a href="#ref-for-16-bit-code-unit-18">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> is a 16-bit integer used in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-11">UTF-16</a>.
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="16-bit-code-unit">16-bit code unit</dfn> is a 16-bit integer used in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①①">UTF-16</a>.
   It is noted with a “0x” prefix and four hexadecimal digits:
   the first and last 16-bit code units are 0x0000 and 0xFFFF.</p>
-  <p class="note" role="note">Note: The byte serialization or memory representation of a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-6">16-bit code unit</a> (little-endian or big-endian)
+  <p class="note" role="note"><span>Note:</span> The byte serialization or memory representation of a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑤">16-bit code unit</a> (little-endian or big-endian)
   is out of scope for this specification.</p>
-  <p>When an algorithm iterates over a sequence (“For every <var>i</var> in …”), <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="consume" data-noexport="" id="consume">consuming<span class="dfn-panel" data-deco=""><b><a href="#consume">#consume</a></b><b>Referenced in:</b><span><a href="#ref-for-consume-1">3. 
-Terminology</a></span><span><a href="#ref-for-consume-2">4.2. 
-Decoding</a></span><span><a href="#ref-for-consume-3">6.2. 
-Decoding</a> <a href="#ref-for-consume-4">(2)</a> <a href="#ref-for-consume-5">(3)</a></span></span></dfn> the next item means advancing in the sequence
+  <p>When an algorithm iterates over a sequence (“For every <var>i</var> in …”), <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="consume" data-noexport="" id="consume">consuming</dfn> the next item means advancing in the sequence
   such that that item will be skipped during the following iteration of the loop:
   the item after the next becomes the next item.</p>
   <div class="example" id="example-1815b2e1">
@@ -873,79 +947,40 @@ Decoding</a> <a href="#ref-for-consume-4">(2)</a> <a href="#ref-for-consume-5">(
    <p>For every digit <var>i</var> in “1234”, run these substeps:</p>
    <ol>
     <li>Print <var>i</var> 
-    <li>If <var>i</var> is 2, <a data-link-type="dfn" href="#consume" id="ref-for-consume-1">consume</a> the next digit. 
+    <li>If <var>i</var> is 2, <a data-link-type="dfn" href="#consume" id="ref-for-consume">consume</a> the next digit. 
    </ol>
   </div>
   <h3 class="heading settled" data-level="3.1" id="surrogates-code-points"><span class="secno">3.1. </span><span class="content"> Surrogate code points</span><a class="self-link" href="#surrogates-code-points"></a></h3>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="lead surrogate code point" data-noexport="" id="lead-surrogate-code-point">lead surrogate code point<span class="dfn-panel" data-deco=""><b><a href="#lead-surrogate-code-point">#lead-surrogate-code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-lead-surrogate-code-point-1">3.1. 
-Surrogate code points</a> <a href="#ref-for-lead-surrogate-code-point-2">(2)</a></span><span><a href="#ref-for-lead-surrogate-code-point-3">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-lead-surrogate-code-point-4">6.1. 
-Encoding</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-code-point">high surrogate code point<a class="self-link" href="#high-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-13">code point</a> in the range from U+D800 to U+DBFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="trail surrogate code point" data-noexport="" id="trail-surrogate-code-point">trail surrogate code point<span class="dfn-panel" data-deco=""><b><a href="#trail-surrogate-code-point">#trail-surrogate-code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-trail-surrogate-code-point-1">3.1. 
-Surrogate code points</a> <a href="#ref-for-trail-surrogate-code-point-2">(2)</a></span><span><a href="#ref-for-trail-surrogate-code-point-3">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-trail-surrogate-code-point-4">6.1. 
-Encoding</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-code-point">low surrogate code point<a class="self-link" href="#low-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-14">code point</a> in the range from U+DC00 to U+DFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate code point" data-noexport="" id="surrogate-code-point">surrogate code point<span class="dfn-panel" data-deco=""><b><a href="#surrogate-code-point">#surrogate-code-point</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-code-point-1">2. 
-Background and motivation</a></span><span><a href="#ref-for-surrogate-code-point-2">3. 
-Terminology</a></span><span><a href="#ref-for-surrogate-code-point-3">3.1. 
-Surrogate code points</a></span><span><a href="#ref-for-surrogate-code-point-4">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-surrogate-code-point-5">4. 
-Potentially ill-formed UTF-16</a></span><span><a href="#ref-for-surrogate-code-point-6">4.1. 
-Encoding</a></span></span></dfn> is
-  either a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point-1">lead surrogate code point</a> or a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point-1">trail surrogate code point</a>.
-  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-15">code point</a> in the range from U+D800 to U+DFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate code point pair" data-noexport="" id="surrogate-code-point-pair">surrogate code point pair<span class="dfn-panel" data-deco=""><b><a href="#surrogate-code-point-pair">#surrogate-code-point-pair</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-code-point-pair-1">2. 
-Background and motivation</a></span><span><a href="#ref-for-surrogate-code-point-pair-2">3.1. 
-Surrogate code points</a></span><span><a href="#ref-for-surrogate-code-point-pair-3">4. 
-Potentially ill-formed UTF-16</a> <a href="#ref-for-surrogate-code-point-pair-4">(2)</a></span><span><a href="#ref-for-surrogate-code-point-pair-5">4.1. 
-Encoding</a></span><span><a href="#ref-for-surrogate-code-point-pair-6">4.2. 
-Decoding</a></span><span><a href="#ref-for-surrogate-code-point-pair-7">6. 
-The WTF-8 encoding</a> <a href="#ref-for-surrogate-code-point-pair-8">(2)</a></span><span><a href="#ref-for-surrogate-code-point-pair-9">6.1. 
-Encoding</a></span></span></dfn> is a sequence of
-  a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point-2">lead surrogate code point</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point-2">trail surrogate code point</a>.</p>
-  <p>An <dfn data-dfn-type="dfn" data-noexport="" id="unpaired-surrogate-code-point">unpaired surrogate code point<a class="self-link" href="#unpaired-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-3">surrogate code point</a> that is not part of a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-2">surrogate code point pair</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="lead-surrogate-code-point">lead surrogate code point</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-code-point">high surrogate code point<a class="self-link" href="#high-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①②">code point</a> in the range from U+D800 to U+DBFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="trail-surrogate-code-point">trail surrogate code point</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-code-point">low surrogate code point<a class="self-link" href="#low-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①③">code point</a> in the range from U+DC00 to U+DFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-code-point">surrogate code point</dfn> is
+  either a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point">lead surrogate code point</a> or a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point">trail surrogate code point</a>.
+  That is, a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①④">code point</a> in the range from U+D800 to U+DFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-code-point-pair">surrogate code point pair</dfn> is a sequence of
+  a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point①">lead surrogate code point</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point①">trail surrogate code point</a>.</p>
+  <p>An <dfn data-dfn-type="dfn" data-noexport="" id="unpaired-surrogate-code-point">unpaired surrogate code point<a class="self-link" href="#unpaired-surrogate-code-point"></a></dfn> is a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point③">surrogate code point</a> that is not part of a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair②">surrogate code point pair</a>.</p>
   <h3 class="heading settled" data-level="3.2" id="surrogates-code-units"><span class="secno">3.2. </span><span class="content"> Surrogate 16-bit code units</span><a class="self-link" href="#surrogates-code-units"></a></h3>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="lead surrogate 16-bit code unit" data-noexport="" id="lead-surrogate-16-bit-code-unit">lead surrogate 16-bit code unit<span class="dfn-panel" data-deco=""><b><a href="#lead-surrogate-16-bit-code-unit">#lead-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b><span><a href="#ref-for-lead-surrogate-16-bit-code-unit-1">3.2. 
-Surrogate 16-bit code units</a> <a href="#ref-for-lead-surrogate-16-bit-code-unit-2">(2)</a></span><span><a href="#ref-for-lead-surrogate-16-bit-code-unit-3">4.2. 
-Decoding</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-16-bit-code-unit">high surrogate 16-bit code unit<a class="self-link" href="#high-surrogate-16-bit-code-unit"></a></dfn> is a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-7">16-bit code unit</a> in the range from 0xD800 to 0xDBFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="trail surrogate 16-bit code unit" data-noexport="" id="trail-surrogate-16-bit-code-unit">trail surrogate 16-bit code unit<span class="dfn-panel" data-deco=""><b><a href="#trail-surrogate-16-bit-code-unit">#trail-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b><span><a href="#ref-for-trail-surrogate-16-bit-code-unit-1">3.2. 
-Surrogate 16-bit code units</a> <a href="#ref-for-trail-surrogate-16-bit-code-unit-2">(2)</a></span><span><a href="#ref-for-trail-surrogate-16-bit-code-unit-3">4.2. 
-Decoding</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-16-bit-code-unit">low surrogate 16-bit code unit<a class="self-link" href="#low-surrogate-16-bit-code-unit"></a></dfn> is a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-8">16-bit code unit</a> in the range from 0xDC00 to 0xDFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate 16-bit code unit" data-noexport="" id="surrogate-16-bit-code-unit">surrogate 16-bit code unit<span class="dfn-panel" data-deco=""><b><a href="#surrogate-16-bit-code-unit">#surrogate-16-bit-code-unit</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-16-bit-code-unit-1">3.2. 
-Surrogate 16-bit code units</a></span></span></dfn> is
-  either a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit-1">lead surrogate 16-bit code unit</a> or a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit-1">trail surrogate 16-bit code unit</a>.
-  That is, a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-9">16-bit code unit</a> in the range from 0xD800 to 0xDFFF.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate 16-bit code unit pair" data-noexport="" id="surrogate-16-bit-code-unit-pair">surrogate 16-bit code unit pair<span class="dfn-panel" data-deco=""><b><a href="#surrogate-16-bit-code-unit-pair">#surrogate-16-bit-code-unit-pair</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-16-bit-code-unit-pair-1">2. 
-Background and motivation</a> <a href="#ref-for-surrogate-16-bit-code-unit-pair-2">(2)</a></span><span><a href="#ref-for-surrogate-16-bit-code-unit-pair-3">3. 
-Terminology</a></span><span><a href="#ref-for-surrogate-16-bit-code-unit-pair-4">3.2. 
-Surrogate 16-bit code units</a></span><span><a href="#ref-for-surrogate-16-bit-code-unit-pair-5">4. 
-Potentially ill-formed UTF-16</a></span></span></dfn> is a sequence of
-  a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit-2">lead surrogate 16-bit code unit</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit-2">trail surrogate 16-bit code unit</a>.
-  In <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-12">UTF-16</a>, it represents a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-6">supplementary code point</a>.</p>
-  <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="unpaired surrogate 16-bit code unit" data-noexport="" id="unpaired-surrogate-16-bit-code-unit">unpaired surrogate 16-bit code unit<span class="dfn-panel" data-deco=""><b><a href="#unpaired-surrogate-16-bit-code-unit">#unpaired-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b><span><a href="#ref-for-unpaired-surrogate-16-bit-code-unit-1">2. 
-Background and motivation</a> <a href="#ref-for-unpaired-surrogate-16-bit-code-unit-2">(2)</a></span><span><a href="#ref-for-unpaired-surrogate-16-bit-code-unit-3">3. 
-Terminology</a></span></span></dfn> is a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit" id="ref-for-surrogate-16-bit-code-unit-1">surrogate 16-bit code unit</a> that is not part of a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair-4">surrogate 16-bit code unit pair</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="lead-surrogate-16-bit-code-unit">lead surrogate 16-bit code unit</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-16-bit-code-unit">high surrogate 16-bit code unit<a class="self-link" href="#high-surrogate-16-bit-code-unit"></a></dfn> is a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑥">16-bit code unit</a> in the range from 0xD800 to 0xDBFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="trail-surrogate-16-bit-code-unit">trail surrogate 16-bit code unit</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-16-bit-code-unit">low surrogate 16-bit code unit<a class="self-link" href="#low-surrogate-16-bit-code-unit"></a></dfn> is a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑦">16-bit code unit</a> in the range from 0xDC00 to 0xDFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-16-bit-code-unit">surrogate 16-bit code unit</dfn> is
+  either a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit">lead surrogate 16-bit code unit</a> or a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit">trail surrogate 16-bit code unit</a>.
+  That is, a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑧">16-bit code unit</a> in the range from 0xD800 to 0xDFFF.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-16-bit-code-unit-pair">surrogate 16-bit code unit pair</dfn> is a sequence of
+  a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit①">lead surrogate 16-bit code unit</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit①">trail surrogate 16-bit code unit</a>.
+  In <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①②">UTF-16</a>, it represents a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point⑤">supplementary code point</a>.</p>
+  <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="unpaired-surrogate-16-bit-code-unit">unpaired surrogate 16-bit code unit</dfn> is a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit" id="ref-for-surrogate-16-bit-code-unit">surrogate 16-bit code unit</a> that is not part of a <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair③">surrogate 16-bit code unit pair</a>.</p>
   <h3 class="heading settled" data-level="3.3" id="surrogates-byte-sequences"><span class="secno">3.3. </span><span class="content"> Surrogate byte sequences</span><a class="self-link" href="#surrogates-byte-sequences"></a></h3>
-  <p class="note" role="note">Note: A <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-3">surrogate byte sequence</a> (and therefore any byte sequence described in this section)
-  is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-10">ill-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-11">UTF-8</a>.
+  <p class="note" role="note"><span>Note:</span> A <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence②">surrogate byte sequence</a> (and therefore any byte sequence described in this section)
+  is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed⑨">ill-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①①">UTF-8</a>.
   Decoders are required to treat it as an error.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="lead surrogate byte sequence" data-noexport="" id="lead-surrogate-byte-sequence">lead surrogate byte sequence<span class="dfn-panel" data-deco=""><b><a href="#lead-surrogate-byte-sequence">#lead-surrogate-byte-sequence</a></b><b>Referenced in:</b><span><a href="#ref-for-lead-surrogate-byte-sequence-1">3.3. 
-Surrogate byte sequences</a> <a href="#ref-for-lead-surrogate-byte-sequence-2">(2)</a> <a href="#ref-for-lead-surrogate-byte-sequence-3">(3)</a></span><span><a href="#ref-for-lead-surrogate-byte-sequence-4">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-byte-sequence">high surrogate byte sequence<a class="self-link" href="#high-surrogate-byte-sequence"></a></dfn> is a sequence of three bytes
-  that represents a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point-3">lead surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-1">generalized UTF-8</a>.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="trail surrogate byte sequence" data-noexport="" id="trail-surrogate-byte-sequence">trail surrogate byte sequence<span class="dfn-panel" data-deco=""><b><a href="#trail-surrogate-byte-sequence">#trail-surrogate-byte-sequence</a></b><b>Referenced in:</b><span><a href="#ref-for-trail-surrogate-byte-sequence-1">3.3. 
-Surrogate byte sequences</a> <a href="#ref-for-trail-surrogate-byte-sequence-2">(2)</a> <a href="#ref-for-trail-surrogate-byte-sequence-3">(3)</a></span><span><a href="#ref-for-trail-surrogate-byte-sequence-4">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-byte-sequence">low surrogate byte sequence<a class="self-link" href="#low-surrogate-byte-sequence"></a></dfn> is a sequence of three bytes
-  that represents a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point-3">trail surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-2">generalized UTF-8</a>.</p>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate byte sequence" data-noexport="" id="surrogate-byte-sequence">surrogate byte sequence<span class="dfn-panel" data-deco=""><b><a href="#surrogate-byte-sequence">#surrogate-byte-sequence</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-byte-sequence-1">2. 
-Background and motivation</a></span><span><a href="#ref-for-surrogate-byte-sequence-2">3. 
-Terminology</a></span><span><a href="#ref-for-surrogate-byte-sequence-3">3.3. 
-Surrogate byte sequences</a> <a href="#ref-for-surrogate-byte-sequence-4">(2)</a> <a href="#ref-for-surrogate-byte-sequence-5">(3)</a></span><span><a href="#ref-for-surrogate-byte-sequence-6">6.4. 
-Converting between WTF-8 and UTF-8</a> <a href="#ref-for-surrogate-byte-sequence-7">(2)</a> <a href="#ref-for-surrogate-byte-sequence-8">(3)</a></span><span><a href="#ref-for-surrogate-byte-sequence-9">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn> is
-  either a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence-1">lead surrogate byte sequence</a> or a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence-1">trail surrogate byte sequence</a>.
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="lead-surrogate-byte-sequence">lead surrogate byte sequence</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="high-surrogate-byte-sequence">high surrogate byte sequence<a class="self-link" href="#high-surrogate-byte-sequence"></a></dfn> is a sequence of three bytes
+  that represents a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point②">lead surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8">generalized UTF-8</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="trail-surrogate-byte-sequence">trail surrogate byte sequence</dfn> or <dfn data-dfn-type="dfn" data-noexport="" id="low-surrogate-byte-sequence">low surrogate byte sequence<a class="self-link" href="#low-surrogate-byte-sequence"></a></dfn> is a sequence of three bytes
+  that represents a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point②">trail surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8①">generalized UTF-8</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-byte-sequence">surrogate byte sequence</dfn> is
+  either a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence">lead surrogate byte sequence</a> or a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence">trail surrogate byte sequence</a>.
   That is, a sequence of three bytes
-  that represents a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-4">surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-3">generalized UTF-8</a>.</p>
+  that represents a <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point④">surrogate code point</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8②">generalized UTF-8</a>.</p>
   <table class="data">
    <caption>
     <p>Table 1. Surrogate byte sequences</p>
@@ -958,117 +993,95 @@ Concatenating WTF-8 strings</a></span></span></dfn> is
      <th>Second byte 
      <th>Third byte 
     <tr>
-     <th><a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence-2">Lead surrogate byte sequence</a> 
+     <th><a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence①">Lead surrogate byte sequence</a> 
      <td>ED 
      <td>A0 to AF 
      <td>80 to BF 
     <tr>
-     <th><a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence-2">Trail surrogate byte sequence</a> 
+     <th><a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence①">Trail surrogate byte sequence</a> 
      <td>ED 
      <td>B0 to BF 
      <td>80 to BF 
     <tr>
-     <th><a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-4">Surrogate byte sequence</a> 
+     <th><a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence③">Surrogate byte sequence</a> 
      <td>ED 
      <td>A0 to BF 
      <td>80 to BF 
   </table>
-  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="surrogate pair byte sequence" data-noexport="" id="surrogate-pair-byte-sequence">surrogate pair byte sequence<span class="dfn-panel" data-deco=""><b><a href="#surrogate-pair-byte-sequence">#surrogate-pair-byte-sequence</a></b><b>Referenced in:</b><span><a href="#ref-for-surrogate-pair-byte-sequence-1">2.1. 
-Differences with CESU-8</a></span><span><a href="#ref-for-surrogate-pair-byte-sequence-2">3. 
-Terminology</a></span><span><a href="#ref-for-surrogate-pair-byte-sequence-3">3.3. 
-Surrogate byte sequences</a></span><span><a href="#ref-for-surrogate-pair-byte-sequence-4">6. 
-The WTF-8 encoding</a></span></span></dfn> is a sequence six bytes composed of
-  a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence-3">lead surrogate byte sequence</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence-3">trail surrogate byte sequence</a>.</p>
-  <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="unpaired surrogate byte sequence" data-noexport="" id="unpaired-surrogate-byte-sequence">unpaired surrogate byte sequence<span class="dfn-panel" data-deco=""><b><a href="#unpaired-surrogate-byte-sequence">#unpaired-surrogate-byte-sequence</a></b><b>Referenced in:</b><span><a href="#ref-for-unpaired-surrogate-byte-sequence-1">2.1. 
-Differences with CESU-8</a></span></span></dfn> is a <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-5">surrogate byte sequence</a> that is not part of a <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence-3">surrogate pair byte sequence</a>.</p>
+  <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="surrogate-pair-byte-sequence">surrogate pair byte sequence</dfn> is a sequence six bytes composed of
+  a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence②">lead surrogate byte sequence</a> followed by a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence②">trail surrogate byte sequence</a>.</p>
+  <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="unpaired-surrogate-byte-sequence">unpaired surrogate byte sequence</dfn> is a <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence④">surrogate byte sequence</a> that is not part of a <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence②">surrogate pair byte sequence</a>.</p>
   <h2 class="heading settled" data-level="4" id="ill-formed-utf-16"><span class="secno">4. </span><span class="content"> Potentially ill-formed UTF-16</span><a class="self-link" href="#ill-formed-utf-16"></a></h2>
-  <p>A sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-10">16-bit code units</a> is <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="potentially ill-formed UTF-16" data-noexport="" id="potentially-ill-formed-utf-16">potentially ill-formed UTF-16<span class="dfn-panel" data-deco=""><b><a href="#potentially-ill-formed-utf-16">#potentially-ill-formed-utf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-potentially-ill-formed-utf-16-1">1. 
-Intended audience</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-2">2. 
-Background and motivation</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-3">4. 
-Potentially ill-formed UTF-16</a> <a href="#ref-for-potentially-ill-formed-utf-16-4">(2)</a> <a href="#ref-for-potentially-ill-formed-utf-16-5">(3)</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-6">4.1. 
-Encoding</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-7">4.2. 
-Decoding</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-8">6. 
-The WTF-8 encoding</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-9">6.1. 
-Encoding</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-10">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a> <a href="#ref-for-potentially-ill-formed-utf-16-11">(2)</a></span><span><a href="#ref-for-potentially-ill-formed-utf-16-12">7. 
-Implementations</a></span></span></dfn> if it is intended to be interpreted as <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-13">UTF-16</a>,
-  but is not necessarily <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-5">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-14">UTF-16</a>.
-  It effectively encodes a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-16">code point</a> that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-3">surrogate code point pair</a>.</p>
-  <p class="note" role="note">Note: Like <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-15">UTF-16</a>, <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-3">potentially ill-formed UTF-16</a> can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-4">surrogate code point pair</a> since the corresponding <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair-5">surrogate 16-bit code unit pair</a> would instead
-  represent a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-7">supplementary code point</a>.
-  Unlike <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-6">well-formed</a> <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-16">UTF-16</a>, it might contain isolated <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-5">surrogate code points</a>.</p>
-  <p>Any sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-11">16-bit code units</a> has an interpretation as <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-4">potentially ill-formed UTF-16</a>.</p>
-  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="WTF-16" data-noexport="" id="wtf-16">WTF-16<span class="dfn-panel" data-deco=""><b><a href="#wtf-16">#wtf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-wtf-16-1">2. 
-Background and motivation</a></span></span></dfn> is sometimes used as a shorter name for <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-5">potentially ill-formed UTF-16</a>,
-  especially in the context of systems were originally designed for <a data-link-type="dfn" href="#ucs-2" id="ref-for-ucs-2-1">UCS-2</a> and later upgraded to <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-17">UTF-16</a> but never enforced <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-7">well-formedness</a>,
+  <p>A sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑨">16-bit code units</a> is <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="potentially-ill-formed-utf-16">potentially ill-formed UTF-16</dfn> if it is intended to be interpreted as <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①③">UTF-16</a>,
+  but is not necessarily <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑤">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①④">UTF-16</a>.
+  It effectively encodes a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑤">code point</a> that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair③">surrogate code point pair</a>.</p>
+  <p class="note" role="note"><span>Note:</span> Like <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑤">UTF-16</a>, <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16②">potentially ill-formed UTF-16</a> can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair④">surrogate code point pair</a> since the corresponding <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair④">surrogate 16-bit code unit pair</a> would instead
+  represent a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point⑥">supplementary code point</a>.
+  Unlike <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑥">well-formed</a> <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑥">UTF-16</a>, it might contain isolated <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point⑤">surrogate code points</a>.</p>
+  <p>Any sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①⓪">16-bit code units</a> has an interpretation as <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16③">potentially ill-formed UTF-16</a>.</p>
+  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="wtf-16">WTF-16</dfn> is sometimes used as a shorter name for <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16④">potentially ill-formed UTF-16</a>,
+  especially in the context of systems were originally designed for <a data-link-type="dfn" href="#ucs-2" id="ref-for-ucs-2">UCS-2</a> and later upgraded to <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑦">UTF-16</a> but never enforced <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑦">well-formedness</a>,
   either by neglect or because of backward-compatibility constraints.</p>
   <h3 class="heading settled" data-level="4.1" id="encoding-ill-formed-utf-16"><span class="secno">4.1. </span><span class="content"> Encoding</span><a class="self-link" href="#encoding-ill-formed-utf-16"></a></h3>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="encode from code points to
-  potentially ill-formed UTF-16" data-noexport="" id="encode-ill-formed-utf-16">encode from <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-17">code points</a> to <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-6">potentially ill-formed UTF-16</a><span class="dfn-panel" data-deco=""><b><a href="#encode-ill-formed-utf-16">#encode-ill-formed-utf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-encode-ill-formed-utf-16-1">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a></span></span></dfn>,
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="encode from code points to potentially ill-formed UTF-16" data-noexport="" id="encode-ill-formed-utf-16">encode from <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑥">code points</a> to <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16⑤">potentially ill-formed UTF-16</a></dfn>,
   run these steps:</p>
   <ol>
-   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-12">16-bit code units</a>, initially empty. 
+   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①①">16-bit code units</a>, initially empty. 
    <li>
-    For every <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-18">code point</a> <var>P</var> of the input, run these substeps: 
+    For every <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑦">code point</a> <var>P</var> of the input, run these substeps: 
     <ol>
      <li>
-       If <var>P</var> is a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point-8">supplementary code point</a>,
-          append to <var>result</var> two <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-13">16-bit code units</a> of values: 
+       If <var>P</var> is a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point⑦">supplementary code point</a>,
+          append to <var>result</var> two <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①②">16-bit code units</a> of values: 
       <ol>
        <li><code>((<var>P</var> - 0x10000) >> 10) + 0xD800</code> 
        <li><code>((<var>P</var> - 0x10000) &amp; 0x3FF) + 0xDC00</code> 
       </ol>
-     <li>Otherwise (<var>P</var> is a <a data-link-type="dfn" href="#bmp-code-point" id="ref-for-bmp-code-point-1">BMP code point</a>),
-          append to <var>result</var> a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-14">16-bit code unit</a> of value <var>P</var>. 
+     <li>Otherwise (<var>P</var> is a <a data-link-type="dfn" href="#bmp-code-point" id="ref-for-bmp-code-point">BMP code point</a>),
+          append to <var>result</var> a <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①③">16-bit code unit</a> of value <var>P</var>. 
     </ol>
    <li>Return <var>result</var>. 
   </ol>
-  <p class="note" role="note">Note: If the input is restricted to <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-5">Unicode text</a>,
-  this is identical to encoding to <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-18">UTF-16</a> and the resulting sequence is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-8">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-19">UTF-16</a>.</p>
+  <p class="note" role="note"><span>Note:</span> If the input is restricted to <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text④">Unicode text</a>,
+  this is identical to encoding to <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑧">UTF-16</a> and the resulting sequence is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑧">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑨">UTF-16</a>.</p>
   <div class="note" role="note">
-   <p>If, on the other hand, the input contains a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-5">surrogate code point pair</a>,
+   <p>If, on the other hand, the input contains a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair⑤">surrogate code point pair</a>,
     the conversion will be incorrect and
     the resulting sequence will not represent the original code points.</p>
    <p>This situation should be considered an error,
     but this specification does not define how to handle it.
     Possibilities include aborting the conversion,
-    or replacing one of the <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point-6">surrogate code points</a> of the pair
-    with a <a data-link-type="dfn" href="#replacement-character" id="ref-for-replacement-character-1">replacement character</a>.</p>
+    or replacing one of the <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point⑥">surrogate code points</a> of the pair
+    with a <a data-link-type="dfn" href="#replacement-character" id="ref-for-replacement-character">replacement character</a>.</p>
   </div>
   <h3 class="heading settled" data-level="4.2" id="decoding-ill-formed-utf-16"><span class="secno">4.2. </span><span class="content"> Decoding</span><a class="self-link" href="#decoding-ill-formed-utf-16"></a></h3>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="decode from potentially ill-formed UTF-16
-  to code points" data-noexport="" id="decode-ill-formed-utf-16">decode from <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-7">potentially ill-formed UTF-16</a> to <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-19">code points</a><span class="dfn-panel" data-deco=""><b><a href="#decode-ill-formed-utf-16">#decode-ill-formed-utf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-decode-ill-formed-utf-16-1">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a></span></span></dfn>,
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="decode from potentially ill-formed UTF-16 to code points" data-noexport="" id="decode-ill-formed-utf-16">decode from <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16⑥">potentially ill-formed UTF-16</a> to <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑧">code points</a></dfn>,
   run these steps:</p>
   <ol>
-   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-20">code points</a>, initially empty. 
+   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑨">code points</a>, initially empty. 
    <li>
-    For every <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-15">16-bit code unit</a> <var>U</var> of the input, run these substeps: 
+    For every <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①④">16-bit code unit</a> <var>U</var> of the input, run these substeps: 
     <ol>
-     <li> If <var>U</var> is a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit-3">lead surrogate 16-bit code unit</a>, <var>U</var> is not the last <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-16">16-bit code unit</a> of the input,
-          and the next <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-17">16-bit code unit</a> of the input <var>next</var> is a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit-3">trail surrogate 16-bit code unit</a>,
-          then <a data-link-type="dfn" href="#consume" id="ref-for-consume-2">consume</a> <var>next</var> and append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-21">code point</a> of value <code> 0x10000 +
+     <li> If <var>U</var> is a <a data-link-type="dfn" href="#lead-surrogate-16-bit-code-unit" id="ref-for-lead-surrogate-16-bit-code-unit②">lead surrogate 16-bit code unit</a>, <var>U</var> is not the last <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①⑤">16-bit code unit</a> of the input,
+          and the next <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①⑥">16-bit code unit</a> of the input <var>next</var> is a <a data-link-type="dfn" href="#trail-surrogate-16-bit-code-unit" id="ref-for-trail-surrogate-16-bit-code-unit②">trail surrogate 16-bit code unit</a>,
+          then <a data-link-type="dfn" href="#consume" id="ref-for-consume①">consume</a> <var>next</var> and append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⓪">code point</a> of value <code> 0x10000 +
             ((<var>U</var> - 0xD800) &lt;&lt; 10) +
             (<var>next</var> - 0xDC00)</code>. 
      <li> Otherwise,
-          append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-22">code point</a> of value <var>U</var>. 
+          append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②①">code point</a> of value <var>U</var>. 
     </ol>
    <li>Return <var>result</var>. 
   </ol>
-  <p class="note" role="note">Note: By construction,
-  the resulting sequence does not contain a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-6">surrogate code point pair</a>.</p>
-  <p class="note" role="note">Note: If the input is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-9">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-20">UTF-16</a>,
-  this is identical to decoding <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-21">UTF-16</a> and the resulting sequence is <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-6">Unicode text</a>.</p>
+  <p class="note" role="note"><span>Note:</span> By construction,
+  the resulting sequence does not contain a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair⑥">surrogate code point pair</a>.</p>
+  <p class="note" role="note"><span>Note:</span> If the input is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑨">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16②⓪">UTF-16</a>,
+  this is identical to decoding <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16②①">UTF-16</a> and the resulting sequence is <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text⑤">Unicode text</a>.</p>
   <h2 class="heading settled" data-level="5" id="generalized-utf8"><span class="secno">5. </span><span class="content"> Generalized UTF-8</span><a class="self-link" href="#generalized-utf8"></a></h2>
-  <p>For the purpose of this specification, <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="generalized UTF-8" data-noexport="" id="generalized-utf-8">generalized UTF-8<span class="dfn-panel" data-deco=""><b><a href="#generalized-utf-8">#generalized-utf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-generalized-utf-8-1">3.3. 
-Surrogate byte sequences</a> <a href="#ref-for-generalized-utf-8-2">(2)</a> <a href="#ref-for-generalized-utf-8-3">(3)</a></span><span><a href="#ref-for-generalized-utf-8-4">5. 
-Generalized UTF-8</a> <a href="#ref-for-generalized-utf-8-5">(2)</a></span><span><a href="#ref-for-generalized-utf-8-6">6. 
-The WTF-8 encoding</a> <a href="#ref-for-generalized-utf-8-7">(2)</a></span></span></dfn> is an encoding of sequences of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-23">code points</a> (not restricted to <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value-5">Unicode scalar values</a>)
+  <p>For the purpose of this specification, <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="generalized-utf-8">generalized UTF-8</dfn> is an encoding of sequences of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②②">code points</a> (not restricted to <a data-link-type="dfn" href="#unicode-scalar-value" id="ref-for-unicode-scalar-value④">Unicode scalar values</a>)
   using 8-bit bytes,
-  based on the same underlying algorithm as <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-12">UTF-8</a>.
-  It is a strict superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-13">UTF-8</a> (like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-14">UTF-8</a> is a strict superset of ASCII).</p>
-  <p>Each <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-24">code point</a> is encoded as a sequence of one to four bytes:</p>
+  based on the same underlying algorithm as <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①②">UTF-8</a>.
+  It is a strict superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①③">UTF-8</a> (like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①④">UTF-8</a> is a strict superset of ASCII).</p>
+  <p>Each <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②③">code point</a> is encoded as a sequence of one to four bytes:</p>
   <table class="data">
    <caption>
     <p>Table 2. Bit distribution</p>
@@ -1106,10 +1119,10 @@ The WTF-8 encoding</a> <a href="#ref-for-generalized-utf-8-7">(2)</a></span></sp
      <td>10xxxxxx 
      <td>10xxxxxx 
   </table>
-  <p>A byte sequence is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-10">well-formed</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-4">generalized UTF-8</a> if and only if:</p>
+  <p>A byte sequence is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⓪">well-formed</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8③">generalized UTF-8</a> if and only if:</p>
   <ul>
    <li>It is the empty string, or 
-   <li> It is composed of a byte sequence that is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-11">well-formed</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-5">generalized UTF-8</a> followed by a byte sequence in the following table. 
+   <li> It is composed of a byte sequence that is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①①">well-formed</a> in <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8④">generalized UTF-8</a> followed by a byte sequence in the following table. 
   </ul>
   <table class="data">
    <caption>
@@ -1167,43 +1180,28 @@ The WTF-8 encoding</a> <a href="#ref-for-generalized-utf-8-7">(2)</a></span></sp
      <td>80 to BF 
   </table>
   <h2 class="heading settled" data-level="6" id="the-wtf-8-encoding"><span class="secno">6. </span><span class="content"> The WTF-8 encoding</span><a class="self-link" href="#the-wtf-8-encoding"></a></h2>
-  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="WTF-8" data-noexport="" id="wtf-8">WTF-8<span class="dfn-panel" data-deco=""><b><a href="#wtf-8">#wtf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-wtf-8-1">1. 
-Intended audience</a> <a href="#ref-for-wtf-8-2">(2)</a> <a href="#ref-for-wtf-8-3">(3)</a> <a href="#ref-for-wtf-8-4">(4)</a></span><span><a href="#ref-for-wtf-8-5">2. 
-Background and motivation</a></span><span><a href="#ref-for-wtf-8-6">2.1. 
-Differences with CESU-8</a> <a href="#ref-for-wtf-8-7">(2)</a> <a href="#ref-for-wtf-8-8">(3)</a></span><span><a href="#ref-for-wtf-8-9">3. 
-Terminology</a></span><span><a href="#ref-for-wtf-8-10">6. 
-The WTF-8 encoding</a> <a href="#ref-for-wtf-8-11">(2)</a></span><span><a href="#ref-for-wtf-8-12">6.1. 
-Encoding</a> <a href="#ref-for-wtf-8-13">(2)</a> <a href="#ref-for-wtf-8-14">(3)</a></span><span><a href="#ref-for-wtf-8-15">6.2. 
-Decoding</a> <a href="#ref-for-wtf-8-16">(2)</a> <a href="#ref-for-wtf-8-17">(3)</a></span><span><a href="#ref-for-wtf-8-18">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a> <a href="#ref-for-wtf-8-19">(2)</a> <a href="#ref-for-wtf-8-20">(3)</a></span><span><a href="#ref-for-wtf-8-21">6.4. 
-Converting between WTF-8 and UTF-8</a> <a href="#ref-for-wtf-8-22">(2)</a> <a href="#ref-for-wtf-8-23">(3)</a> <a href="#ref-for-wtf-8-24">(4)</a> <a href="#ref-for-wtf-8-25">(5)</a></span><span><a href="#ref-for-wtf-8-26">6.5. 
-Concatenating WTF-8 strings</a> <a href="#ref-for-wtf-8-27">(2)</a></span><span><a href="#ref-for-wtf-8-28">7. 
-Implementations</a> <a href="#ref-for-wtf-8-29">(2)</a> <a href="#ref-for-wtf-8-30">(3)</a></span></span></dfn> (Wobbly Transformation Format − 8-bit)
-  is an encoding of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-25">code point</a> sequences
-  that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-7">surrogate code point pair</a> using 8-bit bytes.</p>
-  <p class="note" role="note">Note: Like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-15">UTF-8</a> is artificially restricted to <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-7">Unicode text</a> in order to match <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16-22">UTF-16</a>, <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-10">WTF-8</a> is artificially restricted to exclude <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-8">surrogate code point pairs</a> in order to match <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-8">potentially ill-formed UTF-16</a>.</p>
-  <p>It is identical to <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-6">generalized UTF-8</a>,
-  with the additional <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-12">well-formedness</a> constraint that
-  a <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence-4">surrogate pair byte sequence</a> is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed-11">ill-formed</a>.
-  It is a strict subset of <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8-7">generalized UTF-8</a> and a strict superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-16">UTF-8</a>.</p>
-  <p class="note" role="note">Note: Similarly, <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-17">UTF-8</a> is a strict superset of ASCII.</p>
-  <p><a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-11">WTF-8</a> <em>must not</em> be used for interchange.
+  <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="wtf-8">WTF-8</dfn> (Wobbly Transformation Format − 8-bit)
+  is an encoding of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②④">code point</a> sequences
+  that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair⑦">surrogate code point pair</a> using 8-bit bytes.</p>
+  <p class="note" role="note"><span>Note:</span> Like <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⑤">UTF-8</a> is artificially restricted to <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text⑥">Unicode text</a> in order to match <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16②②">UTF-16</a>, <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8⑨">WTF-8</a> is artificially restricted to exclude <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair⑧">surrogate code point pairs</a> in order to match <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16⑦">potentially ill-formed UTF-16</a>.</p>
+  <p>It is identical to <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8⑤">generalized UTF-8</a>,
+  with the additional <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①②">well-formedness</a> constraint that
+  a <a data-link-type="dfn" href="#surrogate-pair-byte-sequence" id="ref-for-surrogate-pair-byte-sequence③">surrogate pair byte sequence</a> is <a data-link-type="dfn" href="#ill-formed" id="ref-for-ill-formed①⓪">ill-formed</a>.
+  It is a strict subset of <a data-link-type="dfn" href="#generalized-utf-8" id="ref-for-generalized-utf-8⑥">generalized UTF-8</a> and a strict superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⑥">UTF-8</a>.</p>
+  <p class="note" role="note"><span>Note:</span> Similarly, <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⑦">UTF-8</a> is a strict superset of ASCII.</p>
+  <p><a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⓪">WTF-8</a> <em>must not</em> be used for interchange.
   See <a href="#intended-audience">Intended audience</a>.</p>
   <h3 class="heading settled" data-level="6.1" id="encoding-wtf-8"><span class="secno">6.1. </span><span class="content"> Encoding</span><a class="self-link" href="#encoding-wtf-8"></a></h3>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="encode from code points
-  to well-formed WTF-8" data-noexport="" id="encode-to-wtf-8">encode from <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-26">code points</a> to <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-13">well-formed</a> <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-12">WTF-8</a><span class="dfn-panel" data-deco=""><b><a href="#encode-to-wtf-8">#encode-to-wtf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-encode-to-wtf-8-1">6.2. 
-Decoding</a></span><span><a href="#ref-for-encode-to-wtf-8-2">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a></span><span><a href="#ref-for-encode-to-wtf-8-3">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn>,
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="encode from code points to well-formed WTF-8" data-noexport="" id="encode-to-wtf-8">encode from <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑤">code points</a> to <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①③">well-formed</a> <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①①">WTF-8</a></dfn>,
   run these steps:</p>
   <ol>
    <li>Let <var>result</var> be a sequence of bytes, initially empty. 
    <li>
-    For every <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-27">code point</a> <var>P</var> of the input, run these substeps: 
+    For every <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑥">code point</a> <var>P</var> of the input, run these substeps: 
     <ol>
      <li>
-      <p>If <var>P</var> is a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point-4">lead surrogate code point</a>, <var>P</var> is not the last <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-28">code point</a> of the input,
-          and the <var>next</var> <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-29">code point</a> is a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point-4">trail surrogate code point</a>,
+      <p>If <var>P</var> is a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point③">lead surrogate code point</a>, <var>P</var> is not the last <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑦">code point</a> of the input,
+          and the <var>next</var> <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑧">code point</a> is a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point③">trail surrogate code point</a>,
           set <var>P</var>’s value to: <code> 0x10000 +
             ((<var>P</var> - 0xD800) &lt;&lt; 10) +
             (<var>next</var> - 0xDC00)</code>.</p>
@@ -1240,106 +1238,98 @@ Concatenating WTF-8 strings</a></span></span></dfn>,
     </ol>
    <li>Return <var>result</var>. 
   </ol>
-  <p class="note" role="note">Note: If the input contains a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair-9">surrogate code point pair</a>,
+  <p class="note" role="note"><span>Note:</span> If the input contains a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair⑨">surrogate code point pair</a>,
   the resulting byte sequence will be not represent
-  the original sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-30">code points</a>.
-  Instead, it will represent the same <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-31">code points</a> as if had been encoded in <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-9">potentially ill-formed UTF-16</a>.
+  the original sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑨">code points</a>.
+  Instead, it will represent the same <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⓪">code points</a> as if had been encoded in <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16⑧">potentially ill-formed UTF-16</a>.
   This is also consistent with
-  encoding each <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-32">code point</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-13">WTF-8</a> individually,
-  and <a data-link-type="dfn" href="#concatenate-two-wtf-8-strings" id="ref-for-concatenate-two-wtf-8-strings-1">concatenating</a> the resulting <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-14">WTF-8</a> byte sequences.</p>
+  encoding each <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③①">code point</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①②">WTF-8</a> individually,
+  and <a data-link-type="dfn" href="#concatenate-two-wtf-8-strings" id="ref-for-concatenate-two-wtf-8-strings">concatenating</a> the resulting <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①③">WTF-8</a> byte sequences.</p>
   <h3 class="heading settled" data-level="6.2" id="decoding-wtf-8"><span class="secno">6.2. </span><span class="content"> Decoding</span><a class="self-link" href="#decoding-wtf-8"></a></h3>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="decode from well-formed WTF-8
-  to code points" data-noexport="" id="decode-from-wtf-8">decode from <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-14">well-formed</a> <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-15">WTF-8</a> to <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-33">code points</a><span class="dfn-panel" data-deco=""><b><a href="#decode-from-wtf-8">#decode-from-wtf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-decode-from-wtf-8-1">6.3. 
-Converting between WTF-8 and potentially ill-formed UTF-16</a></span><span><a href="#ref-for-decode-from-wtf-8-2">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn>,
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="decode from well-formed WTF-8 to code points" data-noexport="" id="decode-from-wtf-8">decode from <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①④">well-formed</a> <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①④">WTF-8</a> to <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③②">code points</a></dfn>,
   run these steps:</p>
-  <p class="note" role="note">Note: Since <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-16">WTF-8</a> <em>must not</em> be used for interchange
+  <p class="note" role="note"><span>Note:</span> Since <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⑤">WTF-8</a> <em>must not</em> be used for interchange
   (see <a href="#intended-audience">Intended audience</a>),
   this algorithm is deliberately not defined for arbitrary byte sequences.
-  It is only defined for byte sequences known to be <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-15">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-17">WTF-8</a>,
-  such as sequences <a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8-1">encoded from code points</a>, <a data-link-type="dfn" href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8" id="ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8-1">converted from UTF-16</a>, or <a data-link-type="dfn" href="#concatenate-two-wtf-8-strings" id="ref-for-concatenate-two-wtf-8-strings-2">concatenated</a> from sequences themselves <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-16">well-formed</a> in WTF-8.</p>
+  It is only defined for byte sequences known to be <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⑤">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⑥">WTF-8</a>,
+  such as sequences <a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8">encoded from code points</a>, <a data-link-type="dfn" href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8" id="ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8">converted from UTF-16</a>, or <a data-link-type="dfn" href="#concatenate-two-wtf-8-strings" id="ref-for-concatenate-two-wtf-8-strings①">concatenated</a> from sequences themselves <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⑥">well-formed</a> in WTF-8.</p>
   <ol>
-   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-34">code points</a>, initially empty. 
+   <li>Let <var>result</var> be a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③③">code points</a>, initially empty. 
    <li>
     For every byte <var>B</var> of the input, depending on <var>B</var>: 
     <dl class="switch">
      <dt>0x00 to 0x7F 
-     <dd>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-35">code point</a> of value <var>B</var>. 
+     <dd>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③④">code point</a> of value <var>B</var>. 
      <dt>0xC2 to 0xDF 
      <dd>
-       Let <var>B2</var> be the next byte and <a data-link-type="dfn" href="#consume" id="ref-for-consume-3">consume</a> it. 
-      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-36">code point</a> of value <code> ((<var>B</var> &amp; 0x1F) &lt;&lt; 6) +
+       Let <var>B2</var> be the next byte and <a data-link-type="dfn" href="#consume" id="ref-for-consume②">consume</a> it. 
+      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑤">code point</a> of value <code> ((<var>B</var> &amp; 0x1F) &lt;&lt; 6) +
             (<var>B2</var> &amp; 0x3F)</code></p>
      <dt>0xE0 to 0xEF 
      <dd>
        Let <var>B2</var> and <var>B3</var> be the next two bytes,
-          and <a data-link-type="dfn" href="#consume" id="ref-for-consume-4">consume</a> them. 
-      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-37">code point</a> of value <code> ((<var>B</var> &amp; 0x0F) &lt;&lt; 12) +
+          and <a data-link-type="dfn" href="#consume" id="ref-for-consume③">consume</a> them. 
+      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑥">code point</a> of value <code> ((<var>B</var> &amp; 0x0F) &lt;&lt; 12) +
             ((<var>B2</var> &amp; 0x3F) &lt;&lt; 6) +
             (<var>B3</var> &amp; 0x3F)</code></p>
      <dt>0xF0 to 0xF4 
      <dd>
        Let <var>B2</var>, <var>B3</var>, and <var>B4</var> be the next three bytes,
-          and <a data-link-type="dfn" href="#consume" id="ref-for-consume-5">consume</a> them. 
-      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-38">code point</a> of value <code> ((<var>B</var> &amp; 0x07) &lt;&lt; 18) +
+          and <a data-link-type="dfn" href="#consume" id="ref-for-consume④">consume</a> them. 
+      <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑦">code point</a> of value <code> ((<var>B</var> &amp; 0x07) &lt;&lt; 18) +
             ((<var>B2</var> &amp; 0x3F) &lt;&lt; 12) +
             ((<var>B3</var> &amp; 0x3F) &lt;&lt; 6) +
             (<var>B4</var> &amp; 0x3F)</code></p>
     </dl>
    <li>Return <var>result</var>. 
   </ol>
-  <p class="note" role="note">Note: If the input is also <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-17">well-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-18">UTF-8</a>,
-  this is identical to decoding <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-19">UTF-8</a> and the resulting sequence is <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text-8">Unicode text</a>.</p>
+  <p class="note" role="note"><span>Note:</span> If the input is also <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⑦">well-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⑧">UTF-8</a>,
+  this is identical to decoding <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8①⑨">UTF-8</a> and the resulting sequence is <a data-link-type="dfn" href="#unicode-text" id="ref-for-unicode-text⑦">Unicode text</a>.</p>
   <h3 class="heading settled" data-level="6.3" id="converting-wtf-8-ill-formed-utf-16"><span class="secno">6.3. </span><span class="content"> Converting between WTF-8 and potentially ill-formed UTF-16</span><a class="self-link" href="#converting-wtf-8-ill-formed-utf-16"></a></h3>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="convert from potentially ill-formed UTF-16 to WTF-8" data-noexport="" id="convert-from-potentially-ill-formed-utf-16-to-wtf-8">convert from <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-10">potentially ill-formed UTF-16</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-18">WTF-8</a><span class="dfn-panel" data-deco=""><b><a href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8">#convert-from-potentially-ill-formed-utf-16-to-wtf-8</a></b><b>Referenced in:</b><span><a href="#ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8-1">6.2. 
-Decoding</a></span><span><a href="#ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8-2">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn>,
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="convert-from-potentially-ill-formed-utf-16-to-wtf-8">convert from <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16⑨">potentially ill-formed UTF-16</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⑦">WTF-8</a></dfn>,
   run these steps:</p>
   <ul>
-   <li><a data-link-type="dfn" href="#decode-ill-formed-utf-16" id="ref-for-decode-ill-formed-utf-16-1">Decode from potentially ill-formed UTF-16 to code points</a> 
-   <li><a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8-2">Encode from code points to well-formed WTF-8</a> 
+   <li><a data-link-type="dfn" href="#decode-ill-formed-utf-16" id="ref-for-decode-ill-formed-utf-16">Decode from potentially ill-formed UTF-16 to code points</a> 
+   <li><a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8①">Encode from code points to well-formed WTF-8</a> 
   </ul>
-  <p class="note" role="note">Note: This conversion never fails and is lossless.</p>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="convert from WTF-8 to potentially ill-formed UTF-16" data-noexport="" id="convert-from-wtf-8-to-potentially-ill-formed-utf-16">convert from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-19">WTF-8</a> to <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-11">potentially ill-formed UTF-16</a><span class="dfn-panel" data-deco=""><b><a href="#convert-from-wtf-8-to-potentially-ill-formed-utf-16">#convert-from-wtf-8-to-potentially-ill-formed-utf-16</a></b><b>Referenced in:</b><span><a href="#ref-for-convert-from-wtf-8-to-potentially-ill-formed-utf-16-1">6.5. 
-Concatenating WTF-8 strings</a></span></span></dfn>,
+  <p class="note" role="note"><span>Note:</span> This conversion never fails and is lossless.</p>
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="convert-from-wtf-8-to-potentially-ill-formed-utf-16">convert from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⑧">WTF-8</a> to <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16①⓪">potentially ill-formed UTF-16</a></dfn>,
   run these steps:</p>
   <ul>
-   <li><a data-link-type="dfn" href="#decode-from-wtf-8" id="ref-for-decode-from-wtf-8-1">Decode from well-formed WTF-8 to code points</a> 
-   <li><a data-link-type="dfn" href="#encode-ill-formed-utf-16" id="ref-for-encode-ill-formed-utf-16-1">Encode from code points to potentially ill-formed UTF-16</a> 
+   <li><a data-link-type="dfn" href="#decode-from-wtf-8" id="ref-for-decode-from-wtf-8">Decode from well-formed WTF-8 to code points</a> 
+   <li><a data-link-type="dfn" href="#encode-ill-formed-utf-16" id="ref-for-encode-ill-formed-utf-16">Encode from code points to potentially ill-formed UTF-16</a> 
   </ul>
-  <p class="note" role="note">Note: This conversion never fails
-  and, if the input is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-18">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-20">WTF-8</a>, is lossless.</p>
+  <p class="note" role="note"><span>Note:</span> This conversion never fails
+  and, if the input is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⑧">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8①⑨">WTF-8</a>, is lossless.</p>
   <h3 class="heading settled" data-level="6.4" id="converting-wtf-8-utf-8"><span class="secno">6.4. </span><span class="content"> Converting between WTF-8 and UTF-8</span><a class="self-link" href="#converting-wtf-8-utf-8"></a></h3>
-  <p>Since <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-21">WTF-8</a> is a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-20">UTF-8</a>,
-  any sequence of byte that is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-19">well-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-21">UTF-8</a> is also <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-20">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-22">WTF-8</a> and represents the same text.
-  To <dfn data-dfn-type="dfn" data-noexport="" id="convert-from-utf-8-to-wtf-8">convert from <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-22">UTF-8</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-23">WTF-8</a><a class="self-link" href="#convert-from-utf-8-to-wtf-8"></a></dfn>,
+  <p>Since <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⓪">WTF-8</a> is a superset of <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②⓪">UTF-8</a>,
+  any sequence of byte that is <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed①⑨">well-formed</a> in <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②①">UTF-8</a> is also <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed②⓪">well-formed</a> in <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②①">WTF-8</a> and represents the same text.
+  To <dfn data-dfn-type="dfn" data-noexport="" id="convert-from-utf-8-to-wtf-8">convert from <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②②">UTF-8</a> to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②②">WTF-8</a><a class="self-link" href="#convert-from-utf-8-to-wtf-8"></a></dfn>,
   return the input unchanged.</p>
-  <p class="note" role="note">Note: This conversion never fails and is lossless.</p>
-  <p>To <dfn data-dfn-type="dfn" data-noexport="" id="convert-lossily-from-wtf-8-to-utf-8">convert lossily from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-24">WTF-8</a> to <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-23">UTF-8</a><a class="self-link" href="#convert-lossily-from-wtf-8-to-utf-8"></a></dfn>,
-  replace any <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-6">surrogate byte sequence</a> with the sequence of three bytes &lt;0xEF, 0xBF, 0xBD>,
-  the <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-24">UTF-8</a> encoding of the <a data-link-type="dfn" href="#replacement-character" id="ref-for-replacement-character-2">replacement character</a>.</p>
-  <p class="note" role="note">Note: Since <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-7">surrogate byte sequences</a> are also three bytes long,
+  <p class="note" role="note"><span>Note:</span> This conversion never fails and is lossless.</p>
+  <p>To <dfn data-dfn-type="dfn" data-noexport="" id="convert-lossily-from-wtf-8-to-utf-8">convert lossily from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②③">WTF-8</a> to <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②③">UTF-8</a><a class="self-link" href="#convert-lossily-from-wtf-8-to-utf-8"></a></dfn>,
+  replace any <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence⑤">surrogate byte sequence</a> with the sequence of three bytes &lt;0xEF, 0xBF, 0xBD>,
+  the <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②④">UTF-8</a> encoding of the <a data-link-type="dfn" href="#replacement-character" id="ref-for-replacement-character①">replacement character</a>.</p>
+  <p class="note" role="note"><span>Note:</span> Since <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence⑥">surrogate byte sequences</a> are also three bytes long,
   this conversion can be done <em>in place</em>.</p>
-  <p class="note" role="note">Note: This conversion never fails but is lossy.</p>
-  <p>To <dfn data-dfn-type="dfn" data-noexport="" id="convert-strictly-from-wtf-8-to-utf-8">convert strictly from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-25">WTF-8</a> to <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8-25">UTF-8</a><a class="self-link" href="#convert-strictly-from-wtf-8-to-utf-8"></a></dfn>, run these steps:</p>
+  <p class="note" role="note"><span>Note:</span> This conversion never fails but is lossy.</p>
+  <p>To <dfn data-dfn-type="dfn" data-noexport="" id="convert-strictly-from-wtf-8-to-utf-8">convert strictly from <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②④">WTF-8</a> to <a data-link-type="dfn" href="#utf-8" id="ref-for-utf-8②⑤">UTF-8</a><a class="self-link" href="#convert-strictly-from-wtf-8-to-utf-8"></a></dfn>, run these steps:</p>
   <ol>
-   <li>If the input contains a <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-8">surrogate byte sequence</a>, return failure. 
+   <li>If the input contains a <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence⑦">surrogate byte sequence</a>, return failure. 
    <li>Otherwise, return the input unchanged. 
   </ol>
-  <p class="note" role="note">Note: This conversion is lossless when it succeeds, but it can fail.</p>
+  <p class="note" role="note"><span>Note:</span> This conversion is lossless when it succeeds, but it can fail.</p>
   <h3 class="heading settled" data-level="6.5" id="concatenating"><span class="secno">6.5. </span><span class="content"> Concatenating WTF-8 strings</span><a class="self-link" href="#concatenating"></a></h3>
-  <p>Concatenating <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-26">WTF-8</a> strings requires extra care to preserve <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed-21">well-formedness</a>.</p>
-  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="concatenate two WTF-8 strings" data-noexport="" id="concatenate-two-wtf-8-strings">concatenate two <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-27">WTF-8</a> strings<span class="dfn-panel" data-deco=""><b><a href="#concatenate-two-wtf-8-strings">#concatenate-two-wtf-8-strings</a></b><b>Referenced in:</b><span><a href="#ref-for-concatenate-two-wtf-8-strings-1">6.1. 
-Encoding</a></span><span><a href="#ref-for-concatenate-two-wtf-8-strings-2">6.2. 
-Decoding</a></span></span></dfn>, run these steps:</p>
+  <p>Concatenating <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⑤">WTF-8</a> strings requires extra care to preserve <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed②①">well-formedness</a>.</p>
+  <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="concatenate-two-wtf-8-strings">concatenate two <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⑥">WTF-8</a> strings</dfn>, run these steps:</p>
   <ol>
    <li>
-     If the left input string   ends with a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence-4">lead surrogate byte sequence</a> and the right input string starts with a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence-4">trail surrogate byte sequence</a>,
+     If the left input string   ends with a <a data-link-type="dfn" href="#lead-surrogate-byte-sequence" id="ref-for-lead-surrogate-byte-sequence③">lead surrogate byte sequence</a> and the right input string starts with a <a data-link-type="dfn" href="#trail-surrogate-byte-sequence" id="ref-for-trail-surrogate-byte-sequence③">trail surrogate byte sequence</a>,
       run these substeps: 
     <ol>
-     <li> Let <var>lead</var> and <var>trail</var> be two <a data-link-type="dfn" href="#code-point" id="ref-for-code-point-39">code points</a>,
-          the respective results of <a data-link-type="dfn" href="#decode-from-wtf-8" id="ref-for-decode-from-wtf-8-2">decoding from WTF-8</a> these two <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence-9">surrogate byte sequences</a>. 
-     <li> Let <var>supplementary</var> be the <a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8-3">encoding to WTF-8</a> of a single code point of value <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code> 
+     <li> Let <var>lead</var> and <var>trail</var> be two <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑧">code points</a>,
+          the respective results of <a data-link-type="dfn" href="#decode-from-wtf-8" id="ref-for-decode-from-wtf-8①">decoding from WTF-8</a> these two <a data-link-type="dfn" href="#surrogate-byte-sequence" id="ref-for-surrogate-byte-sequence⑧">surrogate byte sequences</a>. 
+     <li> Let <var>supplementary</var> be the <a data-link-type="dfn" href="#encode-to-wtf-8" id="ref-for-encode-to-wtf-8②">encoding to WTF-8</a> of a single code point of value <code>0x10000 + ((<var>lead</var> - 0xD800) &lt;&lt; 10) + (<var>trail</var> - 0xDC00)</code> 
      <li> Let <var>left</var> be substring of the left input string
           that removes the three final bytes. 
      <li> Let <var>right</var> be substring of the right input string
@@ -1348,23 +1338,23 @@ Decoding</a></span></span></dfn>, run these steps:</p>
     </ol>
    <li>Otherwise, return the concatenation of the two input byte sequences 
   </ol>
-  <p class="note" role="note">Note: This is equivalent to
-  converting both strings <a data-link-type="dfn" href="#convert-from-wtf-8-to-potentially-ill-formed-utf-16" id="ref-for-convert-from-wtf-8-to-potentially-ill-formed-utf-16-1"> to potentially ill-formed UTF-16</a>,
-  concatenating the resulting <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit-18">16-bit code unit</a> sequences,
-  then converting the concatenation back <a data-link-type="dfn" href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8" id="ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8-2">to WTF-8</a>.</p>
+  <p class="note" role="note"><span>Note:</span> This is equivalent to
+  converting both strings <a data-link-type="dfn" href="#convert-from-wtf-8-to-potentially-ill-formed-utf-16" id="ref-for-convert-from-wtf-8-to-potentially-ill-formed-utf-16"> to potentially ill-formed UTF-16</a>,
+  concatenating the resulting <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit①⑦">16-bit code unit</a> sequences,
+  then converting the concatenation back <a data-link-type="dfn" href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8" id="ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8①">to WTF-8</a>.</p>
   <h2 class="heading settled" data-level="7" id="implementations"><span class="secno">7. </span><span class="content"> Implementations</span><a class="self-link" href="#implementations"></a></h2>
   <p><em>This section is non-normative.</em></p>
   <ul>
    <li> <a href="http://s48.org/">Scheme 48</a> uses an encoding they call <em>UTF-8of16</em> to encode <a href="http://s48.org/1.8/manual/manual-Z-H-6.html#node_sec_5.15">filenames
       and other operating system strings on Windows</a>.
-      This encoding is identical to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-28">WTF-8</a>. 
+      This encoding is identical to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⑦">WTF-8</a>. 
    <li> <a href="http://racket-lang.org/">Racket</a> uses an encoding they call <a href="http://docs.racket-lang.org/reference/bytestrings.html#%28part._.Bytes_to_.Bytes_.Encoding_.Conversion%29"> <em>platform-UTF-8</em></a> to <a href="http://plt.eecs.northwestern.edu/snapshots/current/doc/reference/windowspaths.html#%28part._windowspathrep%29"> encode filenames on Windows</a>.
-      This encoding is identical to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-29">WTF-8</a>. 
+      This encoding is identical to <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⑧">WTF-8</a>. 
    <li> <a href="https://github.com/mathiasbynens/wtf-8">wtf-8.js</a> implements this specification in JavaScript. 
    <li> <a href="https://github.com/SimonSapin/rust-wtf8">rust-wtf8</a> implements this specification in <a href="http://www.rust-lang.org/">Rust</a>. 
-   <li> On Windows (which uses <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16-12">potentially ill-formed UTF-16</a> in its APIs),
+   <li> On Windows (which uses <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16①①">potentially ill-formed UTF-16</a> in its APIs),
       the Rust standard library <a href="https://github.com/rust-lang/rfcs/blob/master/text/0517-io-os-reform.md#string-handling">uses WTF-8</a> internally for <em>OS strings</em>,
-      but does not expose the <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8-30">WTF-8</a> byte sequences. 
+      but does not expose the <a data-link-type="dfn" href="#wtf-8" id="ref-for-wtf-8②⑨">WTF-8</a> byte sequences. 
   </ul>
   <h2 class="heading settled" data-level="8" id="acknowledgments"><span class="secno">8. </span><span class="content"> Acknowledgments</span><a class="self-link" href="#acknowledgments"></a></h2>
   <p>Thanks to Coralie Mercier for <a href="https://twitter.com/koalie/status/506821684687413248"> coining the name WTF-8</a>.</p>
@@ -1391,7 +1381,7 @@ Decoding</a></span></span></dfn>, run these steps:</p>
             except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
    <p> Examples in this specification are introduced with the words “for example”
             or are set apart from the normative text with <code>class="example"</code>, like this: </p>
-   <div class="example" id="example-ae2b6bc0"><a class="self-link" href="#example-ae2b6bc0"></a> This is an example of an informative example. </div>
+   <div class="example" id="example-example"><a class="self-link" href="#example-example"></a> This is an example of an informative example. </div>
    <p> Informative notes begin with the word “Note”
             and are set apart from the normative text with <code>class="note"</code>, like this: </p>
    <p class="note" role="note"> Note, this is an informative note. </p>
@@ -1540,14 +1530,10 @@ Decoding</a></span></span></dfn>, run these steps:</p>
    <li><a href="#convert-from-wtf-8-to-potentially-ill-formed-utf-16">convert from WTF-8 to potentially ill-formed UTF-16</a><span>, in §6.3</span>
    <li><a href="#convert-lossily-from-wtf-8-to-utf-8">convert lossily from WTF-8 to UTF-8</a><span>, in §6.4</span>
    <li><a href="#convert-strictly-from-wtf-8-to-utf-8">convert strictly from WTF-8 to UTF-8</a><span>, in §6.4</span>
-   <li><a href="#decode-ill-formed-utf-16">decode from potentially ill-formed UTF-16
-  to code points</a><span>, in §4.2</span>
-   <li><a href="#decode-from-wtf-8">decode from well-formed WTF-8
-  to code points</a><span>, in §6.2</span>
-   <li><a href="#encode-ill-formed-utf-16">encode from code points to
-  potentially ill-formed UTF-16</a><span>, in §4.1</span>
-   <li><a href="#encode-to-wtf-8">encode from code points
-  to well-formed WTF-8</a><span>, in §6.1</span>
+   <li><a href="#decode-ill-formed-utf-16">decode from potentially ill-formed UTF-16 to code points</a><span>, in §4.2</span>
+   <li><a href="#decode-from-wtf-8">decode from well-formed WTF-8 to code points</a><span>, in §6.2</span>
+   <li><a href="#encode-ill-formed-utf-16">encode from code points to potentially ill-formed UTF-16</a><span>, in §4.1</span>
+   <li><a href="#encode-to-wtf-8">encode from code points to well-formed WTF-8</a><span>, in §6.1</span>
    <li><a href="#generalized-utf-8">generalized UTF-8</a><span>, in §5</span>
    <li><a href="#high-surrogate-16-bit-code-unit">high surrogate 16-bit code unit</a><span>, in §3.2</span>
    <li><a href="#high-surrogate-byte-sequence">high surrogate byte sequence</a><span>, in §3.3</span>
@@ -1596,22 +1582,536 @@ Decoding</a></span></span></dfn>, run these steps:</p>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-charsets">[CHARSETS]
-   <dd><a href="http://www.iana.org/assignments/character-sets"><cite>Characters sets.</cite></a> These are the official names for character sets that may be used in the Internet and may be referred to in Internet documentation URL: <a href="http://www.iana.org/assignments/character-sets">http://www.iana.org/assignments/character-sets</a> 
-   <dt id="biblio-whatwg-encoding">[WHATWG-ENCODING]
+   <dd><a href="https://www.iana.org/assignments/character-sets">Character sets</a>. URL: <a href="https://www.iana.org/assignments/character-sets">https://www.iana.org/assignments/character-sets</a>
+   <dt id="biblio-encoding">[ENCODING]
    <dd>Anne van Kesteren. <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a>. Living Standard. URL: <a href="https://encoding.spec.whatwg.org/">https://encoding.spec.whatwg.org/</a>
   </dl>
-<script>
+  <aside class="dfn-panel" data-for="ucs-2">
+   <b><a href="#ucs-2">#ucs-2</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-ucs-2">4. 
+Potentially ill-formed UTF-16</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="code-point">
+   <b><a href="#code-point">#code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-code-point">2. 
+Background and motivation</a> <a href="#ref-for-code-point①">(2)</a> <a href="#ref-for-code-point②">(3)</a> <a href="#ref-for-code-point③">(4)</a>
+    <li><a href="#ref-for-code-point④">3. 
+Terminology</a> <a href="#ref-for-code-point⑤">(2)</a> <a href="#ref-for-code-point⑥">(3)</a> <a href="#ref-for-code-point⑦">(4)</a> <a href="#ref-for-code-point⑧">(5)</a> <a href="#ref-for-code-point⑨">(6)</a> <a href="#ref-for-code-point①⓪">(7)</a> <a href="#ref-for-code-point①①">(8)</a>
+    <li><a href="#ref-for-code-point①②">3.1. 
+Surrogate code points</a> <a href="#ref-for-code-point①③">(2)</a> <a href="#ref-for-code-point①④">(3)</a>
+    <li><a href="#ref-for-code-point①⑤">4. 
+Potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-code-point①⑥">4.1. 
+Encoding</a> <a href="#ref-for-code-point①⑦">(2)</a>
+    <li><a href="#ref-for-code-point①⑧">4.2. 
+Decoding</a> <a href="#ref-for-code-point①⑨">(2)</a> <a href="#ref-for-code-point②⓪">(3)</a> <a href="#ref-for-code-point②①">(4)</a>
+    <li><a href="#ref-for-code-point②②">5. 
+Generalized UTF-8</a> <a href="#ref-for-code-point②③">(2)</a>
+    <li><a href="#ref-for-code-point②④">6. 
+The WTF-8 encoding</a>
+    <li><a href="#ref-for-code-point②⑤">6.1. 
+Encoding</a> <a href="#ref-for-code-point②⑥">(2)</a> <a href="#ref-for-code-point②⑦">(3)</a> <a href="#ref-for-code-point②⑧">(4)</a> <a href="#ref-for-code-point②⑨">(5)</a> <a href="#ref-for-code-point③⓪">(6)</a> <a href="#ref-for-code-point③①">(7)</a>
+    <li><a href="#ref-for-code-point③②">6.2. 
+Decoding</a> <a href="#ref-for-code-point③③">(2)</a> <a href="#ref-for-code-point③④">(3)</a> <a href="#ref-for-code-point③⑤">(4)</a> <a href="#ref-for-code-point③⑥">(5)</a> <a href="#ref-for-code-point③⑦">(6)</a>
+    <li><a href="#ref-for-code-point③⑧">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="basic-multilingual-plane">
+   <b><a href="#basic-multilingual-plane">#basic-multilingual-plane</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-basic-multilingual-plane">3. 
+Terminology</a> <a href="#ref-for-basic-multilingual-plane①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="bmp-code-point">
+   <b><a href="#bmp-code-point">#bmp-code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-bmp-code-point">4.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="supplementary-code-point">
+   <b><a href="#supplementary-code-point">#supplementary-code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-supplementary-code-point">2. 
+Background and motivation</a> <a href="#ref-for-supplementary-code-point①">(2)</a> <a href="#ref-for-supplementary-code-point②">(3)</a>
+    <li><a href="#ref-for-supplementary-code-point③">2.1. 
+Differences with CESU-8</a>
+    <li><a href="#ref-for-supplementary-code-point④">3. 
+Terminology</a>
+    <li><a href="#ref-for-supplementary-code-point⑤">3.2. 
+Surrogate 16-bit code units</a>
+    <li><a href="#ref-for-supplementary-code-point⑥">4. 
+Potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-supplementary-code-point⑦">4.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="unicode-scalar-value">
+   <b><a href="#unicode-scalar-value">#unicode-scalar-value</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unicode-scalar-value">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-unicode-scalar-value①">3. 
+Terminology</a> <a href="#ref-for-unicode-scalar-value②">(2)</a> <a href="#ref-for-unicode-scalar-value③">(3)</a>
+    <li><a href="#ref-for-unicode-scalar-value④">5. 
+Generalized UTF-8</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="bmp-scalar-value">
+   <b><a href="#bmp-scalar-value">#bmp-scalar-value</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-bmp-scalar-value">3. 
+Terminology</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="unicode-text">
+   <b><a href="#unicode-text">#unicode-text</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unicode-text">1. 
+Intended audience</a>
+    <li><a href="#ref-for-unicode-text①">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-unicode-text②">3. 
+Terminology</a> <a href="#ref-for-unicode-text③">(2)</a>
+    <li><a href="#ref-for-unicode-text④">4.1. 
+Encoding</a>
+    <li><a href="#ref-for-unicode-text⑤">4.2. 
+Decoding</a>
+    <li><a href="#ref-for-unicode-text⑥">6. 
+The WTF-8 encoding</a>
+    <li><a href="#ref-for-unicode-text⑦">6.2. 
+Decoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="utf-8">
+   <b><a href="#utf-8">#utf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-utf-8①">1. 
+Intended audience</a> <a href="#ref-for-utf-8②">(2)</a>
+    <li><a href="#ref-for-utf-8③">2. 
+Background and motivation</a> <a href="#ref-for-utf-8④">(2)</a> <a href="#ref-for-utf-8⑤">(3)</a> <a href="#ref-for-utf-8⑥">(4)</a>
+    <li><a href="#ref-for-utf-8⑦">2.1. 
+Differences with CESU-8</a> <a href="#ref-for-utf-8⑧">(2)</a>
+    <li><a href="#ref-for-utf-8⑨">3. 
+Terminology</a> <a href="#ref-for-utf-8①⓪">(2)</a>
+    <li><a href="#ref-for-utf-8①①">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-utf-8①②">5. 
+Generalized UTF-8</a> <a href="#ref-for-utf-8①③">(2)</a> <a href="#ref-for-utf-8①④">(3)</a>
+    <li><a href="#ref-for-utf-8①⑤">6. 
+The WTF-8 encoding</a> <a href="#ref-for-utf-8①⑥">(2)</a> <a href="#ref-for-utf-8①⑦">(3)</a>
+    <li><a href="#ref-for-utf-8①⑧">6.2. 
+Decoding</a> <a href="#ref-for-utf-8①⑨">(2)</a>
+    <li><a href="#ref-for-utf-8②⓪">6.4. 
+Converting between WTF-8 and UTF-8</a> <a href="#ref-for-utf-8②①">(2)</a> <a href="#ref-for-utf-8②②">(3)</a> <a href="#ref-for-utf-8②③">(4)</a> <a href="#ref-for-utf-8②④">(5)</a> <a href="#ref-for-utf-8②⑤">(6)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="utf-16">
+   <b><a href="#utf-16">#utf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-utf-16①">2. 
+Background and motivation</a> <a href="#ref-for-utf-16②">(2)</a> <a href="#ref-for-utf-16③">(3)</a> <a href="#ref-for-utf-16④">(4)</a> <a href="#ref-for-utf-16⑤">(5)</a> <a href="#ref-for-utf-16⑥">(6)</a> <a href="#ref-for-utf-16⑦">(7)</a>
+    <li><a href="#ref-for-utf-16⑧">2.1. 
+Differences with CESU-8</a>
+    <li><a href="#ref-for-utf-16⑨">3. 
+Terminology</a> <a href="#ref-for-utf-16①⓪">(2)</a> <a href="#ref-for-utf-16①①">(3)</a>
+    <li><a href="#ref-for-utf-16①②">3.2. 
+Surrogate 16-bit code units</a>
+    <li><a href="#ref-for-utf-16①③">4. 
+Potentially ill-formed UTF-16</a> <a href="#ref-for-utf-16①④">(2)</a> <a href="#ref-for-utf-16①⑤">(3)</a> <a href="#ref-for-utf-16①⑥">(4)</a> <a href="#ref-for-utf-16①⑦">(5)</a>
+    <li><a href="#ref-for-utf-16①⑧">4.1. 
+Encoding</a> <a href="#ref-for-utf-16①⑨">(2)</a>
+    <li><a href="#ref-for-utf-16②⓪">4.2. 
+Decoding</a> <a href="#ref-for-utf-16②①">(2)</a>
+    <li><a href="#ref-for-utf-16②②">6. 
+The WTF-8 encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="well-formed">
+   <b><a href="#well-formed">#well-formed</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-well-formed①">2. 
+Background and motivation</a> <a href="#ref-for-well-formed②">(2)</a> <a href="#ref-for-well-formed③">(3)</a> <a href="#ref-for-well-formed④">(4)</a>
+    <li><a href="#ref-for-well-formed⑤">4. 
+Potentially ill-formed UTF-16</a> <a href="#ref-for-well-formed⑥">(2)</a> <a href="#ref-for-well-formed⑦">(3)</a>
+    <li><a href="#ref-for-well-formed⑧">4.1. 
+Encoding</a>
+    <li><a href="#ref-for-well-formed⑨">4.2. 
+Decoding</a>
+    <li><a href="#ref-for-well-formed①⓪">5. 
+Generalized UTF-8</a> <a href="#ref-for-well-formed①①">(2)</a>
+    <li><a href="#ref-for-well-formed①②">6. 
+The WTF-8 encoding</a>
+    <li><a href="#ref-for-well-formed①③">6.1. 
+Encoding</a>
+    <li><a href="#ref-for-well-formed①④">6.2. 
+Decoding</a> <a href="#ref-for-well-formed①⑤">(2)</a> <a href="#ref-for-well-formed①⑥">(3)</a> <a href="#ref-for-well-formed①⑦">(4)</a>
+    <li><a href="#ref-for-well-formed①⑧">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-well-formed①⑨">6.4. 
+Converting between WTF-8 and UTF-8</a> <a href="#ref-for-well-formed②⓪">(2)</a>
+    <li><a href="#ref-for-well-formed②①">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="ill-formed">
+   <b><a href="#ill-formed">#ill-formed</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-ill-formed">2. 
+Background and motivation</a> <a href="#ref-for-ill-formed①">(2)</a> <a href="#ref-for-ill-formed②">(3)</a> <a href="#ref-for-ill-formed③">(4)</a>
+    <li><a href="#ref-for-ill-formed④">2.1. 
+Differences with CESU-8</a>
+    <li><a href="#ref-for-ill-formed⑤">3. 
+Terminology</a> <a href="#ref-for-ill-formed⑥">(2)</a> <a href="#ref-for-ill-formed⑦">(3)</a> <a href="#ref-for-ill-formed⑧">(4)</a>
+    <li><a href="#ref-for-ill-formed⑨">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-ill-formed①⓪">6. 
+The WTF-8 encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="replacement-character">
+   <b><a href="#replacement-character">#replacement-character</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-replacement-character">4.1. 
+Encoding</a>
+    <li><a href="#ref-for-replacement-character①">6.4. 
+Converting between WTF-8 and UTF-8</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="16-bit-code-unit">
+   <b><a href="#16-bit-code-unit">#16-bit-code-unit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-16-bit-code-unit">2. 
+Background and motivation</a> <a href="#ref-for-16-bit-code-unit①">(2)</a>
+    <li><a href="#ref-for-16-bit-code-unit②">3. 
+Terminology</a> <a href="#ref-for-16-bit-code-unit③">(2)</a> <a href="#ref-for-16-bit-code-unit④">(3)</a> <a href="#ref-for-16-bit-code-unit⑤">(4)</a>
+    <li><a href="#ref-for-16-bit-code-unit⑥">3.2. 
+Surrogate 16-bit code units</a> <a href="#ref-for-16-bit-code-unit⑦">(2)</a> <a href="#ref-for-16-bit-code-unit⑧">(3)</a>
+    <li><a href="#ref-for-16-bit-code-unit⑨">4. 
+Potentially ill-formed UTF-16</a> <a href="#ref-for-16-bit-code-unit①⓪">(2)</a>
+    <li><a href="#ref-for-16-bit-code-unit①①">4.1. 
+Encoding</a> <a href="#ref-for-16-bit-code-unit①②">(2)</a> <a href="#ref-for-16-bit-code-unit①③">(3)</a>
+    <li><a href="#ref-for-16-bit-code-unit①④">4.2. 
+Decoding</a> <a href="#ref-for-16-bit-code-unit①⑤">(2)</a> <a href="#ref-for-16-bit-code-unit①⑥">(3)</a>
+    <li><a href="#ref-for-16-bit-code-unit①⑦">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="consume">
+   <b><a href="#consume">#consume</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-consume">3. 
+Terminology</a>
+    <li><a href="#ref-for-consume①">4.2. 
+Decoding</a>
+    <li><a href="#ref-for-consume②">6.2. 
+Decoding</a> <a href="#ref-for-consume③">(2)</a> <a href="#ref-for-consume④">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="lead-surrogate-code-point">
+   <b><a href="#lead-surrogate-code-point">#lead-surrogate-code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-lead-surrogate-code-point">3.1. 
+Surrogate code points</a> <a href="#ref-for-lead-surrogate-code-point①">(2)</a>
+    <li><a href="#ref-for-lead-surrogate-code-point②">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-lead-surrogate-code-point③">6.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="trail-surrogate-code-point">
+   <b><a href="#trail-surrogate-code-point">#trail-surrogate-code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-trail-surrogate-code-point">3.1. 
+Surrogate code points</a> <a href="#ref-for-trail-surrogate-code-point①">(2)</a>
+    <li><a href="#ref-for-trail-surrogate-code-point②">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-trail-surrogate-code-point③">6.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-code-point">
+   <b><a href="#surrogate-code-point">#surrogate-code-point</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-code-point①">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-surrogate-code-point②">3. 
+Terminology</a>
+    <li><a href="#ref-for-surrogate-code-point③">3.1. 
+Surrogate code points</a>
+    <li><a href="#ref-for-surrogate-code-point④">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-surrogate-code-point⑤">4. 
+Potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-surrogate-code-point⑥">4.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-code-point-pair">
+   <b><a href="#surrogate-code-point-pair">#surrogate-code-point-pair</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-code-point-pair①">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-surrogate-code-point-pair②">3.1. 
+Surrogate code points</a>
+    <li><a href="#ref-for-surrogate-code-point-pair③">4. 
+Potentially ill-formed UTF-16</a> <a href="#ref-for-surrogate-code-point-pair④">(2)</a>
+    <li><a href="#ref-for-surrogate-code-point-pair⑤">4.1. 
+Encoding</a>
+    <li><a href="#ref-for-surrogate-code-point-pair⑥">4.2. 
+Decoding</a>
+    <li><a href="#ref-for-surrogate-code-point-pair⑦">6. 
+The WTF-8 encoding</a> <a href="#ref-for-surrogate-code-point-pair⑧">(2)</a>
+    <li><a href="#ref-for-surrogate-code-point-pair⑨">6.1. 
+Encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="lead-surrogate-16-bit-code-unit">
+   <b><a href="#lead-surrogate-16-bit-code-unit">#lead-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-lead-surrogate-16-bit-code-unit">3.2. 
+Surrogate 16-bit code units</a> <a href="#ref-for-lead-surrogate-16-bit-code-unit①">(2)</a>
+    <li><a href="#ref-for-lead-surrogate-16-bit-code-unit②">4.2. 
+Decoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="trail-surrogate-16-bit-code-unit">
+   <b><a href="#trail-surrogate-16-bit-code-unit">#trail-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-trail-surrogate-16-bit-code-unit">3.2. 
+Surrogate 16-bit code units</a> <a href="#ref-for-trail-surrogate-16-bit-code-unit①">(2)</a>
+    <li><a href="#ref-for-trail-surrogate-16-bit-code-unit②">4.2. 
+Decoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-16-bit-code-unit">
+   <b><a href="#surrogate-16-bit-code-unit">#surrogate-16-bit-code-unit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-16-bit-code-unit">3.2. 
+Surrogate 16-bit code units</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-16-bit-code-unit-pair">
+   <b><a href="#surrogate-16-bit-code-unit-pair">#surrogate-16-bit-code-unit-pair</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-16-bit-code-unit-pair">2. 
+Background and motivation</a> <a href="#ref-for-surrogate-16-bit-code-unit-pair①">(2)</a>
+    <li><a href="#ref-for-surrogate-16-bit-code-unit-pair②">3. 
+Terminology</a>
+    <li><a href="#ref-for-surrogate-16-bit-code-unit-pair③">3.2. 
+Surrogate 16-bit code units</a>
+    <li><a href="#ref-for-surrogate-16-bit-code-unit-pair④">4. 
+Potentially ill-formed UTF-16</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="unpaired-surrogate-16-bit-code-unit">
+   <b><a href="#unpaired-surrogate-16-bit-code-unit">#unpaired-surrogate-16-bit-code-unit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unpaired-surrogate-16-bit-code-unit">2. 
+Background and motivation</a> <a href="#ref-for-unpaired-surrogate-16-bit-code-unit①">(2)</a>
+    <li><a href="#ref-for-unpaired-surrogate-16-bit-code-unit②">3. 
+Terminology</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="lead-surrogate-byte-sequence">
+   <b><a href="#lead-surrogate-byte-sequence">#lead-surrogate-byte-sequence</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-lead-surrogate-byte-sequence">3.3. 
+Surrogate byte sequences</a> <a href="#ref-for-lead-surrogate-byte-sequence①">(2)</a> <a href="#ref-for-lead-surrogate-byte-sequence②">(3)</a>
+    <li><a href="#ref-for-lead-surrogate-byte-sequence③">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="trail-surrogate-byte-sequence">
+   <b><a href="#trail-surrogate-byte-sequence">#trail-surrogate-byte-sequence</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-trail-surrogate-byte-sequence">3.3. 
+Surrogate byte sequences</a> <a href="#ref-for-trail-surrogate-byte-sequence①">(2)</a> <a href="#ref-for-trail-surrogate-byte-sequence②">(3)</a>
+    <li><a href="#ref-for-trail-surrogate-byte-sequence③">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-byte-sequence">
+   <b><a href="#surrogate-byte-sequence">#surrogate-byte-sequence</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-byte-sequence">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-surrogate-byte-sequence①">3. 
+Terminology</a>
+    <li><a href="#ref-for-surrogate-byte-sequence②">3.3. 
+Surrogate byte sequences</a> <a href="#ref-for-surrogate-byte-sequence③">(2)</a> <a href="#ref-for-surrogate-byte-sequence④">(3)</a>
+    <li><a href="#ref-for-surrogate-byte-sequence⑤">6.4. 
+Converting between WTF-8 and UTF-8</a> <a href="#ref-for-surrogate-byte-sequence⑥">(2)</a> <a href="#ref-for-surrogate-byte-sequence⑦">(3)</a>
+    <li><a href="#ref-for-surrogate-byte-sequence⑧">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="surrogate-pair-byte-sequence">
+   <b><a href="#surrogate-pair-byte-sequence">#surrogate-pair-byte-sequence</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-surrogate-pair-byte-sequence">2.1. 
+Differences with CESU-8</a>
+    <li><a href="#ref-for-surrogate-pair-byte-sequence①">3. 
+Terminology</a>
+    <li><a href="#ref-for-surrogate-pair-byte-sequence②">3.3. 
+Surrogate byte sequences</a>
+    <li><a href="#ref-for-surrogate-pair-byte-sequence③">6. 
+The WTF-8 encoding</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="unpaired-surrogate-byte-sequence">
+   <b><a href="#unpaired-surrogate-byte-sequence">#unpaired-surrogate-byte-sequence</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unpaired-surrogate-byte-sequence">2.1. 
+Differences with CESU-8</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="potentially-ill-formed-utf-16">
+   <b><a href="#potentially-ill-formed-utf-16">#potentially-ill-formed-utf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16">1. 
+Intended audience</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16①">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16②">4. 
+Potentially ill-formed UTF-16</a> <a href="#ref-for-potentially-ill-formed-utf-16③">(2)</a> <a href="#ref-for-potentially-ill-formed-utf-16④">(3)</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16⑤">4.1. 
+Encoding</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16⑥">4.2. 
+Decoding</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16⑦">6. 
+The WTF-8 encoding</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16⑧">6.1. 
+Encoding</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16⑨">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a> <a href="#ref-for-potentially-ill-formed-utf-16①⓪">(2)</a>
+    <li><a href="#ref-for-potentially-ill-formed-utf-16①①">7. 
+Implementations</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="wtf-16">
+   <b><a href="#wtf-16">#wtf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-wtf-16">2. 
+Background and motivation</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="encode-ill-formed-utf-16">
+   <b><a href="#encode-ill-formed-utf-16">#encode-ill-formed-utf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-encode-ill-formed-utf-16">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="decode-ill-formed-utf-16">
+   <b><a href="#decode-ill-formed-utf-16">#decode-ill-formed-utf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-decode-ill-formed-utf-16">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="generalized-utf-8">
+   <b><a href="#generalized-utf-8">#generalized-utf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-generalized-utf-8">3.3. 
+Surrogate byte sequences</a> <a href="#ref-for-generalized-utf-8①">(2)</a> <a href="#ref-for-generalized-utf-8②">(3)</a>
+    <li><a href="#ref-for-generalized-utf-8③">5. 
+Generalized UTF-8</a> <a href="#ref-for-generalized-utf-8④">(2)</a>
+    <li><a href="#ref-for-generalized-utf-8⑤">6. 
+The WTF-8 encoding</a> <a href="#ref-for-generalized-utf-8⑥">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="wtf-8">
+   <b><a href="#wtf-8">#wtf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-wtf-8">1. 
+Intended audience</a> <a href="#ref-for-wtf-8①">(2)</a> <a href="#ref-for-wtf-8②">(3)</a> <a href="#ref-for-wtf-8③">(4)</a>
+    <li><a href="#ref-for-wtf-8④">2. 
+Background and motivation</a>
+    <li><a href="#ref-for-wtf-8⑤">2.1. 
+Differences with CESU-8</a> <a href="#ref-for-wtf-8⑥">(2)</a> <a href="#ref-for-wtf-8⑦">(3)</a>
+    <li><a href="#ref-for-wtf-8⑧">3. 
+Terminology</a>
+    <li><a href="#ref-for-wtf-8⑨">6. 
+The WTF-8 encoding</a> <a href="#ref-for-wtf-8①⓪">(2)</a>
+    <li><a href="#ref-for-wtf-8①①">6.1. 
+Encoding</a> <a href="#ref-for-wtf-8①②">(2)</a> <a href="#ref-for-wtf-8①③">(3)</a>
+    <li><a href="#ref-for-wtf-8①④">6.2. 
+Decoding</a> <a href="#ref-for-wtf-8①⑤">(2)</a> <a href="#ref-for-wtf-8①⑥">(3)</a>
+    <li><a href="#ref-for-wtf-8①⑦">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a> <a href="#ref-for-wtf-8①⑧">(2)</a> <a href="#ref-for-wtf-8①⑨">(3)</a>
+    <li><a href="#ref-for-wtf-8②⓪">6.4. 
+Converting between WTF-8 and UTF-8</a> <a href="#ref-for-wtf-8②①">(2)</a> <a href="#ref-for-wtf-8②②">(3)</a> <a href="#ref-for-wtf-8②③">(4)</a> <a href="#ref-for-wtf-8②④">(5)</a>
+    <li><a href="#ref-for-wtf-8②⑤">6.5. 
+Concatenating WTF-8 strings</a> <a href="#ref-for-wtf-8②⑥">(2)</a>
+    <li><a href="#ref-for-wtf-8②⑦">7. 
+Implementations</a> <a href="#ref-for-wtf-8②⑧">(2)</a> <a href="#ref-for-wtf-8②⑨">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="encode-to-wtf-8">
+   <b><a href="#encode-to-wtf-8">#encode-to-wtf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-encode-to-wtf-8">6.2. 
+Decoding</a>
+    <li><a href="#ref-for-encode-to-wtf-8①">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-encode-to-wtf-8②">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="decode-from-wtf-8">
+   <b><a href="#decode-from-wtf-8">#decode-from-wtf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-decode-from-wtf-8">6.3. 
+Converting between WTF-8 and potentially ill-formed UTF-16</a>
+    <li><a href="#ref-for-decode-from-wtf-8①">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="convert-from-potentially-ill-formed-utf-16-to-wtf-8">
+   <b><a href="#convert-from-potentially-ill-formed-utf-16-to-wtf-8">#convert-from-potentially-ill-formed-utf-16-to-wtf-8</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8">6.2. 
+Decoding</a>
+    <li><a href="#ref-for-convert-from-potentially-ill-formed-utf-16-to-wtf-8①">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="convert-from-wtf-8-to-potentially-ill-formed-utf-16">
+   <b><a href="#convert-from-wtf-8-to-potentially-ill-formed-utf-16">#convert-from-wtf-8-to-potentially-ill-formed-utf-16</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-convert-from-wtf-8-to-potentially-ill-formed-utf-16">6.5. 
+Concatenating WTF-8 strings</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="concatenate-two-wtf-8-strings">
+   <b><a href="#concatenate-two-wtf-8-strings">#concatenate-two-wtf-8-strings</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concatenate-two-wtf-8-strings">6.1. 
+Encoding</a>
+    <li><a href="#ref-for-concatenate-two-wtf-8-strings①">6.2. 
+Decoding</a>
+   </ul>
+  </aside>
+<script>/* script-dfn-panel */
+
         document.body.addEventListener("click", function(e) {
             var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
             // Find the dfn element or panel, if any, that was clicked on.
             var el = e.target;
             var target;
+            var hitALink = false;
             while(el.parentElement) {
-                if(el.tagName == "DFN") {
-                    target = "dfn";
-                    break;
+                if(el.tagName == "A") {
+                    // Clicking on a link in a <dfn> shouldn't summon the panel
+                    hitALink = true;
                 }
-                if(/H\d/.test(el.tagName) && el.getAttribute('data-dfn-type') != null) {
+                if(el.classList.contains("dfn-paneled")) {
                     target = "dfn";
                     break;
                 }
@@ -1628,15 +2128,29 @@ Decoding</a></span></span></dfn>, run these steps:</p>
                     el.classList.remove("activated");
                 });
             }
-            if(target == "dfn") {
+            if(target == "dfn" && !hitALink) {
                 // open the panel
-                var dfnPanel = el.querySelector(".dfn-panel");
+                var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
                 if(dfnPanel) {
+                    console.log(dfnPanel);
                     dfnPanel.classList.add("on");
+                    var rect = el.getBoundingClientRect();
+                    dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+                    dfnPanel.style.top = window.scrollY + rect.top + "px";
+                    var panelRect = dfnPanel.getBoundingClientRect();
+                    var panelWidth = panelRect.right - panelRect.left;
+                    if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                        // Reposition, because the panel is overflowing
+                        dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+                    }
+                } else {
+                    console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
                 }
             } else if(target == "dfn-panel") {
                 // Switch it to "activated" state, which pins it.
                 el.classList.add("activated");
+                el.style.left = null;
+                el.style.top = null;
             }
 
         });
