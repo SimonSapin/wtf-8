@@ -582,9 +582,8 @@ span.issue, span.note {
   <hr title="Separator for header">
 </div>
 
-<h2 class='no-num no-toc no-ref' id='abstract'>Abstract</h2>
 <div class="p-summary" data-fill-with="abstract"></div>
+
 <div data-fill-with="at-risk"></div>
 
-<h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
 <div data-fill-with="table-of-contents"></div>
