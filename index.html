@@ -769,7 +769,7 @@ pre .property::before, pre .property::after {
      <dt>Change history:
      <dd><span><a href="https://github.com/SimonSapin/wtf-8/commits/gh-pages">On GitHub</a></span>
      <dt>Last updated:
-     <dd><span>11 March 2016</span>
+     <dd><span>31 August 2017</span>
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -1221,7 +1221,7 @@ and related or neighboring rights to this work. </p>
        <dd>
          Append to <var>result</var> three bytes of values 
         <ol>
-         <li><code>0xC0 | (<var>P</var> >> 12)</code> 
+         <li><code>0xE0 | (<var>P</var> >> 12)</code> 
          <li><code>0x80 | ((<var>P</var> >> 6) &amp; 0x3F)</code> 
          <li><code>0x80 | (<var>P</var> &amp; 0x3F)</code> 
         </ol>
@@ -1229,7 +1229,7 @@ and related or neighboring rights to this work. </p>
        <dd>
          Append to <var>result</var> four bytes of values 
         <ol>
-         <li><code>0xC0 | (<var>P</var> >> 18)</code> 
+         <li><code>0xF0 | (<var>P</var> >> 18)</code> 
          <li><code>0x80 | ((<var>P</var> >> 12) &amp; 0x3F)</code> 
          <li><code>0x80 | ((<var>P</var> >> 6) &amp; 0x3F)</code> 
          <li><code>0x80 | (<var>P</var> &amp; 0x3F)</code> 
@@ -1363,6 +1363,7 @@ and related or neighboring rights to this work. </p>
   David Baron,
   Dylan Petonke,
   Henri Sivonen,
+  Jacob Lifshay,
   James Graham,
   Kevin Ballard,
   Mathias Bynens,

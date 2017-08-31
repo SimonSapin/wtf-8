@@ -640,7 +640,7 @@ Encoding</h3>
             <dd>
               Append to <var>result</var> three bytes of values
               <ol>
-                <li><code>0xC0 | (<var>P</var> >> 12)</code>
+                <li><code>0xE0 | (<var>P</var> >> 12)</code>
                 <li><code>0x80 | ((<var>P</var> >> 6) & 0x3F)</code>
                 <li><code>0x80 | (<var>P</var> & 0x3F)</code>
               </ol>
@@ -648,7 +648,7 @@ Encoding</h3>
             <dd>
               Append to <var>result</var> four bytes of values
               <ol>
-                <li><code>0xC0 | (<var>P</var> >> 18)</code>
+                <li><code>0xF0 | (<var>P</var> >> 18)</code>
                 <li><code>0x80 | ((<var>P</var> >> 12) & 0x3F)</code>
                 <li><code>0x80 | ((<var>P</var> >> 6) & 0x3F)</code>
                 <li><code>0x80 | (<var>P</var> & 0x3F)</code>
@@ -880,6 +880,7 @@ Acknowledgments</h2>
   David Baron,
   Dylan Petonke,
   Henri Sivonen,
+  Jacob Lifshay,
   James Graham,
   Kevin Ballard,
   Mathias Bynens,
