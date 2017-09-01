@@ -769,7 +769,7 @@ pre .property::before, pre .property::after {
      <dt>Change history:
      <dd><span><a href="https://github.com/SimonSapin/wtf-8/commits/gh-pages">On GitHub</a></span>
      <dt>Last updated:
-     <dd><span>31 August 2017</span>
+     <dd><span>1 September 2017</span>
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -1012,7 +1012,7 @@ and related or neighboring rights to this work. </p>
   <h2 class="heading settled" data-level="4" id="ill-formed-utf-16"><span class="secno">4. </span><span class="content"> Potentially ill-formed UTF-16</span><a class="self-link" href="#ill-formed-utf-16"></a></h2>
   <p>A sequence of <a data-link-type="dfn" href="#16-bit-code-unit" id="ref-for-16-bit-code-unit⑨">16-bit code units</a> is <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="potentially-ill-formed-utf-16">potentially ill-formed UTF-16</dfn> if it is intended to be interpreted as <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①③">UTF-16</a>,
   but is not necessarily <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑤">well-formed</a> in <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①④">UTF-16</a>.
-  It effectively encodes a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑤">code point</a> that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair③">surrogate code point pair</a>.</p>
+  It effectively encodes a sequence of <a data-link-type="dfn" href="#code-point" id="ref-for-code-point①⑤">code points</a> that do not contain any <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair③">surrogate code point pair</a>.</p>
   <p class="note" role="note"><span>Note:</span> Like <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑤">UTF-16</a>, <a data-link-type="dfn" href="#potentially-ill-formed-utf-16" id="ref-for-potentially-ill-formed-utf-16②">potentially ill-formed UTF-16</a> can not represent a <a data-link-type="dfn" href="#surrogate-code-point-pair" id="ref-for-surrogate-code-point-pair④">surrogate code point pair</a> since the corresponding <a data-link-type="dfn" href="#surrogate-16-bit-code-unit-pair" id="ref-for-surrogate-16-bit-code-unit-pair④">surrogate 16-bit code unit pair</a> would instead
   represent a <a data-link-type="dfn" href="#supplementary-code-point" id="ref-for-supplementary-code-point⑥">supplementary code point</a>.
   Unlike <a data-link-type="dfn" href="#well-formed" id="ref-for-well-formed⑥">well-formed</a> <a data-link-type="dfn" href="#utf-16" id="ref-for-utf-16①⑥">UTF-16</a>, it might contain isolated <a data-link-type="dfn" href="#surrogate-code-point" id="ref-for-surrogate-code-point⑤">surrogate code points</a>.</p>
