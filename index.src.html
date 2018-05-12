@@ -619,6 +619,7 @@ Encoding</h3>
           If <var>P</var> is a <a>lead surrogate code point</a>,
           <var>P</var> is not the last <a>code point</a> of the input,
           and the <var>next</var> <a>code point</a> is a <a>trail surrogate code point</a>,
+          <a>consume</a> the next code point and
           set <var>P</var>’s value to:
           <code>
             0x10000 +
@@ -644,7 +645,7 @@ Encoding</h3>
                 <li><code>0x80 | ((<var>P</var> >> 6) & 0x3F)</code>
                 <li><code>0x80 | (<var>P</var> & 0x3F)</code>
               </ol>
-            <dt>U+FFFF to U+10FFFF
+            <dt>U+10000 to U+10FFFF
             <dd>
               Append to <var>result</var> four bytes of values
               <ol>
@@ -879,6 +880,7 @@ Acknowledgments</h2>
   Anne van Kesteren,
   David Baron,
   Dylan Petonke,
+  Guillaume Knispel,
   Henri Sivonen,
   Jacob Lifshay,
   James Graham,

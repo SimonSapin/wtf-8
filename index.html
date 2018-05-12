@@ -769,7 +769,7 @@ pre .property::before, pre .property::after {
      <dt>Change history:
      <dd><span><a href="https://github.com/SimonSapin/wtf-8/commits/gh-pages">On GitHub</a></span>
      <dt>Last updated:
-     <dd><span>1 September 2017</span>
+     <dd><span>12 May 2018</span>
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -1199,7 +1199,7 @@ and related or neighboring rights to this work. </p>
     <ol>
      <li>
       <p>If <var>P</var> is a <a data-link-type="dfn" href="#lead-surrogate-code-point" id="ref-for-lead-surrogate-code-point③">lead surrogate code point</a>, <var>P</var> is not the last <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑦">code point</a> of the input,
-          and the <var>next</var> <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑧">code point</a> is a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point③">trail surrogate code point</a>,
+          and the <var>next</var> <a data-link-type="dfn" href="#code-point" id="ref-for-code-point②⑧">code point</a> is a <a data-link-type="dfn" href="#trail-surrogate-code-point" id="ref-for-trail-surrogate-code-point③">trail surrogate code point</a>, <a data-link-type="dfn" href="#consume" id="ref-for-consume②">consume</a> the next code point and
           set <var>P</var>’s value to: <code> 0x10000 +
             ((<var>P</var> - 0xD800) &lt;&lt; 10) +
             (<var>next</var> - 0xDC00)</code>.</p>
@@ -1260,20 +1260,20 @@ and related or neighboring rights to this work. </p>
      <dd>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③④">code point</a> of value <var>B</var>. 
      <dt>0xC2 to 0xDF 
      <dd>
-       Let <var>B2</var> be the next byte and <a data-link-type="dfn" href="#consume" id="ref-for-consume②">consume</a> it. 
+       Let <var>B2</var> be the next byte and <a data-link-type="dfn" href="#consume" id="ref-for-consume③">consume</a> it. 
       <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑤">code point</a> of value <code> ((<var>B</var> &amp; 0x1F) &lt;&lt; 6) +
             (<var>B2</var> &amp; 0x3F)</code></p>
      <dt>0xE0 to 0xEF 
      <dd>
        Let <var>B2</var> and <var>B3</var> be the next two bytes,
-          and <a data-link-type="dfn" href="#consume" id="ref-for-consume③">consume</a> them. 
+          and <a data-link-type="dfn" href="#consume" id="ref-for-consume④">consume</a> them. 
       <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑥">code point</a> of value <code> ((<var>B</var> &amp; 0x0F) &lt;&lt; 12) +
             ((<var>B2</var> &amp; 0x3F) &lt;&lt; 6) +
             (<var>B3</var> &amp; 0x3F)</code></p>
      <dt>0xF0 to 0xF4 
      <dd>
        Let <var>B2</var>, <var>B3</var>, and <var>B4</var> be the next three bytes,
-          and <a data-link-type="dfn" href="#consume" id="ref-for-consume④">consume</a> them. 
+          and <a data-link-type="dfn" href="#consume" id="ref-for-consume⑤">consume</a> them. 
       <p>Append to <var>result</var> a <a data-link-type="dfn" href="#code-point" id="ref-for-code-point③⑦">code point</a> of value <code> ((<var>B</var> &amp; 0x07) &lt;&lt; 18) +
             ((<var>B2</var> &amp; 0x3F) &lt;&lt; 12) +
             ((<var>B3</var> &amp; 0x3F) &lt;&lt; 6) +
@@ -1808,8 +1808,10 @@ Concatenating WTF-8 strings</a>
 Terminology</a>
     <li><a href="#ref-for-consume①">4.2. 
 Decoding</a>
-    <li><a href="#ref-for-consume②">6.2. 
-Decoding</a> <a href="#ref-for-consume③">(2)</a> <a href="#ref-for-consume④">(3)</a>
+    <li><a href="#ref-for-consume②">6.1. 
+Encoding</a>
+    <li><a href="#ref-for-consume③">6.2. 
+Decoding</a> <a href="#ref-for-consume④">(2)</a> <a href="#ref-for-consume⑤">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lead-surrogate-code-point">
