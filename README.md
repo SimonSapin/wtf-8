@@ -1,4 +1,1 @@
-The WTF-8 encoding specification
---------------------------------
-
-[Latest version](https://simonsapin.github.io/wtf-8/)
+Moved to [https://codeberg.org/wtf-8/pages](https://codeberg.org/wtf-8/pages).
